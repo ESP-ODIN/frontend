@@ -1,4 +1,4 @@
-import { Fira_Code, Inter } from "next/font/google"
+import { Fira_Code, Inter, Roboto } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -16,6 +16,13 @@ const fontMono = Fira_Code({
   fallback: ["JetBrains Mono", "monospace"],
 })
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  variable: "--font-heading",
+  fallback: ["Helvetica", "Arial", "sans-serif"],
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +32,13 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        inter.variable,
+        roboto.variable,
+      )}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
