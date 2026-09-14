@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export function Nav() {
   return (
-    <div className="flex items-center justify-evenly p-4">
+    <div className="flex items-center justify-between pb-4">
         <Logo  />
         <SearchBar count={100} />
         <div>
