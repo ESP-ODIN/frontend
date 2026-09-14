@@ -3,13 +3,16 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docker:build": "docker build -t odin-frontend .",
+    "docker:dev": "docker run --rm -p 3000:3000 -v \"$PWD\":/app -v /app/node_modules -v /app/.next -e WATCHPACK_POLLING=true -e CHOKIDAR_USEPOLLING=true odin-frontend"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
