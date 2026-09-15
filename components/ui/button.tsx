@@ -45,6 +45,8 @@ function Button({
   icon: Icon,
   iconPosition = "left",
   children,
+  nativeButton,
+  render,
   ...props
 }: ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
@@ -55,6 +57,8 @@ function Button({
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      nativeButton={nativeButton ?? !render}
+      render={render}
       {...props}
     >
       {Icon && iconPosition === "left" && <Icon data-icon="inline-start" />}

@@ -16,7 +16,7 @@ export function SearchBar({ count, className }: SearchBarProps) {
     <DialogPrimitive.Trigger
       handle={commandMenuHandle}
       className={cn(
-        "relative flex h-9 w-full items-center rounded-lg border border-input bg-background/30 px-3 text-left text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative flex h-9 w-1/2 items-center rounded-lg border border-input bg-background/30 px-3 text-left text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className
       )}
     >

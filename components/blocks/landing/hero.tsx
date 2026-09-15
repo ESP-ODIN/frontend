@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 import { Snippet } from "@/components/blocks/snippet-1";
 import { Button } from "@/components/ui/button";
 import { CoreValues } from "@/components/blocks/landing/core-values";
@@ -10,7 +11,7 @@ type HeroProps = {
 
 export function Hero({ className }: HeroProps) {
   return (
-    <div className="flex flex-col items-center text-center pt-20">
+    <div className="flex flex-col items-center text-center">
         <h1 className="text-4xl w-2xl font-bold tracking-tight text-foreground sm:text-6xl">
             Gestionnaire de paquets pour <span className="text-primary">Agents IA</span>.
         </h1>
@@ -21,7 +22,7 @@ export function Hero({ className }: HeroProps) {
             <CoreValues />
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <Snippet text="curl -sSL get.odin.dev | sh" dark />
-                <Button className="py-6 px-4" icon={ArrowRight} iconPosition="right">Parcourir la boutique</Button>
+                <Button className="py-6 px-4" icon={ArrowRight} iconPosition="right" render={<Link href="/marketplace" />}>Parcourir la boutique</Button>
             </div>
         </div>
     </div>

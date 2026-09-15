@@ -25,8 +25,15 @@ export function FeaturedAgents({ className }: FeaturedAgentsProps) {
         ))}
       </div>
 
-      <Button variant="outline" size="lg" icon={ArrowRight} iconPosition="right" className="rounded-full">
-        <Link href="/marketplace">Explorer tous les agents</Link>
+      <Button
+        variant="outline"
+        size="lg"
+        icon={ArrowRight}
+        iconPosition="right"
+        className="rounded-full"
+        render={<Link href="/marketplace" />}
+      >
+        Explorer tous les agents
       </Button>
     </div>
   )
