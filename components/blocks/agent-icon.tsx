@@ -6,6 +6,8 @@ export const agentColorVariants = {
   primary: "bg-primary/10 text-primary",
   amber: "bg-amber-100 text-amber-900",
   blue: "bg-blue-100 text-blue-900",
+  red: "bg-red-100 text-red-900",
+  muted: "bg-muted/15 text-foreground",
 } as const
 
 export type AgentColor = keyof typeof agentColorVariants
@@ -20,6 +22,7 @@ export type Agent = {
   downloads: string
   version: string
   color: AgentColor
+  featured?: boolean
 } & ({ icon: LucideIcon; label?: never } | { icon?: never; label: string })
 
 type AgentIconProps = {

@@ -13,7 +13,13 @@ type AgentCardProps = {
 
 export function AgentCard({ agent, featured = false, className }: AgentCardProps) {
   return (
-    <div className={cn("flex flex-col gap-4 rounded-xl border border-muted/40 p-6", className)}>
+    <Link
+      href={`/agent/${agent.slug}`}
+      className={cn(
+        "group flex flex-col gap-4 rounded-xl border border-muted/40 bg-background-100 p-6 transition-colors hover:border-muted",
+        className
+      )}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <AgentIcon icon={agent.icon} label={agent.label} color={agent.color} />
@@ -49,14 +55,11 @@ export function AgentCard({ agent, featured = false, className }: AgentCardProps
           </span>
           <span>{agent.version}</span>
         </div>
-        <Link
-          href={`/agents/${agent.slug}`}
-          className="flex items-center gap-1 font-mono text-sm font-bold text-primary hover:underline"
-        >
+        <span className="flex items-center gap-1 font-mono text-sm font-bold text-primary group-hover:underline">
           install
           <ArrowRight className="size-3.5" />
-        </Link>
+        </span>
       </div>
-    </div>
+    </Link>
   )
 }

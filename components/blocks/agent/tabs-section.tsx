@@ -1,0 +1,54 @@
+"use client"
+
+import { useState } from "react"
+
+import type { AgentDetail } from "@/lib/data/agent-details"
+import { cn } from "@/lib/utils"
+import { AgentOverview } from "@/components/blocks/agent/overview"
+
+type AgentTabsSectionProps = {
+  detail: AgentDetail
+}
+
+const tabs = [
+  { id: "overview", label: "Vue d'ensemble" },
+  { id: "changelog", label: "Changelog" },
+  { id: "community", label: "REX communauté", count: 38 },
+  { id: "security", label: "Sécurité" },
+] as const
+
+export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
+  const [active, setActive] = useState<(typeof tabs)[number]["id"]>("overview")
+
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="flex gap-6 border-b border-border/60">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActive(tab.id)}
+            className={cn(
+              "flex items-center gap-1.5 border-b-2 pb-3 text-sm font-medium transition-colors",
+              active === tab.id
+                ? "border-primary text-foreground"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {tab.label}
+            {"count" in tab && (
+              <span className="rounded-full bg-muted/15 px-1.5 py-0.5 text-xs text-muted-foreground">
+                {tab.count}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {active === "overview" ? (
+        <AgentOverview detail={detail} />
+      ) : (
+        <p className="text-muted-foreground">Bientôt disponible.</p>
+      )}
+    </div>
+  )
+}
