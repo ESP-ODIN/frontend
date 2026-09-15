@@ -13,15 +13,11 @@ export function Nav() {
           </div>
           <SearchBar count={100} className="max-w-md" />
           <div className="flex flex-1 items-center justify-end">
-              <Button className= "text-foreground" variant="link" size="sm">
-                  <Link href="/sign-in">
-                      Sign In
-                  </Link>
+              <Button className= "text-foreground" variant="link" size="sm" render={<Link href="/sign-in" />}>
+                  Sign In
               </Button>
-              <Button className= "rounded-lg" variant="default" size="sm">
-                  <Link href="/log-in">
-                      Log In
-                  </Link>
+              <Button className= "rounded-lg" variant="default" size="sm" render={<Link href="/log-in" />}>
+                  Log In
               </Button>
           </div>
       </div>

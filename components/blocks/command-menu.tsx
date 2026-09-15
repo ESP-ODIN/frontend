@@ -24,10 +24,8 @@ type ResultItem = {
 }
 
 const pages = [
+  { label: "Accueil", href: "/", sublabel: "Page d'accueil d'Odin" },
   { label: "Marketplace", href: "/marketplace", sublabel: "Parcourir tous les agents" },
-  { label: "Documentation", href: "/docs", sublabel: "Guides et référence de la CLI" },
-  { label: "Communauté", href: "/community", sublabel: "REX, tutoriels et discussions" },
-  { label: "Tarifs", href: "/pricing", sublabel: "Gratuit pour les auteurs individuels" },
 ]
 
 const items: ResultItem[] = [

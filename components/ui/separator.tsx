@@ -1,7 +1,20 @@
 "use client"
 
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
+import { cva } from "class-variance-authority"
 import { cn } from "cn"
+
+const separatorVariants = cva("shrink-0 bg-muted/30", {
+  variants: {
+    orientation: {
+      horizontal: "h-px w-full mb-10",
+      vertical: "w-px self-stretch",
+    },
+  },
+  defaultVariants: {
+    orientation: "horizontal",
+  },
+})
 
 function Separator({
   className,
@@ -12,13 +25,10 @@ function Separator({
     <SeparatorPrimitive
       data-slot="separator"
       orientation={orientation}
-      className={cn(
-        "shrink-0 bg-muted/30 data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
-        className
-      )}
+      className={cn(separatorVariants({ orientation }), className)}
       {...props}
     />
   )
 }
 
-export { Separator }
+export { Separator, separatorVariants }

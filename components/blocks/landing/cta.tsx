@@ -29,15 +29,16 @@ export function Cta({ className }: CtaProps) {
           Choisissez votre fournisseur de modèle.
         </p>
         <div className="flex flex-col items-center gap-3 sm:flex-row">
-          <Button size="lg" className="px-6">
-            <Link href="/docs/install">Obtenir la CLI</Link>
+          <Button size="lg" className="px-6" render={<Link href="/docs/install" />}>
+            Obtenir la CLI
           </Button>
           <Button
             size="lg"
             variant="ghost"
             className="border border-white/15 bg-white/5 px-6 text-white hover:bg-white/10 hover:text-white"
+            render={<Link href="/docs" />}
           >
-            <Link href="/docs">Consulter la documentation</Link>
+            Consulter la documentation
           </Button>
         </div>
       </div>

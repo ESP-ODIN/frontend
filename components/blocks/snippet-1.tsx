@@ -1,5 +1,7 @@
+"use client";
+
 import { useRef, useState } from "react";
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 type TSnippetType = "success" | "warning" | "error";
 
@@ -10,6 +12,7 @@ interface SnippetProps {
   prompt?: boolean;
   dark?: boolean;
   type?: TSnippetType;
+  className?: string;
 }
 
 const variant = {
@@ -62,7 +65,8 @@ export const Snippet = ({
   onCopy,
   prompt = true,
   dark = false,
-  type
+  type,
+  className
 }: SnippetProps) => {
   const [animation, setAnimation] = useState<boolean>(false);
   const animationTimeout = useRef<NodeJS.Timeout>(null);
@@ -85,9 +89,10 @@ export const Snippet = ({
 
   return (
     <div
-      className={clsx(
+      className={cn(
         "flex items-center px-3 py-2.5 rounded-full border border-gray-alpha-400",
-        colors.background
+        colors.background,
+        className
       )}
       style={{ width: width }}
     >
@@ -95,7 +100,7 @@ export const Snippet = ({
         {_text.map((item) => (
           <div
             key={item}
-            className={clsx(
+            className={cn(
               "font-mono before:text-primary text-[13px]",
               prompt && "before:content-['$_']",
               colors.text
@@ -105,7 +110,7 @@ export const Snippet = ({
         ))}
       </div>
       <div
-        className={clsx(
+        className={cn(
           "ml-2 w-4 h-4 flex shrink-0 cursor-pointer relative",
           _text.length > 1 && "self-start"
         )}
@@ -115,7 +120,7 @@ export const Snippet = ({
           strokeLinejoin="round"
           viewBox="0 0 16 16"
           width="16"
-          className={clsx(
+          className={cn(
             "absolute right-0 z-10",
             _text.length > 1 ? "top-0" : "top-1/2 -translate-y-1/2",
             colors.fill,
@@ -134,7 +139,7 @@ export const Snippet = ({
           strokeLinejoin="round"
           viewBox="0 0 16 16"
           width="16"
-          className={clsx(
+          className={cn(
             "absolute top-0 right-0 opacity-0",
             colors.fill,
             animation && "animate-fade-in"
