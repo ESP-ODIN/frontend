@@ -86,7 +86,7 @@ export const Snippet = ({
   return (
     <div
       className={clsx(
-        "flex px-3 py-2.5 rounded-full border border-gray-alpha-400",
+        "flex items-center px-3 py-2.5 rounded-full border border-gray-alpha-400",
         colors.background
       )}
       style={{ width: width }}
@@ -104,7 +104,12 @@ export const Snippet = ({
           </div>
         ))}
       </div>
-      <div className="ml-2 w-4 h-4 shrink-0 cursor-pointer relative">
+      <div
+        className={clsx(
+          "ml-2 w-4 h-4 flex shrink-0 cursor-pointer relative",
+          _text.length > 1 && "self-start"
+        )}
+      >
         <svg
           height="16"
           strokeLinejoin="round"

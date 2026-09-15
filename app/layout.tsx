@@ -2,6 +2,7 @@ import { Fira_Code, Inter, Roboto } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Footer } from "@/components/layout/footer"
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -42,8 +43,9 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            {children}
+          <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+            <div className="flex-1">{children}</div>
+            <Footer />
           </div>
         </ThemeProvider>
       </body>
