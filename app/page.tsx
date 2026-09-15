@@ -1,19 +1,32 @@
-import { Button } from "@/components/ui/button"
+// Landing Page
+
+import { Nav } from '@/components/blocks/landing/nav'
+import { Separator } from '@/components/ui/separator'
+import { Hero } from '@/components/blocks/landing/hero'
+import { Stats } from '@/components/blocks/landing/stats'
+import { Terminal } from '@/components/blocks/terminal'
+import { Values } from '@/components/blocks/landing/values'
+import { HowItWorks } from '@/components/blocks/landing/how-it-works'
+import { Platform } from '@/components/blocks/landing/platform'
+import { FeaturedAgents } from '@/components/blocks/landing/featured-agents'
+import { Cta } from '@/components/blocks/landing/cta'
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
+    <main>
+        <Nav />
+        <Separator />
+        <div className="flex flex-col gap-20">
+            <Hero />
+            <Stats />
+            <Terminal />
+            <Values />
+            <HowItWorks />
+            <Platform />
+            <FeaturedAgents />
+            <Cta />
         </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    </main>
+
   )
 }

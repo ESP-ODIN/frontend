@@ -1,0 +1,29 @@
+"use client"
+import { Snippet } from "@/components/blocks/snippet-1";
+import { Button } from "@/components/ui/button";
+import { CoreValues } from "@/components/blocks/landing/core-values";
+import { ArrowRight } from "lucide-react";
+
+type HeroProps = {
+  className?: string
+}
+
+export function Hero({ className }: HeroProps) {
+  return (
+    <div className="flex flex-col items-center text-center pt-20">
+        <h1 className="text-4xl w-2xl font-bold tracking-tight text-foreground sm:text-6xl">
+            Gestionnaire de paquets pour <span className="text-primary">Agents IA</span>.
+        </h1>
+        <div className="flex flex-col items-center gap-6">
+            <p className="mt-6 text-md text-muted-foreground w-lg">
+                Découvrir, installer et partager des agents intelligents à partir d’une ligne de commande
+            </p>
+            <CoreValues />
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                <Snippet text="curl -sSL get.odin.dev | sh" dark />
+                <Button className="py-6 px-4" icon={ArrowRight} iconPosition="right">Parcourir la boutique</Button>
+            </div>
+        </div>
+    </div>
+  )
+}
