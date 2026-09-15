@@ -132,7 +132,7 @@ export function Platform({ className }: PlatformProps) {
           cta="Parcourir la boutique"
         >
           <div className="flex flex-col gap-2 rounded-xl border border-muted/40 p-2">
-            {agents.map((agent) => (
+            {agents.slice(0, 3).map((agent) => (
               <AgentListItem key={agent.slug} agent={agent} />
             ))}
           </div>
@@ -146,7 +146,7 @@ export function Platform({ className }: PlatformProps) {
           cta="Rejoignez la communauté"
         >
           <div className="flex flex-col divide-y divide-muted/40 rounded-xl border border-muted/40">
-            {feed.map((post) => (
+            {feed.slice(0, 2).map((post) => (
               <div key={post.handle} className="flex flex-col gap-2 p-3">
                 <div className="flex items-center gap-2">
                   <div
