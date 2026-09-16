@@ -51,7 +51,7 @@ const lineStyles: Record<LineKind, string> = {
 
 export function Terminal({
   className,
-  title = "~/projects/odin-demo · odin v0.18.2",
+  title = "~/projects/odin-demo · odin v0.1.0",
   loop = false,
 }: TerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null)

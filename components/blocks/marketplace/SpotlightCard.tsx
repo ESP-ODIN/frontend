@@ -1,5 +1,6 @@
 "use client"
 import { Star, MoveDown } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Snippet } from "@/components/blocks/snippet-1";
@@ -7,7 +8,7 @@ import { Snippet } from "@/components/blocks/snippet-1";
 const spotlightagent = {
   manifest: "code-reviewer",
   version: "2.4.1",
-  author: "antrhopic",
+  author: "anthropic",
   likes: "4,218",
   downloades: "128k",
   ladtupdated: "2h",
@@ -29,8 +30,8 @@ export function SpotlightCard() {
                 </p>
             </div>
             <div className="flex gap-2">
-                <Button>Installer</Button>
-                <Button className="bg-[#76705F]/20 border-[#76705F]/70" variant="outline">Voir détails</Button>
+                <Button render={<Link href={`/agents/${spotlightagent.manifest}`} />}>Installer</Button>
+                <Button className="bg-[#76705F]/20 border-[#76705F]/70" variant="outline" render={<Link href={`/agents/${spotlightagent.manifest}`} />}>Voir détails</Button>
             </div>
             <p className="flex items-center gap-1 text-sm text-[#F6F1E6]/60">
                 <Star className="size-4" /> {spotlightagent.likes} • <MoveDown className="size-4" /> {spotlightagent.downloades} installations by @{spotlightagent.author} • Mis à jour il y a {spotlightagent.ladtupdated}

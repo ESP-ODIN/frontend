@@ -21,7 +21,7 @@ export function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
         {similar.map((agent) => (
           <li key={agent.slug}>
             <Link
-              href={`/agent/${agent.slug}`}
+              href={`/agents/${agent.slug}`}
               className="group flex items-center gap-3 rounded-lg -mx-1 px-1 py-1 hover:bg-accent/50"
             >
               <AgentIcon

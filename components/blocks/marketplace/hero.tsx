@@ -19,7 +19,7 @@ export function Hero() {
         <div className="flex flex-col gap-5">
             <p className="text-sm font-mono tracking-wider text-primary font-bold">Boutique</p>
             <h1 className="text-5xl font-bold">Trouver votre prochain agent.</h1>
-            <p className="w-1/2 text-foreground/60">2 481 agents provenant de plus de 38 000 auteurs. Lisez REX, vérifiez les autorisations, installez en une seule commande.</p>
+            <p className="w-3/4 text-foreground/60">2 481 agents provenant de plus de 38 000 auteurs. Lisez REX, vérifiez les autorisations, installez en une seule commande.</p>
         </div>
         <div className="flex items-end gap-8">
             {stats.map((stat) => (

@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     <div className="flex flex-col gap-8 px-10 py-8">
       <AgentBreadcrumb categorySlug={detail.categorySlug} name={agent.name} />
       <AgentHeader agent={agent} detail={detail} />
-      <AgentInstallBar agent={agent} detail={detail} />
+      <AgentInstallBar agentSlug={agent.slug} agentName={agent.name} detail={detail} />
       <AgentStatsBar detail={detail} />
       <Separator className="mb-0" />
 

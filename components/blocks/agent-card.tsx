@@ -14,7 +14,7 @@ type AgentCardProps = {
 export function AgentCard({ agent, featured = false, className }: AgentCardProps) {
   return (
     <Link
-      href={`/agent/${agent.slug}`}
+      href={`/agents/${agent.slug}`}
       className={cn(
         "group flex flex-col gap-4 rounded-xl border border-muted/40 bg-background-100 p-6 transition-colors hover:border-muted",
         className
