@@ -1,6 +1,6 @@
 import { Check, X } from "lucide-react"
 
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 import { cn } from "@/lib/utils"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
 import { Separator } from "@/components/ui/separator"

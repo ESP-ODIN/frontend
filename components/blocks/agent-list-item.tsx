@@ -21,7 +21,7 @@ export function AgentListItem({ agent, className }: AgentListItemProps) {
         variant="outline"
         size="sm"
         className="rounded-full"
-        render={<Link href={`/agent/${agent.slug}`} />}
+        render={<Link href={`/agents/${agent.slug}`} />}
       >
         Install
       </Button>

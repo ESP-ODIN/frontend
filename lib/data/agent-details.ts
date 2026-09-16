@@ -1,4 +1,3 @@
-import { agents } from "@/lib/data/agents"
 import type { Agent } from "@/components/blocks/agent-icon"
 
 export type AgentDetail = {
@@ -24,7 +23,7 @@ export type AgentDetail = {
   similar: string[]
 }
 
-const overrides: Record<string, Partial<AgentDetail>> = {
+export const overrides: Record<string, Partial<AgentDetail>> = {
   "code-reviewer": {
     categoryLabel: "Developer tools",
     categorySlug: "developer-tools",
@@ -99,7 +98,7 @@ function toSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-")
 }
 
-function genericDetail(agent: Agent): AgentDetail {
+export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
   const category = agent.tags[0] ?? "Agents"
 
   return {
@@ -133,25 +132,6 @@ function genericDetail(agent: Agent): AgentDetail {
       { label: "env, shell", granted: false },
     ],
     dependencies: ["@anthropic/sdk ^0.24"],
-    similar: agents.filter((a) => a.slug !== agent.slug).slice(0, 3).map((a) => a.slug),
+    similar: allAgents.filter((a) => a.slug !== agent.slug).slice(0, 3).map((a) => a.slug),
   }
-}
-
-export function getAgent(slug: string): Agent | null {
-  return agents.find((item) => item.slug === slug) ?? null
-}
-
-// Deliberately excludes Agent fields (icon is a component reference and
-// can't be passed as a prop into a Client Component).
-export function getAgentDetail(slug: string): AgentDetail | null {
-  const agent = agents.find((item) => item.slug === slug)
-  if (!agent) return null
-
-  return { ...genericDetail(agent), ...overrides[slug] }
-}
-
-export function getSimilarAgents(slugs: string[]): Agent[] {
-  return slugs
-    .map((slug) => agents.find((agent) => agent.slug === slug))
-    .filter((agent): agent is Agent => Boolean(agent))
 }

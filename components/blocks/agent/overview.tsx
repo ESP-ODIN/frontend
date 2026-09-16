@@ -1,4 +1,4 @@
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 import { CodeBlock } from "@/components/blocks/code-block"
 
 type AgentOverviewProps = {

@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { ChevronRight, Star } from "lucide-react"
 
-import type { AgentDetail } from "@/lib/data/agent-details"
-import { getSimilarAgents } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
+import { getSimilarAgents } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
 
@@ -10,8 +10,8 @@ type AgentSimilarPanelProps = {
   detail: AgentDetail
 }
 
-export function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
-  const similar = getSimilarAgents(detail.similar)
+export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
+  const similar = await getSimilarAgents(detail.similar)
 
   if (similar.length === 0) return null
 

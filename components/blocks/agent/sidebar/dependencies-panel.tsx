@@ -1,4 +1,4 @@
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
 import { Separator } from "@/components/ui/separator"
 

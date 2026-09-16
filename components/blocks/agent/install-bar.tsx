@@ -2,7 +2,7 @@
 
 import { Eye, GitFork, Star } from "lucide-react"
 
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 import { Snippet } from "@/components/blocks/snippet-1"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"

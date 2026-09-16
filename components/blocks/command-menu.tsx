@@ -9,10 +9,6 @@ import { cn } from "@/lib/utils"
 import { agents } from "@/lib/data/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 
-/**
- * Shared handle connecting the SearchBar trigger (rendered in the Nav) to this
- * detached dialog. See https://base-ui.com/react/components/dialog#handle.
- */
 export const commandMenuHandle = DialogPrimitive.createHandle()
 
 type ResultItem = {
@@ -80,7 +76,6 @@ export function CommandMenu() {
   const [activeIndex, setActiveIndex] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  // Global ⌘K / Ctrl+K toggle, works from anywhere on the page.
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
