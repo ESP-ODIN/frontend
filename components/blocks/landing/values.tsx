@@ -54,7 +54,7 @@ export function Values({ className }: ValuesProps) {
           <div
             key={label}
             className={cn(
-              "flex flex-col gap-5 p-8",
+              "flex flex-col gap-5 p-6 sm:p-8",
               index !== 0 && "border-t border-muted/40 sm:border-t-0 sm:border-l"
             )}
           >

@@ -67,7 +67,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
           <div
             key={title}
             className={cn(
-              "flex flex-col gap-5 p-8",
+              "flex flex-col gap-5 p-6 sm:p-8",
               index !== 0 && "border-t border-muted/40 lg:border-t-0",
               index % 3 !== 0 && "lg:border-l lg:border-muted/40",
               index >= 3 && "lg:border-t lg:border-muted/40"

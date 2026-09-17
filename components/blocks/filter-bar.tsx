@@ -89,7 +89,7 @@ export function FilterBar({ className }: FilterBarProps) {
   }
 
   return (
-    <div className={cn(className, "flex w-56 flex-col gap-5")}>
+    <div className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
       <FilterSection title="Catégories">
         {categories.map((item) => (
           <FilterCheckbox

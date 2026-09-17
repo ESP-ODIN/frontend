@@ -15,7 +15,7 @@ export function AgentStatsBar({ detail }: AgentStatsBarProps) {
   ]
 
   return (
-    <div className="flex flex-wrap gap-x-10 gap-y-4 border-t border-border/60 pt-6">
+    <div className="flex flex-wrap gap-x-6 gap-y-4 border-t border-border/60 pt-6 sm:gap-x-10">
       {stats.map((stat) => (
         <div key={stat.label} className="flex flex-col gap-1">
           <p className="font-mono text-lg font-bold text-foreground">{stat.value}</p>

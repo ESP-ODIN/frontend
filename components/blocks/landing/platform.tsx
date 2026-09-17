@@ -75,7 +75,7 @@ type SurfaceCardProps = {
 
 function SurfaceCard({ eyebrow, title, description, href, cta, children }: SurfaceCardProps) {
   return (
-    <div className="flex flex-col gap-6 rounded-2xl border border-muted/40 p-8">
+    <div className="flex flex-col gap-6 rounded-2xl border border-muted/40 p-6 sm:p-8">
       <div className="flex flex-col gap-3">
         <p className="text-xs font-mono tracking-wider text-primary">{eyebrow}</p>
         <h3 className="text-2xl font-bold text-foreground">{title}</h3>
