@@ -15,7 +15,7 @@ export default function AppLayout({
 }>) {
   return (
     <main className="pt-24 sm:pt-28">
-      <FloatingNav links={links} ctaHref="/marketplace" />
+      <FloatingNav links={links} showCta={false} />
       {children}
     </main>
   )

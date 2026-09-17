@@ -90,26 +90,23 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
   },
 }
 
-function toTitleCase(value: string) {
-  return value.charAt(0).toUpperCase() + value.slice(1)
-}
-
-function toSlug(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+const languageLabels: Record<Agent["language"], string> = {
+  typescript: "TypeScript",
+  python: "Python",
+  rust: "Rust",
+  "multi-runtime": "Multi-runtime",
 }
 
 export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
-  const category = agent.tags[0] ?? "Agents"
-
   return {
-    categoryLabel: toTitleCase(category),
-    categorySlug: toSlug(category),
+    categoryLabel: agent.category.label,
+    categorySlug: agent.category.slug,
     updatedLabel: "il y a quelques jours",
     installsLabel: agent.downloads,
     starsLabel: agent.stars,
     forksLabel: "—",
     ratingLabel: "— / 5",
-    runtimeLabel: agent.tags[1] ?? "Multi-runtime",
+    runtimeLabel: languageLabels[agent.language],
     uptimeLabel: "—",
     license: "MIT",
     publishedLabel: "2025",

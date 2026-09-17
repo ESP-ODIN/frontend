@@ -1,63 +1,63 @@
-"use client"
+import { Check, type LucideIcon } from "lucide-react"
 
-import { useState } from "react"
+import { agents } from "@/lib/data/agents"
+import { categories, languages, types, updates } from "@/lib/data/categories"
+import { emptyFilters, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
 import { cn } from "@/lib/utils"
-import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type FilterBarProps = {
   className?: string
+  filters: MarketplaceFilters
+  onChange: (next: MarketplaceFilters) => void
 }
 
-const categories = [
-  { name: "Outils de développement", value: "dev-tools", count: 612 },
-  { name: "Données et analyses", value: "data-analytics", count: 384 },
-  { name: "Conception", value: "design", count: 142 },
-  { name: "Productivité", value: "productivity", count: 298 },
-  { name: "Security", value: "security", count: 174 },
-  { name: "Service client", value: "customer-service", count: 221 },
-  { name: "Recherche", value: "research", count: 156 },
-  { name: "Marketing", value: "marketing", count: 188 },
-]
-
-const types = [
-  { name: "Workflow", value: "workflow", count: 1462 },
-  { name: "Agent autonome", value: "autonomous", count: 1019 },
-]
-
-const languages = [
-  { name: "TypeScript", value: "typescript", count: 1148 },
-  { name: "Python", value: "python", count: 1039 },
-  { name: "Rust", value: "rust", count: 184 },
-  { name: "Multi-runtime", value: "multi-runtime", count: 110 },
-]
-
-const miseajours = [
-  { name: "Dernières 24 heures", value: "last-24h", count: 42 },
-  { name: "La semaine dernière", value: "last-week", count: 261 },
-  { name: "Le mois dernier", value: "last-month", count: 812 },
-]
+function countBy<T extends string>(pick: (agent: (typeof agents)[number]) => T) {
+  const counts = new Map<T, number>()
+  for (const agent of agents) {
+    const key = pick(agent)
+    counts.set(key, (counts.get(key) ?? 0) + 1)
+  }
+  return counts
+}
 
 function FilterCheckbox({
   name,
   count,
   checked,
   onChange,
+  icon: Icon,
 }: {
   name: string
   count: number
   checked: boolean
   onChange: () => void
+  icon?: LucideIcon
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 -mx-2 text-sm text-foreground/80 transition-colors hover:bg-primary/5 hover:text-foreground">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="size-4 shrink-0 rounded border-border accent-primary"
-      />
+    <label className="group -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-foreground/80 transition-colors hover:bg-primary/5 hover:text-foreground">
+      <span className="relative flex shrink-0 items-center justify-center">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          className="peer sr-only"
+        />
+        <span
+          className={cn(
+            "flex size-4 items-center justify-center rounded-[5px] border transition-all",
+            checked
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border bg-transparent text-transparent group-hover:border-primary/50"
+          )}
+        >
+          <Check className="size-3" strokeWidth={3} />
+        </span>
+      </span>
+      {Icon && <Icon className="size-3.5 shrink-0 text-muted-foreground" />}
       <span className="flex-1">{name}</span>
-      <span className="text-xs text-muted-foreground">{count.toLocaleString("fr-FR")}</span>
+      <span className="rounded-full bg-muted/15 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+        {count.toLocaleString("fr-FR")}
+      </span>
     </label>
   )
 }
@@ -70,35 +70,51 @@ function FilterSection({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-border/60 pb-5">
+    <div className="flex flex-col gap-0.5 border-b border-border/60 pb-5">
       <p className="mb-2 text-sm font-semibold text-foreground">{title}</p>
       {children}
     </div>
   )
 }
 
-export function FilterBar({ className }: FilterBarProps) {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-  const [selectedUpdates, setSelectedUpdates] = useState<string[]>([])
+export function FilterBar({ className, filters, onChange }: FilterBarProps) {
+  const categoryCounts = countBy((agent) => agent.category.slug)
+  const typeCounts = countBy((agent) => agent.type)
+  const languageCounts = countBy((agent) => agent.language)
+  const updateCounts = countBy((agent) => agent.recency)
 
-  function toggle(value: string, list: string[], setList: (values: string[]) => void) {
-    setList(
-      list.includes(value) ? list.filter((item) => item !== value) : [...list, value]
-    )
+  function toggle(key: keyof MarketplaceFilters, value: string) {
+    const list = filters[key]
+    onChange({
+      ...filters,
+      [key]: list.includes(value) ? list.filter((item) => item !== value) : [...list, value],
+    })
   }
 
   return (
-    <ScrollReveal className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
+    <div className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-bold text-foreground">Filtres</p>
+        {hasActiveFilters(filters) && (
+          <button
+            type="button"
+            onClick={() => onChange(emptyFilters)}
+            className="text-xs font-medium text-primary hover:underline"
+          >
+            Réinitialiser
+          </button>
+        )}
+      </div>
+
       <FilterSection title="Catégories">
         {categories.map((item) => (
           <FilterCheckbox
-            key={item.value}
-            name={item.name}
-            count={item.count}
-            checked={selectedCategories.includes(item.value)}
-            onChange={() => toggle(item.value, selectedCategories, setSelectedCategories)}
+            key={item.slug}
+            name={item.label}
+            icon={item.icon}
+            count={categoryCounts.get(item.slug) ?? 0}
+            checked={filters.categories.includes(item.slug)}
+            onChange={() => toggle("categories", item.slug)}
           />
         ))}
       </FilterSection>
@@ -106,11 +122,11 @@ export function FilterBar({ className }: FilterBarProps) {
       <FilterSection title="Type">
         {types.map((item) => (
           <FilterCheckbox
-            key={item.value}
-            name={item.name}
-            count={item.count}
-            checked={selectedTypes.includes(item.value)}
-            onChange={() => toggle(item.value, selectedTypes, setSelectedTypes)}
+            key={item.slug}
+            name={item.label}
+            count={typeCounts.get(item.slug) ?? 0}
+            checked={filters.types.includes(item.slug)}
+            onChange={() => toggle("types", item.slug)}
           />
         ))}
       </FilterSection>
@@ -118,26 +134,26 @@ export function FilterBar({ className }: FilterBarProps) {
       <FilterSection title="Language">
         {languages.map((item) => (
           <FilterCheckbox
-            key={item.value}
-            name={item.name}
-            count={item.count}
-            checked={selectedLanguages.includes(item.value)}
-            onChange={() => toggle(item.value, selectedLanguages, setSelectedLanguages)}
+            key={item.slug}
+            name={item.label}
+            count={languageCounts.get(item.slug) ?? 0}
+            checked={filters.languages.includes(item.slug)}
+            onChange={() => toggle("languages", item.slug)}
           />
         ))}
       </FilterSection>
 
       <FilterSection title="Mise à jour">
-        {miseajours.map((item) => (
+        {updates.map((item) => (
           <FilterCheckbox
-            key={item.value}
-            name={item.name}
-            count={item.count}
-            checked={selectedUpdates.includes(item.value)}
-            onChange={() => toggle(item.value, selectedUpdates, setSelectedUpdates)}
+            key={item.slug}
+            name={item.label}
+            count={updateCounts.get(item.slug) ?? 0}
+            checked={filters.updates.includes(item.slug)}
+            onChange={() => toggle("updates", item.slug)}
           />
         ))}
       </FilterSection>
-    </ScrollReveal>
+    </div>
   )
 }

@@ -12,6 +12,15 @@ export const agentColorVariants = {
 
 export type AgentColor = keyof typeof agentColorVariants
 
+export type AgentType = "workflow" | "autonomous"
+export type AgentLanguage = "typescript" | "python" | "rust" | "multi-runtime"
+export type AgentRecency = "last-24h" | "last-week" | "last-month"
+
+export type AgentCategory = {
+  slug: string
+  label: string
+}
+
 export type Agent = {
   slug: string
   name: string
@@ -23,6 +32,10 @@ export type Agent = {
   version: string
   color: AgentColor
   featured?: boolean
+  category: AgentCategory
+  type: AgentType
+  language: AgentLanguage
+  recency: AgentRecency
 } & ({ icon: LucideIcon; label?: never } | { icon?: never; label: string })
 
 type AgentIconProps = {

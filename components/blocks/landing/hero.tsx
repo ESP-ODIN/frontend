@@ -11,6 +11,7 @@ import { ScrollReveal } from "@/components/motion/scroll-reveal"
 const providers = [
   "OpenAI",
   "Anthropic",
+  "n8n",
   "Mistral",
   "Google Gemini",
   "Cohere",
@@ -58,7 +59,9 @@ export function Hero() {
         </ScrollReveal>
 
         <ScrollReveal delay={280} className="mt-6">
+            <Magnetic>
           <CopyCommand command="curl -sSL get.odin.dev | sh" />
+            </Magnetic>
         </ScrollReveal>
 
         <ScrollReveal delay={340} className="mt-4 flex items-center gap-1.5 text-xs text-white/40">

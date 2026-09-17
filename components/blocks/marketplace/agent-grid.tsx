@@ -1,34 +1,45 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 
+import type { Agent } from "@/components/blocks/agent-icon"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { AgentCard } from "@/components/blocks/agent-card"
-import { agents as baseAgents } from "@/lib/data/agents"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type AgentGridProps = {
+  agents: Agent[]
   className?: string
   pageSize?: number
 }
 
-// Demo dataset only: the real catalogue has thousands of agents, this repeats
-// the mock entries (keeping their real slug so links to /agent/[id] stay valid)
-// so pagination has something to page through.
-const demoAgents = Array.from({ length: 60 }, (_, i) => baseAgents[i % baseAgents.length])
-
-export function AgentGrid({ className, pageSize = 9 }: AgentGridProps) {
+export function AgentGrid({ agents, className, pageSize = 9 }: AgentGridProps) {
   const [page, setPage] = useState(1)
-  const pageCount = Math.max(1, Math.ceil(demoAgents.length / pageSize))
-  const pageAgents = demoAgents.slice((page - 1) * pageSize, page * pageSize)
+  const pageCount = Math.max(1, Math.ceil(agents.length / pageSize))
+  const pageAgents = agents.slice((page - 1) * pageSize, page * pageSize)
+
+  // Filters can shrink the result set below the current page — snap back to
+  // the last valid page instead of rendering an empty grid.
+  useEffect(() => {
+    setPage((current) => Math.min(current, pageCount))
+  }, [pageCount])
+
+  if (agents.length === 0) {
+    return (
+      <div className={cn(className, "flex flex-col items-center gap-2 rounded-xl border border-dashed border-border/60 py-16 text-center")}>
+        <p className="font-medium text-foreground">Aucun agent ne correspond à ces filtres.</p>
+        <p className="text-sm text-muted-foreground">Essayez d&apos;en retirer quelques-uns.</p>
+      </div>
+    )
+  }
 
   return (
     <div className={cn(className, "flex flex-col gap-8")}>
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {pageAgents.map((agent, i) => (
-          <ScrollReveal key={`${agent.slug}-${i}`} delay={(i % pageSize) * 40}>
+          <ScrollReveal key={agent.slug} delay={(i % pageSize) * 40}>
             <AgentCard agent={agent} featured={agent.featured} />
           </ScrollReveal>
         ))}

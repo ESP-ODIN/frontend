@@ -316,6 +316,88 @@
   }
 }
 
+@keyframes fx-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fx-ring-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0.9;
+    border-width: 3px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+    border-width: 0;
+  }
+}
+
+@keyframes fx-particle {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--fx-angle, 0deg)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--fx-angle, 0deg)) translateX(var(--fx-distance, 60px)) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-pop-out {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fx-ring-implode {
+  0% {
+    transform: translate(-50%, -50%) scale(2.4);
+    opacity: 0;
+    border-width: 0;
+  }
+  55% {
+    opacity: 0.7;
+    border-width: 2px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+    border-width: 3px;
+  }
+}
+
+@keyframes fx-particle-implode {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--fx-angle, 0deg)) translateX(var(--fx-distance, 60px)) scale(0);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--fx-angle, 0deg)) translateX(0) scale(0);
+    opacity: 0;
+  }
+}
+
 .fx-aurora-a {
   animation: fx-aurora-a 22s ease-in-out infinite;
 }
@@ -346,9 +428,6 @@
 
 .fx-marquee-track {
   animation: fx-marquee var(--fx-marquee-duration, 32s) linear infinite;
-}
-.fx-marquee-group:hover .fx-marquee-track {
-  animation-play-state: paused;
 }
 
 .fx-float {
@@ -422,6 +501,56 @@
   );
 }
 
+.fx-pop {
+  animation: fx-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fx-explosion-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  border: 3px solid currentColor;
+  pointer-events: none;
+  animation: fx-ring-burst 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fx-explosion-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  pointer-events: none;
+  animation: fx-particle var(--fx-duration, 600ms) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fx-pop-out {
+  animation: fx-pop-out 0.4s ease-out;
+}
+
+.fx-implosion-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  border: 3px solid currentColor;
+  pointer-events: none;
+  animation: fx-ring-implode 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fx-implosion-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  pointer-events: none;
+  animation: fx-particle-implode var(--fx-duration, 500ms) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fx-aurora-a,
   .fx-aurora-b,
@@ -431,7 +560,13 @@
   .fx-marquee-track,
   .fx-float,
   .fx-pulse-ring,
-  .fx-live-dot {
+  .fx-live-dot,
+  .fx-pop,
+  .fx-pop-out,
+  .fx-explosion-ring,
+  .fx-explosion-particle,
+  .fx-implosion-ring,
+  .fx-implosion-particle {
     animation: none !important;
   }
   .fx-reveal {

@@ -10,7 +10,6 @@ type MarqueeProps = {
   reverse?: boolean
 }
 
-/** Pure-CSS infinite scroller, paused on hover. No JS needed. */
 export function Marquee({ items, className, itemClassName, duration = 32, reverse = false }: MarqueeProps) {
   const doubled = [...items, ...items]
 

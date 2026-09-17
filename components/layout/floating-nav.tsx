@@ -18,6 +18,7 @@ type FloatingNavProps = {
   smoothScroll?: boolean
   minimal?: boolean
   ctaHref?: string
+  showCta?: boolean
 }
 
 export function FloatingNav({
@@ -25,6 +26,7 @@ export function FloatingNav({
   smoothScroll = false,
   minimal = false,
   ctaHref = "/sign-in",
+  showCta = true,
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -99,29 +101,31 @@ export function FloatingNav({
               <Search className="size-4" />
             </DialogPrimitive.Trigger>
 
-            <Magnetic>
-              {scrolled ? (
-                <Button
-                  className="fx-shine rounded-full"
-                  size="icon-sm"
-                  aria-label="Essayer Odin"
-                  render={<Link href={ctaHref} />}
-                >
-                  <ArrowRight />
-                </Button>
-              ) : (
-                <Button
-                  className="fx-shine rounded-full px-3 sm:px-4"
-                  size="sm"
-                  icon={ArrowRight}
-                  iconPosition="right"
-                  render={<Link href={ctaHref} />}
-                >
-                  <span className="hidden sm:inline">Essayer Odin</span>
-                  <span className="sm:hidden">Essayer</span>
-                </Button>
-              )}
-            </Magnetic>
+            {showCta && (
+              <Magnetic>
+                {scrolled ? (
+                  <Button
+                    className="fx-shine rounded-full"
+                    size="icon-sm"
+                    aria-label="Essayer Odin"
+                    render={<Link href={ctaHref} />}
+                  >
+                    <ArrowRight />
+                  </Button>
+                ) : (
+                  <Button
+                    className="fx-shine rounded-full px-3 sm:px-4"
+                    size="sm"
+                    icon={ArrowRight}
+                    iconPosition="right"
+                    render={<Link href={ctaHref} />}
+                  >
+                    <span className="hidden sm:inline">Essayer Odin</span>
+                    <span className="sm:hidden">Essayer</span>
+                  </Button>
+                )}
+              </Magnetic>
+            )}
 
             {links.length > 0 && (
               <Button
@@ -173,16 +177,18 @@ export function FloatingNav({
                     {link.label}
                   </Link>
                 ))}
-                <div className="mt-4 border-t border-muted/40 pt-4">
-                  <Button
-                    className="w-full rounded-lg"
-                    variant="default"
-                    size="sm"
-                    render={<Link href={ctaHref} onClick={() => setOpen(false)} />}
-                  >
-                    Essayer Odin
-                  </Button>
-                </div>
+                {showCta && (
+                  <div className="mt-4 border-t border-muted/40 pt-4">
+                    <Button
+                      className="w-full rounded-lg"
+                      variant="default"
+                      size="sm"
+                      render={<Link href={ctaHref} onClick={() => setOpen(false)} />}
+                    >
+                      Essayer Odin
+                    </Button>
+                  </div>
+                )}
               </div>
             </DialogPrimitive.Popup>
           </DialogPrimitive.Portal>
