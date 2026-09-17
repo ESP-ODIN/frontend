@@ -8,6 +8,7 @@ import { ArrowRight, CornerDownLeft, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { agents } from "@/lib/data/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
+import { ThemeToggle } from "@/components/blocks/theme-toggle"
 
 export const commandMenuHandle = DialogPrimitive.createHandle()
 
@@ -200,11 +201,14 @@ export function CommandMenu() {
             ))}
           </div>
 
-          <div className="flex items-center justify-end gap-4 border-t border-muted/40 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <CornerDownLeft className="size-3" /> sélectionner
-            </span>
-            <span>↑↓ naviguer</span>
+          <div className="flex items-center justify-between gap-4 border-t border-muted/40 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
+            <ThemeToggle />
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5">
+                <CornerDownLeft className="size-3" /> sélectionner
+              </span>
+              <span>↑↓ naviguer</span>
+            </div>
           </div>
         </DialogPrimitive.Popup>
       </DialogPrimitive.Portal>
