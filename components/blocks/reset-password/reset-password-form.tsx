@@ -82,7 +82,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" className="mt-2 rounded-lg" disabled={isSubmitting}>
+      <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
         {isSubmitting ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
       </Button>
     </form>

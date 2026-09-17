@@ -1,3 +1,5 @@
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
+
 const stats = [
   {
     value: "+184",
@@ -16,19 +18,24 @@ const stats = [
 export function Hero() {
   return (
     <div className="flex flex-col gap-8 mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-4">
-        <div className="flex flex-col gap-5">
-            <p className="text-sm font-mono tracking-wider text-primary font-bold">Boutique</p>
-            <h1 className="text-4xl font-bold sm:text-5xl">Trouver votre prochain agent.</h1>
+        <ScrollReveal className="flex flex-col gap-5">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 font-mono text-xs tracking-wider text-primary">
+              <span className="fx-live-dot size-1.5 rounded-full bg-primary" />
+                MARKETPLACE
+            </span>
+            <h1 className="text-4xl font-bold sm:text-5xl">
+              Trouver votre <span className="fx-gradient-text">prochain agent</span>.
+            </h1>
             <p className="max-w-md text-foreground/60">2 481 agents provenant de plus de 38 000 auteurs. Lisez REX, vérifiez les autorisations, installez en une seule commande.</p>
-        </div>
-        <div className="flex flex-wrap items-end justify-center gap-6 sm:gap-8 lg:justify-start">
+        </ScrollReveal>
+        <ScrollReveal delay={120} className="flex flex-wrap items-end justify-center gap-6 sm:gap-8 lg:justify-start">
             {stats.map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center gap-2 lg:items-start">
                     <p className="text-xl font-bold whitespace-nowrap">{stat.value}</p>
                     <p className="text-sm text-foreground/60 whitespace-nowrap">{stat.label}</p>
                 </div>
             ))}
-        </div>
+        </ScrollReveal>
     </div>
   )
 }

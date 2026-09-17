@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { AgentCard } from "@/components/blocks/agent-card"
 import { agents as baseAgents } from "@/lib/data/agents"
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type AgentGridProps = {
   className?: string
@@ -27,7 +28,9 @@ export function AgentGrid({ className, pageSize = 9 }: AgentGridProps) {
     <div className={cn(className, "flex flex-col gap-8")}>
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {pageAgents.map((agent, i) => (
-          <AgentCard key={`${agent.slug}-${i}`} agent={agent} featured={agent.featured} />
+          <ScrollReveal key={`${agent.slug}-${i}`} delay={(i % pageSize) * 40}>
+            <AgentCard agent={agent} featured={agent.featured} />
+          </ScrollReveal>
         ))}
       </div>
 
@@ -36,6 +39,7 @@ export function AgentGrid({ className, pageSize = 9 }: AgentGridProps) {
           variant="outline"
           icon={ArrowLeft}
           iconPosition="left"
+          className="rounded-full"
           disabled={page <= 1}
           onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
@@ -48,6 +52,7 @@ export function AgentGrid({ className, pageSize = 9 }: AgentGridProps) {
           variant="outline"
           icon={ArrowRight}
           iconPosition="right"
+          className="rounded-full"
           disabled={page >= pageCount}
           onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
         >

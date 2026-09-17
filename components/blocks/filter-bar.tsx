@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type FilterBarProps = {
   className?: string
@@ -48,7 +49,7 @@ function FilterCheckbox({
   onChange: () => void
 }) {
   return (
-    <label className="flex items-center gap-2.5 py-1 text-sm text-foreground/80 cursor-pointer hover:text-foreground">
+    <label className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 -mx-2 text-sm text-foreground/80 transition-colors hover:bg-primary/5 hover:text-foreground">
       <input
         type="checkbox"
         checked={checked}
@@ -89,7 +90,7 @@ export function FilterBar({ className }: FilterBarProps) {
   }
 
   return (
-    <div className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
+    <ScrollReveal className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
       <FilterSection title="Catégories">
         {categories.map((item) => (
           <FilterCheckbox
@@ -137,6 +138,6 @@ export function FilterBar({ className }: FilterBarProps) {
           />
         ))}
       </FilterSection>
-    </div>
+    </ScrollReveal>
   )
 }

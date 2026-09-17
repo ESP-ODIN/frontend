@@ -1,40 +1,44 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { AgentCard } from "@/components/blocks/agent-card"
 import { SectionHeader } from "@/components/blocks/landing/section-header"
+import { TiltCard } from "@/components/motion/tilt-card"
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { Magnetic } from "@/components/motion/magnetic"
 import { agents } from "@/lib/data/agents"
 
-type FeaturedAgentsProps = {
-  className?: string
-}
-
-export function FeaturedAgents({ className }: FeaturedAgentsProps) {
+export function FeaturedAgents() {
   return (
-    <div className={cn("flex flex-col items-center gap-10", className)}>
+    <div id="agents" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
         eyebrow="SÉLECTIONNÉS CETTE SEMAINE"
         title="Sélectionnés avec soin par l'équipe du registre."
       />
 
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-3">
-        {agents.slice(0, 3).map((agent) => (
-          <AgentCard key={agent.slug} agent={agent} featured />
+        {agents.slice(0, 3).map((agent, index) => (
+          <ScrollReveal key={agent.slug} delay={index * 100}>
+            <TiltCard className="rounded-xl">
+              <AgentCard agent={agent} featured />
+            </TiltCard>
+          </ScrollReveal>
         ))}
       </div>
 
-      <Button
-        variant="outline"
-        size="lg"
-        icon={ArrowRight}
-        iconPosition="right"
-        className="rounded-full"
-        render={<Link href="/marketplace" />}
-      >
-        Explorer tous les agents
-      </Button>
+      <Magnetic>
+        <Button
+          variant="outline"
+          size="lg"
+          icon={ArrowRight}
+          iconPosition="right"
+          className="rounded-full"
+          render={<Link href="/marketplace" />}
+        >
+          Explorer tous les agents
+        </Button>
+      </Magnetic>
     </div>
   )
 }

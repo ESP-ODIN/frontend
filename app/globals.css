@@ -8,6 +8,7 @@
     --font-heading: var(--font-heading);
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
+    --font-logo: var(--font-logo);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -205,5 +206,237 @@
   100% {
     opacity: 1;
     scale: 1;
+  }
+}
+
+/*
+ * Motion system — shared across the whole site (nav, hero/CTA panels, cards,
+ * reveals). Classes are prefixed `fx-` and paired with the components in
+ * `components/motion/`.
+ */
+
+@keyframes fx-aurora-a {
+  0%,
+  100% {
+    transform: translate3d(-6%, -4%, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(4%, 6%, 0) scale(1.15) rotate(20deg);
+  }
+}
+
+@keyframes fx-aurora-b {
+  0%,
+  100% {
+    transform: translate3d(6%, 4%, 0) scale(1.05) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-8%, -6%, 0) scale(0.95) rotate(-15deg);
+  }
+}
+
+@keyframes fx-aurora-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(-4%, 8%, 0) scale(1.2);
+    opacity: 0.85;
+  }
+}
+
+@keyframes fx-drift-grid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 48px;
+  }
+}
+
+@keyframes fx-gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fx-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fx-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fx-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  80%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-shine-sweep {
+  from {
+    transform: translateX(-150%) skewX(-15deg);
+  }
+  to {
+    transform: translateX(250%) skewX(-15deg);
+  }
+}
+
+@keyframes fx-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.fx-aurora-a {
+  animation: fx-aurora-a 22s ease-in-out infinite;
+}
+.fx-aurora-b {
+  animation: fx-aurora-b 26s ease-in-out infinite;
+}
+.fx-aurora-c {
+  animation: fx-aurora-c 18s ease-in-out infinite;
+}
+
+.fx-grid-overlay {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: fx-drift-grid 14s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
+}
+
+.fx-gradient-text {
+  background-image: linear-gradient(90deg, #e85d04, #ffb35c, #ffd8a8, #e85d04);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fx-gradient-x 6s ease infinite;
+}
+
+.fx-marquee-track {
+  animation: fx-marquee var(--fx-marquee-duration, 32s) linear infinite;
+}
+.fx-marquee-group:hover .fx-marquee-track {
+  animation-play-state: paused;
+}
+
+.fx-float {
+  animation: fx-float 5s ease-in-out infinite;
+}
+
+.fx-pulse-ring {
+  animation: fx-pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.fx-live-dot {
+  animation: fx-blink 2s ease-in-out infinite;
+}
+
+.fx-shine {
+  position: relative;
+  overflow: hidden;
+}
+.fx-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-150%) skewX(-15deg);
+  pointer-events: none;
+}
+.fx-shine:hover::after {
+  animation: fx-shine-sweep 1s ease;
+}
+
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--fx-reveal-delay, 0ms);
+}
+.fx-reveal.fx-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fx-spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.fx-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--fx-x, 50%) var(--fx-y, 50%),
+    rgba(232, 93, 4, 0.16),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.fx-spotlight:hover::before {
+  opacity: 1;
+}
+
+.fx-spotlight-dark::before {
+  background: radial-gradient(
+    420px circle at var(--fx-x, 50%) var(--fx-y, 50%),
+    rgba(255, 255, 255, 0.08),
+    transparent 65%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-aurora-a,
+  .fx-aurora-b,
+  .fx-aurora-c,
+  .fx-grid-overlay,
+  .fx-gradient-text,
+  .fx-marquee-track,
+  .fx-float,
+  .fx-pulse-ring,
+  .fx-live-dot {
+    animation: none !important;
+  }
+  .fx-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
