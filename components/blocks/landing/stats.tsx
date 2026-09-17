@@ -13,7 +13,7 @@ const stats: StatItem[] = [
   { value: "2,481", label: "AGENTS PUBLIÉS" },
   { value: "14.2M", label: "INSTALLATION / MOIS" },
   { value: "38K", label: "AUTEURS" },
-  { value: "99,98%", label: "REGISTRY UPTIME" },
+  { value: "99,98%", label: "TEST DE SÉCURITÉ PASSÉ" },
 ]
 
 export function Stats({ className }: StatsProps) {

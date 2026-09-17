@@ -1,4 +1,4 @@
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 
 type AgentStatsBarProps = {
   detail: AgentDetail
@@ -11,7 +11,7 @@ export function AgentStatsBar({ detail }: AgentStatsBarProps) {
     { label: "Forks", value: detail.forksLabel },
     { label: "Note communauté", value: detail.ratingLabel },
     { label: "Runtime", value: detail.runtimeLabel },
-    { label: "Uptime 30j", value: detail.uptimeLabel },
+    { label: "Tests de sécurité passés", value: detail.uptimeLabel },
   ]
 
   return (

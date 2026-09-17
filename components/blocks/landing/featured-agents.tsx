@@ -20,7 +20,7 @@ export function FeaturedAgents({ className }: FeaturedAgentsProps) {
       />
 
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-3">
-        {agents.map((agent) => (
+        {agents.slice(0, 3).map((agent) => (
           <AgentCard key={agent.slug} agent={agent} featured />
         ))}
       </div>

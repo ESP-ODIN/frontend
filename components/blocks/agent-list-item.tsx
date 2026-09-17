@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -15,7 +17,12 @@ export function AgentListItem({ agent, className }: AgentListItemProps) {
         <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
         <p className="text-xs text-muted-foreground">by {agent.author}</p>
       </div>
-      <Button variant="outline" size="sm" className="rounded-full">
+      <Button
+        variant="outline"
+        size="sm"
+        className="rounded-full"
+        render={<Link href={`/agents/${agent.slug}`} />}
+      >
         Install
       </Button>
     </div>

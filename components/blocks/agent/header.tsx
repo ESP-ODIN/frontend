@@ -1,5 +1,5 @@
 import type { Agent } from "@/components/blocks/agent-icon"
-import type { AgentDetail } from "@/lib/data/agent-details"
+import type { AgentDetail } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
 

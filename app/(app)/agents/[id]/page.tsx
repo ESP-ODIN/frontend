@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 
-import { getAgent, getAgentDetail } from "@/lib/data/agent-details"
+import { getAgent, getAgentDetail } from "@/lib/api/agents"
 import { Separator } from "@/components/ui/separator"
 import { AgentBreadcrumb } from "@/components/blocks/agent/breadcrumb"
 import { AgentHeader } from "@/components/blocks/agent/header"
@@ -16,7 +16,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
-  const agent = getAgent(id)
+  const agent = await getAgent(id)
 
   return {
     title: agent ? `${agent.name} — Odin` : "Agent introuvable — Odin",
@@ -26,8 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params
-  const agent = getAgent(id)
-  const detail = getAgentDetail(id)
+  const [agent, detail] = await Promise.all([getAgent(id), getAgentDetail(id)])
 
   if (!agent || !detail) notFound()
 
@@ -35,7 +34,7 @@ export default async function Page({ params }: PageProps) {
     <div className="flex flex-col gap-8 px-10 py-8">
       <AgentBreadcrumb categorySlug={detail.categorySlug} name={agent.name} />
       <AgentHeader agent={agent} detail={detail} />
-      <AgentInstallBar agent={agent} detail={detail} />
+      <AgentInstallBar agentSlug={agent.slug} agentName={agent.name} detail={detail} />
       <AgentStatsBar detail={detail} />
       <Separator className="mb-0" />
 
