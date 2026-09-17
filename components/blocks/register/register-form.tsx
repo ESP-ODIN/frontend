@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordStrength } from "@/components/blocks/password-strength"
 import { registerWithEmail } from "@/lib/api/auth"
 
 export function RegisterForm() {
@@ -85,6 +86,7 @@ export function RegisterForm() {
           onChange={(event) => setPassword(event.target.value)}
           placeholder="••••••••"
         />
+        <PasswordStrength password={password} />
       </div>
 
       <div className="flex flex-col gap-1.5">

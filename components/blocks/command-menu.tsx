@@ -24,6 +24,10 @@ const pages = [
   { label: "Marketplace", href: "/marketplace", sublabel: "Parcourir tous les agents" },
 ]
 
+// When the palette opens with no query, only tease the 3 most recent
+// agents instead of dumping the whole catalogue — typing still searches all of them.
+const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.slug}`))
+
 const items: ResultItem[] = [
   ...agents.map(
     (agent): ResultItem => ({
@@ -93,7 +97,7 @@ export function CommandMenu() {
 
   const results = React.useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return items
+    if (!q) return items.filter((item) => item.group === "Pages" || exampleAgentIds.has(item.id))
     return items.filter((item) => item.keywords.toLowerCase().includes(q))
   }, [query])
 

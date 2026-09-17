@@ -16,7 +16,6 @@ export type NavLink = { label: string; href: string }
 type FloatingNavProps = {
   links?: NavLink[]
   smoothScroll?: boolean
-  minimal?: boolean
   ctaHref?: string
   showCta?: boolean
 }
@@ -24,7 +23,6 @@ type FloatingNavProps = {
 export function FloatingNav({
   links = [],
   smoothScroll = false,
-  minimal = false,
   ctaHref = "/sign-in",
   showCta = true,
 }: FloatingNavProps) {
@@ -53,18 +51,6 @@ export function FloatingNav({
       cancelAnimationFrame(frame)
     }
   }, [])
-
-  if (minimal) {
-    return (
-      <header className="fixed inset-x-0 top-3 z-50 flex justify-center px-3 sm:top-4 sm:px-4">
-        <nav className="flex items-center rounded-full border border-muted/30 bg-background/70 px-3 py-2 shadow-lg shadow-black/5 backdrop-blur-xl">
-          <Link href="/" className="flex items-center gap-2 rounded-full py-1 pl-1">
-            <Logo />
-          </Link>
-        </nav>
-      </header>
-    )
-  }
 
   return (
     <>

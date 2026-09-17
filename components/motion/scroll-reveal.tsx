@@ -7,9 +7,7 @@ import { cn } from "@/lib/utils"
 type ScrollRevealProps = {
   children: ReactNode
   className?: string
-  /** Stagger delay in ms, useful when revealing a grid of siblings in sequence. */
   delay?: number
-  /** Root tag to render — defaults to `div`, pass `footer`/`section`/etc. to keep semantics. */
   as?: ElementType
 }
 
