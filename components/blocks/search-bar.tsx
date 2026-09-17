@@ -21,10 +21,10 @@ export function SearchBar({ count, className }: SearchBarProps) {
       )}
     >
       <Search className="pointer-events-none absolute left-3.5 size-4 text-muted-foreground" />
-      <span className="truncate pr-16 pl-7 text-sm text-muted-foreground">
+      <span className="truncate pr-3 pl-7 text-sm text-muted-foreground sm:pr-16">
         Search {count} agents...
       </span>
-      <span className="absolute right-1.5 rounded-full border border-muted/50 bg-background px-2 py-1 text-xs text-muted-foreground">
+      <span className="absolute right-1.5 hidden rounded-full border border-muted/50 bg-background px-2 py-1 text-xs text-muted-foreground sm:inline-block">
         ⌘K
       </span>
     </DialogPrimitive.Trigger>

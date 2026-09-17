@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { Logo } from '@/components/blocks/logo'
 import { SearchBar } from '@/components/blocks/search-bar'
 import { CommandMenu } from '@/components/blocks/command-menu'
@@ -9,7 +10,7 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 
 export function Nav() {
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -28,7 +29,7 @@ export function Nav() {
               </Button>
           </div>
 
-          {/* Mobile / tablet layout — collapsed behind a menu toggle below lg */}
+          {/* Mobile / tablet layout — logo + a burger that opens a real popup drawer, below lg */}
           <div className="flex flex-1 items-center lg:hidden">
               <Logo />
           </div>
@@ -36,35 +37,59 @@ export function Nav() {
               variant="outline"
               size="icon-sm"
               className="bg-transparent border-muted/50 lg:hidden"
-              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen((open) => !open)}
+              aria-label="Ouvrir le menu"
+              onClick={() => setOpen(true)}
           >
-              {mobileOpen ? <X /> : <Menu />}
+              <Menu />
           </Button>
       </div>
 
-      {mobileOpen && (
-        <div className="flex flex-col gap-3 pb-4 lg:hidden">
-          <SearchBar count={100} className="w-full max-w-none" />
-          <Button
-              className="w-full text-foreground"
-              variant="outline"
-              size="sm"
-              render={<Link href="/sign-in" onClick={() => setMobileOpen(false)} />}
-          >
-              Sign In
-          </Button>
-          <Button
-              className="w-full rounded-lg"
-              variant="default"
-              size="sm"
-              render={<Link href="/log-in" onClick={() => setMobileOpen(false)} />}
-          >
-              Log In
-          </Button>
-        </div>
-      )}
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+          <DialogPrimitive.Popup className="fixed inset-y-0 right-0 z-50 flex w-[85vw] max-w-sm flex-col border-l border-muted/40 bg-popover text-popover-foreground shadow-2xl outline-none data-open:animate-in data-open:slide-in-from-right data-open:fade-in-0 data-closed:animate-out data-closed:slide-out-to-right data-closed:fade-out-0 lg:hidden">
+            <div className="flex shrink-0 items-center justify-between border-b border-muted/40 px-4 py-4">
+              <Logo />
+              <DialogPrimitive.Title className="sr-only">Menu de navigation</DialogPrimitive.Title>
+              <DialogPrimitive.Close
+                render={
+                  <button
+                    type="button"
+                    aria-label="Fermer"
+                    className="flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted/10 hover:text-foreground"
+                  >
+                    <X className="size-4" />
+                  </button>
+                }
+              />
+            </div>
+            <DialogPrimitive.Description className="sr-only">
+              Rechercher des agents et naviguer sur Odin
+            </DialogPrimitive.Description>
+
+            <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+              <SearchBar count={100} className="w-full max-w-none" />
+              <Button
+                  className="w-full text-foreground"
+                  variant="outline"
+                  size="sm"
+                  render={<Link href="/sign-in" onClick={() => setOpen(false)} />}
+              >
+                  Sign In
+              </Button>
+              <Button
+                  className="w-full rounded-lg"
+                  variant="default"
+                  size="sm"
+                  render={<Link href="/log-in" onClick={() => setOpen(false)} />}
+              >
+                  Log In
+              </Button>
+            </div>
+          </DialogPrimitive.Popup>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+
       <CommandMenu />
     </>
   )
