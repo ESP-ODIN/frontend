@@ -16,7 +16,7 @@ export default function Page() {
     <main>
         <Nav />
         <Separator />
-        <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-14 sm:gap-20">
             <Hero />
             <Stats />
             <Terminal />

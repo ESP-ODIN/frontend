@@ -5,7 +5,7 @@ import { ForgotPasswordForm } from "@/components/blocks/forgot-password/forgot-p
 
 export function ForgotPasswordCard() {
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col gap-6 rounded-xl border border-muted/40 bg-background-100 p-8">
+    <div className="mx-auto flex w-full max-w-lg flex-col gap-6 rounded-xl border border-muted/40 bg-background-100 p-6 sm:p-8">
       <div className="flex flex-col items-center gap-2 text-center">
         <Logo showName={false} />
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Mot de passe oublié</h1>

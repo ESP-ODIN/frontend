@@ -11,10 +11,10 @@ type AgentHeaderProps = {
 export function AgentHeader({ agent, detail }: AgentHeaderProps) {
   return (
     <div className="flex items-start gap-4">
-      <AgentIcon icon={agent.icon} label={agent.label} color={agent.color} className="size-14 text-xl" />
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <h1 className="font-mono text-3xl font-bold text-foreground">{agent.name}</h1>
+      <AgentIcon icon={agent.icon} label={agent.label} color={agent.color} className="size-12 shrink-0 text-lg sm:size-14 sm:text-xl" />
+      <div className="flex min-w-0 flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="font-mono text-2xl font-bold text-foreground break-words sm:text-3xl">{agent.name}</h1>
           <Badge variant="outline">{agent.version}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">

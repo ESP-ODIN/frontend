@@ -11,7 +11,7 @@ export function Cta({ className }: CtaProps) {
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-[#1a1a1a] px-6 py-20 text-center",
+        "relative flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-[#1a1a1a] px-6 py-14 text-center sm:py-20",
         className
       )}
     >

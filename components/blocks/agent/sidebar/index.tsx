@@ -12,7 +12,7 @@ type AgentSidebarProps = {
 
 export function AgentSidebar({ agent, detail }: AgentSidebarProps) {
   return (
-    <div className="flex w-72 shrink-0 flex-col gap-6">
+    <div className="flex w-full flex-col gap-6 lg:w-72 lg:shrink-0">
       <AgentInfoPanel agent={agent} detail={detail} />
       <AgentPermissionsPanel detail={detail} />
       <AgentDependenciesPanel detail={detail} />

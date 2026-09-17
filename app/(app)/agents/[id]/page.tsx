@@ -31,15 +31,15 @@ export default async function Page({ params }: PageProps) {
   if (!agent || !detail) notFound()
 
   return (
-    <div className="flex flex-col gap-8 px-10 py-8">
+    <div className="flex flex-col gap-8 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
       <AgentBreadcrumb categorySlug={detail.categorySlug} name={agent.name} />
       <AgentHeader agent={agent} detail={detail} />
       <AgentInstallBar agentSlug={agent.slug} agentName={agent.name} detail={detail} />
       <AgentStatsBar detail={detail} />
       <Separator className="mb-0" />
 
-      <div className="flex gap-10">
-        <div className="flex-1">
+      <div className="flex flex-col gap-10 lg:flex-row">
+        <div className="min-w-0 flex-1">
           <AgentTabsSection detail={detail} />
         </div>
         <AgentSidebar agent={agent} detail={detail} />
