@@ -141,7 +141,7 @@ export function Terminal({
     <div
       ref={containerRef}
       className={cn(
-        "overflow-hidden rounded-2xl bg-[#1a1a1a] shadow-2xl shadow-black/20 ring-1 ring-white/10",
+        "overflow-hidden rounded-3xl bg-[#1a1a1a] shadow-2xl shadow-black/20 ring-1 ring-white/10",
         className,
       )}
     >

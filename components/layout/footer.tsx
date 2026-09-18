@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Logo } from "@/components/blocks/logo"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type FooterColumn = {
   title: string
@@ -58,7 +59,7 @@ type FooterProps = {
 
 export function Footer({ className }: FooterProps) {
   return (
-    <footer className={cn("flex flex-col gap-16 pt-30 pb-8", className)}>
+    <ScrollReveal as="footer" className={cn("flex flex-col gap-16 pt-30 pb-8", className)}>
       <div className="flex flex-col justify-between gap-12 lg:flex-row lg:gap-8">
         <div className="flex max-w-xs flex-col gap-3">
           <Logo />
@@ -79,9 +80,11 @@ export function Footer({ className }: FooterProps) {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground"
+                      className="group inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-primary"
                     >
-                      {link.label}
+                      <span className="transition-transform group-hover:translate-x-0.5">
+                        {link.label}
+                      </span>
                     </Link>
                   </li>
                 ))}
@@ -93,8 +96,11 @@ export function Footer({ className }: FooterProps) {
 
       <div className="flex flex-col gap-8">
         <Separator />
-        <p className="text-center font-mono text-xs text-muted-foreground">© Odin · v0.1.0</p>
+        <p className="flex items-center justify-center gap-2 text-center font-mono text-xs text-muted-foreground">
+          <span className="fx-live-dot size-1.5 rounded-full bg-primary" />
+          © Odin · v0.1.0
+        </p>
       </div>
-    </footer>
+    </ScrollReveal>
   )
 }

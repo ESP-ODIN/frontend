@@ -5,8 +5,15 @@ import { SlidersHorizontal, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { FilterBar } from "@/components/blocks/filter-bar"
+import type { MarketplaceFilters } from "@/lib/marketplace-filters"
 
-export function FilterSheet() {
+type FilterSheetProps = {
+  filters: MarketplaceFilters
+  onChange: (next: MarketplaceFilters) => void
+  activeCount: number
+}
+
+export function FilterSheet({ filters, onChange, activeCount }: FilterSheetProps) {
   return (
     <DialogPrimitive.Root>
       <DialogPrimitive.Trigger
@@ -16,7 +23,7 @@ export function FilterSheet() {
             icon={SlidersHorizontal}
             className="w-full justify-center rounded-lg bg-transparent lg:hidden"
           >
-            Filtrer
+            Filtrer{activeCount > 0 && ` · ${activeCount}`}
           </Button>
         }
       />
@@ -45,7 +52,7 @@ export function FilterSheet() {
           </DialogPrimitive.Description>
 
           <div className="flex-1 overflow-y-auto px-5 py-5">
-            <FilterBar className="w-full" />
+            <FilterBar className="w-full" filters={filters} onChange={onChange} />
           </div>
 
           <div className="shrink-0 border-t border-muted/40 p-4">

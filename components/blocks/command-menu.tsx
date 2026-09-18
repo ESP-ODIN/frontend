@@ -8,6 +8,7 @@ import { ArrowRight, CornerDownLeft, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { agents } from "@/lib/data/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
+import { ThemeToggle } from "@/components/blocks/theme-toggle"
 
 export const commandMenuHandle = DialogPrimitive.createHandle()
 
@@ -23,6 +24,10 @@ const pages = [
   { label: "Accueil", href: "/", sublabel: "Page d'accueil d'Odin" },
   { label: "Marketplace", href: "/marketplace", sublabel: "Parcourir tous les agents" },
 ]
+
+// When the palette opens with no query, only tease the 3 most recent
+// agents instead of dumping the whole catalogue — typing still searches all of them.
+const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.slug}`))
 
 const items: ResultItem[] = [
   ...agents.map(
@@ -93,7 +98,7 @@ export function CommandMenu() {
 
   const results = React.useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return items
+    if (!q) return items.filter((item) => item.group === "Pages" || exampleAgentIds.has(item.id))
     return items.filter((item) => item.keywords.toLowerCase().includes(q))
   }, [query])
 
@@ -196,11 +201,14 @@ export function CommandMenu() {
             ))}
           </div>
 
-          <div className="flex items-center justify-end gap-4 border-t border-muted/40 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <CornerDownLeft className="size-3" /> sélectionner
-            </span>
-            <span>↑↓ naviguer</span>
+          <div className="flex items-center justify-between gap-4 border-t border-muted/40 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
+            <ThemeToggle />
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5">
+                <CornerDownLeft className="size-3" /> sélectionner
+              </span>
+              <span>↑↓ naviguer</span>
+            </div>
           </div>
         </DialogPrimitive.Popup>
       </DialogPrimitive.Portal>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordStrength } from "@/components/blocks/password-strength"
 import { registerWithEmail } from "@/lib/api/auth"
 
 export function RegisterForm() {
@@ -85,6 +86,7 @@ export function RegisterForm() {
           onChange={(event) => setPassword(event.target.value)}
           placeholder="••••••••"
         />
+        <PasswordStrength password={password} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -106,7 +108,7 @@ export function RegisterForm() {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" className="mt-2 rounded-lg" disabled={isSubmitting}>
+      <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
         {isSubmitting ? "Création du compte..." : "Créer mon compte"}
       </Button>
     </form>

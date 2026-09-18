@@ -1,8 +1,9 @@
 import { Code, GitBranch, Package, Shield, Users, Zap, type LucideIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
 import { IconTile } from "@/components/blocks/icon-tile"
 import { SectionHeader } from "@/components/blocks/landing/section-header"
+import { SpotlightPanel } from "@/components/motion/spotlight-panel"
+import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type FeatureItem = {
   title: string
@@ -49,36 +50,31 @@ const features: FeatureItem[] = [
   },
 ]
 
-type HowItWorksProps = {
-  className?: string
-}
-
-export function HowItWorks({ className }: HowItWorksProps) {
+export function HowItWorks() {
   return (
-    <div className={cn("flex flex-col items-center gap-10", className)}>
+    <div id="how-it-works" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
         eyebrow="COMMENT ÇA FONCTIONNE"
         title="Considérez les agents comme des colis."
         description="Manifestes standards. Versions sémantiques. Éditeurs signés. Exécution en sandbox. Tout ce qu'on attend d'un écosystème de paquets moderne — appliqué aux agents autonomes."
       />
 
-      <div className="grid w-full grid-cols-1 rounded-3xl border border-muted/40 lg:grid-cols-3">
+      <div className="relative grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
         {features.map(({ title, description, icon: Icon }, index) => (
-          <div
-            key={title}
-            className={cn(
-              "flex flex-col gap-5 p-6 sm:p-8",
-              index !== 0 && "border-t border-muted/40 lg:border-t-0",
-              index % 3 !== 0 && "lg:border-l lg:border-muted/40",
-              index >= 3 && "lg:border-t lg:border-muted/40"
-            )}
-          >
-            <IconTile icon={Icon} />
-            <div className="flex flex-col gap-2">
-              <h3 className="text-2xl font-bold text-foreground">{title}</h3>
-              <p className="text-muted-foreground">{description}</p>
-            </div>
-          </div>
+          <ScrollReveal key={title} delay={index * 80}>
+            <SpotlightPanel className="group flex h-full flex-col gap-5 rounded-2xl border border-muted/40 bg-background-100 p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 sm:p-8">
+              <div className="flex items-center gap-3">
+                <IconTile icon={Icon} className="transition-transform group-hover:scale-105" />
+                <span className="font-mono text-xs text-muted-foreground/60">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xl font-bold text-foreground sm:text-2xl">{title}</h3>
+                <p className="text-muted-foreground">{description}</p>
+              </div>
+            </SpotlightPanel>
+          </ScrollReveal>
         ))}
       </div>
     </div>

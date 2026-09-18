@@ -1,4 +1,4 @@
-import { Fira_Code, Inter, Roboto } from "next/font/google"
+import { Fira_Code, Inter, Roboto, Space_Grotesk } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -24,6 +24,13 @@ const roboto = Roboto({
   fallback: ["Helvetica", "Arial", "sans-serif"],
 })
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-logo",
+  fallback: ["Helvetica", "Arial", "sans-serif"],
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,6 +46,7 @@ export default function RootLayout({
         "font-sans",
         inter.variable,
         roboto.variable,
+        spaceGrotesk.variable,
       )}
     >
       <body>

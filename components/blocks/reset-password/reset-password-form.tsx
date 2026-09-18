@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordStrength } from "@/components/blocks/password-strength"
 import { resetPassword } from "@/lib/api/auth"
 
 type ResetPasswordFormProps = {
@@ -61,6 +62,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           onChange={(event) => setPassword(event.target.value)}
           placeholder="••••••••"
         />
+        <PasswordStrength password={password} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -82,7 +84,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" className="mt-2 rounded-lg" disabled={isSubmitting}>
+      <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
         {isSubmitting ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
       </Button>
     </form>
