@@ -37,8 +37,6 @@ export function isEnvVarNameValid(name: string): boolean {
   return ENV_VAR_NAME_REGEX.test(name)
 }
 
-// In "repository" mode the fields must come from a scan of the *current* repo URL,
-// so editing the URL after a scan forces a re-scan before moving on.
 export function isManifestSourceReady(source: SourceSection): boolean {
   if (source.kind === "repository")
     return source.scannedRepoUrl === source.repoUrl

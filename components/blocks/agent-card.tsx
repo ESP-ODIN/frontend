@@ -15,7 +15,6 @@ type AgentCardProps = {
 export function AgentCard({ agent, featured = false, className }: AgentCardProps) {
   return (
     <>
-      {/* Compact list row — phones only, keeps the marketplace scannable without a mouse */}
       <Link
         href={`/agents/${agent.slug}`}
         className={cn(
@@ -50,7 +49,6 @@ export function AgentCard({ agent, featured = false, className }: AgentCardProps
         <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
       </Link>
 
-      {/* Full card — from sm upward */}
       <SpotlightPanel className={cn("hidden rounded-xl sm:block", className)}>
         <Link
           href={`/agents/${agent.slug}`}

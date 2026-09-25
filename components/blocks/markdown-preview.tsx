@@ -3,8 +3,6 @@ import remarkGfm from "remark-gfm"
 
 import { cn } from "@/lib/utils"
 
-// GitHub-flavoured Markdown (tables, task lists, strikethrough, autolinks) rendered
-// as React elements — raw HTML in the source is ignored, so user content is safe to render.
 const components: Components = {
   h1: ({ node: _node, ...props }) => (
     <h1
@@ -42,7 +40,6 @@ const components: Components = {
     <ul
       className={cn(
         "my-3 list-disc space-y-1 pl-6",
-        // Task lists: no bullet, the checkbox plays that role.
         className?.includes("contains-task-list") && "list-none pl-1",
         className
       )}

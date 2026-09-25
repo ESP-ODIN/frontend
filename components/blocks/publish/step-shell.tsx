@@ -11,7 +11,6 @@ type StepShellProps = {
   title: string
   description: string
   children: ReactNode
-  /** Overrides the default "Continuer" button. Pass `null` to hide the right-side action entirely. */
   footer?: ReactNode | null
 }
 

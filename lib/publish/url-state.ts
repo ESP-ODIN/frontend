@@ -10,8 +10,6 @@ import {
 } from "./constants"
 import type { PublishFormData } from "./types"
 
-// The whole wizard state lives in `?draft=` so a refresh (or a shared link) restores it.
-// The value is base64url-encoded JSON: opaque, but URL-safe and UTF-8 friendly.
 export const DRAFT_PARAM = "draft"
 
 export type PublishDraft = { data: PublishFormData; step: number }
@@ -34,8 +32,6 @@ export function serializeDraft(draft: PublishDraft): string {
   return toBase64Url(JSON.stringify({ d: draft.data, s: draft.step }))
 }
 
-// The URL is user-editable, so every field is checked against its expected type
-// and falls back to the default — a tampered or outdated draft never crashes the wizard.
 function str(value: unknown, fallback: string): string {
   return typeof value === "string" ? value : fallback
 }

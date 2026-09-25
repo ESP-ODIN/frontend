@@ -4,11 +4,6 @@ import { genericDetail, overrides, type AgentDetail } from "@/lib/data/agent-det
 
 export type { AgentDetail }
 
-// Data-access layer for agents. Every export here is async on purpose:
-// today it reads the in-memory fixtures under lib/data/, but the signatures
-// already match what a real backend call would look like, so swapping the
-// bodies for `fetch("/api/agents/...")` later won't touch any caller.
-
 export async function getAgents(): Promise<Agent[]> {
   return agents
 }

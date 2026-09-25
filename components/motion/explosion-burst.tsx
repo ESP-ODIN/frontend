@@ -8,16 +8,9 @@ const DEFAULT_IMPLODE_COLORS = ["#94a3b8", "#cbd5e1", "#64748b", "#e2e8f0"]
 type ExplodeOptions = {
   count?: number
   colors?: string[]
-  /** "burst" sprays particles outward (activate). "implode" pulls them back in (deactivate). */
   mode?: "burst" | "implode"
 }
 
-/**
- * Attach `containerRef` to a `position: relative` wrapper around a trigger
- * (button, icon…), then call `explode()` on interaction to pop it and spray
- * particles outward, or `implode: true` to collapse them inward. No-ops
- * under `prefers-reduced-motion`.
- */
 export function useExplosion<T extends HTMLElement = HTMLElement>() {
   const containerRef = useRef<T | null>(null)
 

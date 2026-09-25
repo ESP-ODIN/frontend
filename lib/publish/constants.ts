@@ -16,9 +16,6 @@ import type {
   WizardStepId,
 } from "./types"
 
-// Only "workflow" and "autonomous" ship today, but the selector renders whatever
-// is in this array — adding "Automatisation avec modèle IA classique" or
-// "Agent IA agentique" later is just another entry here, no component changes.
 export const AGENT_TYPE_OPTIONS: AgentTypeOption[] = [
   {
     id: "workflow",
@@ -98,9 +95,6 @@ export const MANIFEST_SOURCE_OPTIONS: {
 
 export const MAX_TAGS = 4
 
-// Shown to the owner right after submitting: every agent goes through the security
-// pipeline before it's actually listed. Placeholder values — update both once the
-// security team has defined the real pipeline and its SLA.
 export const SECURITY_REVIEW = {
   estimatedDuration: "24 à 48 heures",
   checks: [
@@ -111,11 +105,9 @@ export const SECURITY_REVIEW = {
   ],
 }
 
-// One step per manifest.toml table, so the form reads like the file it produces.
 export const WIZARD_STEPS: {
   id: WizardStepId
   label: string
-  /** TOML table(s) the step fills — shown next to the step title. */
   tables: string[]
 }[] = [
   { id: "source", label: "Source", tables: [] },

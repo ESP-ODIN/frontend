@@ -24,7 +24,6 @@ export function SecurityReviewDialog({
   slug,
 }: SecurityReviewDialogProps) {
   return (
-    // Outside clicks don't close it: the owner has to acknowledge the message.
     <Dialog open={open} onOpenChange={onOpenChange} disablePointerDismissal>
       <DialogContent
         showCloseButton={false}

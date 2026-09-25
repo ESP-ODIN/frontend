@@ -14,7 +14,6 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const draftParam = (await searchParams)[DRAFT_PARAM]
-  // Restoring server-side means the first render already shows the saved draft — no flash, no hydration mismatch.
   const initialDraft = parseDraft(
     typeof draftParam === "string" ? draftParam : null
   )

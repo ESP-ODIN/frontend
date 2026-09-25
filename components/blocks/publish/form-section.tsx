@@ -2,7 +2,6 @@ import type { ReactNode } from "react"
 
 type FormSectionProps = {
   title: string
-  /** manifest.toml table the fields are written to, e.g. "permissions.terminal". */
   table?: string
   description?: string
   children: ReactNode

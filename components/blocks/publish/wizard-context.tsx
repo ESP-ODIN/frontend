@@ -40,7 +40,6 @@ type SubmissionState =
 
 type WizardContextValue = {
   data: PublishFormData
-  /** Shallow-merges `patch` into one manifest section of the form. */
   updateSection: <K extends keyof PublishFormData>(
     section: K,
     patch: Partial<PublishFormData[K]>
@@ -58,8 +57,6 @@ type WizardContextValue = {
 
 const WizardContext = createContext<WizardContextValue | null>(null)
 
-// Lives in the provider rather than in the name field so a draft restored on a later
-// step still gets its name re-checked (the field itself is only mounted on the package step).
 function useNameAvailability(packageName: string): NameCheckStatus {
   const [status, setStatus] = useState<NameCheckStatus>("idle")
   const debouncedName = useDebouncedValue(packageName, 400)
@@ -86,8 +83,6 @@ function useNameAvailability(packageName: string): NameCheckStatus {
   return status
 }
 
-// Mirrors the wizard into `?draft=` (replaceState: no history spam, no navigation)
-// so a refresh restores it. Cleared once the agent is published.
 function useDraftUrlSync(
   data: PublishFormData,
   step: number,

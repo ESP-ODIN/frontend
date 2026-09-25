@@ -19,7 +19,6 @@ export function StepReview() {
   const { data, stepValidity, submission, setSubmission } = usePublishWizard()
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
 
-  // The recap shows exactly what gets posted: the payload's manifest, serialized.
   const payload = useMemo(() => buildPublishPayload(data), [data])
   const toml = useMemo(
     () => stringifyManifestToml(payload.manifest),

@@ -24,7 +24,6 @@ type ScanState =
   | { status: "not-found" }
   | { status: "error"; message: string }
 
-// Undefined keys (absent or invalid in the file) fall back to their default value.
 function withDefaults<T extends object>(defaults: T, scanned: Partial<T>): T {
   const result = { ...defaults }
   for (const key of Object.keys(scanned) as (keyof T)[]) {
@@ -50,8 +49,6 @@ export function RepoUrlField() {
     try {
       const result = await scanManifestFromRepo(repoUrl)
       if (!result.found) {
-        // No manifest.toml: nothing gets prefilled, the owner is sent to the manual form.
-        // Values left over from a previous repo's scan are wiped so they can't leak in.
         updateSection("source", {
           kind: "form",
           scannedRepoUrl: "",
@@ -66,7 +63,6 @@ export function RepoUrlField() {
         return
       }
       const { scanned } = result
-      // Every section mirrors the file: an explicit (re)scan overwrites what was there.
       updateSection("source", {
         scannedRepoUrl: repoUrl,
         readmeFile: scanned.readmeFile,

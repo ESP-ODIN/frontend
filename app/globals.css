@@ -209,12 +209,6 @@
   }
 }
 
-/*
- * Motion system — shared across the whole site (nav, hero/CTA panels, cards,
- * reveals). Classes are prefixed `fx-` and paired with the components in
- * `components/motion/`.
- */
-
 @keyframes fx-aurora-a {
   0%,
   100% {

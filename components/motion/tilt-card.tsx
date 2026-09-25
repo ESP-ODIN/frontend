@@ -9,7 +9,6 @@ type TiltCardProps = {
   className?: string
 }
 
-/** Subtle 3D tilt + spotlight glow following the cursor, disabled under reduced motion. */
 export function TiltCard({ children, className }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
 

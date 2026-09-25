@@ -20,8 +20,6 @@ export function AgentGrid({ agents, className, pageSize = 9 }: AgentGridProps) {
   const pageCount = Math.max(1, Math.ceil(agents.length / pageSize))
   const pageAgents = agents.slice((page - 1) * pageSize, page * pageSize)
 
-  // Filters can shrink the result set below the current page — snap back to
-  // the last valid page instead of rendering an empty grid.
   useEffect(() => {
     setPage((current) => Math.min(current, pageCount))
   }, [pageCount])

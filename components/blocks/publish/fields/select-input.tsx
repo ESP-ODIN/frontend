@@ -35,7 +35,6 @@ export function SelectInput({
   return (
     <Select<string>
       id={id}
-      // `null` is Base UI's "nothing selected" — the form stores that as "".
       value={value || null}
       onValueChange={(next) => onChange(next ?? "")}
       items={options.map((option) => ({

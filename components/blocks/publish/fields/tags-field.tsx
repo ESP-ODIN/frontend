@@ -21,7 +21,6 @@ export function TagsField() {
       .map((tag) => tag.trim())
       .filter(Boolean)
     if (newTags.length === 0) return
-    // Extra tags past the limit are dropped rather than rejecting the whole paste.
     updateSection("package", {
       tags: Array.from(new Set([...tags, ...newTags])).slice(0, MAX_TAGS),
     })
