@@ -44,7 +44,6 @@ export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
             </button>
           ))}
         </div>
-        {/* Hints that the tab row scrolls horizontally once it no longer fits — no scrollbar to rely on for touch */}
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden" />
       </div>
 

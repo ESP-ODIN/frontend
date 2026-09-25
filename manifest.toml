@@ -1,0 +1,29 @@
+// TEST TEST TEST
+[package]
+name        = "pr-summarizer"
+version     = "1.0.0"
+description = "Résume les nouvelles PR GitHub et poste un récap sur Slack toutes les heures."
+type        = "workflow"
+category    = "dev-tools"
+tags        = ["github", "slack", "cli"]
+repository  = "https://github.com/ESP-ODIN/pr-summarizer"
+readme      = "README.md"
+changelog   = """
+## 1.0.0
+
+- Première publication.
+"""
+
+[run]
+runtime    = "python3"
+entrypoint = "main.py"
+args       = ["--config", "config.yaml"]
+
+[permissions]
+network    = true
+filesystem = "read-only"
+env        = ["GITHUB_TOKEN", "SLACK_WEBHOOK_URL"]
+
+[permissions.terminal]
+access   = "restricted"
+commands = ["git", "gh"]

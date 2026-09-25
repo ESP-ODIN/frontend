@@ -25,9 +25,7 @@ function readStore(): Record<string, AgentInteractionState> {
 function writeStore(store: Record<string, AgentInteractionState>) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store))
-  } catch {
-    // localStorage unavailable (private browsing, quota, ...) — state stays in-memory only.
-  }
+  } catch {}
 }
 
 async function persist(slug: string, next: AgentInteractionState): Promise<AgentInteractionState> {

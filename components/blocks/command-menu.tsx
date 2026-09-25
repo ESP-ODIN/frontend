@@ -23,10 +23,9 @@ type ResultItem = {
 const pages = [
   { label: "Accueil", href: "/", sublabel: "Page d'accueil d'Odin" },
   { label: "Marketplace", href: "/marketplace", sublabel: "Parcourir tous les agents" },
+  { label: "Publish", href: "/publish", sublabel: "Publier un nouvel agent" }
 ]
 
-// When the palette opens with no query, only tease the 3 most recent
-// agents instead of dumping the whole catalogue — typing still searches all of them.
 const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.slug}`))
 
 const items: ResultItem[] = [

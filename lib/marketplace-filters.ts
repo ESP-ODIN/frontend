@@ -23,8 +23,6 @@ export function hasActiveFilters(filters: MarketplaceFilters) {
   )
 }
 
-// "Dernières 24h" agents are also within "la semaine dernière" and "le mois
-// dernier" — each bucket includes everything more recent than it.
 const recencyRank: Record<AgentRecency, number> = {
   "last-24h": 0,
   "last-week": 1,

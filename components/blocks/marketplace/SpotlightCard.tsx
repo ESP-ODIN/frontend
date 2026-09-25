@@ -44,7 +44,6 @@ export function SpotlightCard() {
                 <Star className="size-4" /> {spotlightagent.likes} • <MoveDown className="size-4" /> {spotlightagent.downloades} installations by @{spotlightagent.author} • Mis à jour il y a {spotlightagent.ladtupdated}
             </p>
 
-            {/* Compact mobile/tablet CTA — the full manifest table below is desktop-only */}
             <CopyCommand className="w-fit max-w-full overflow-x-auto text-xs lg:hidden" command={`odin install ${spotlightagent.manifest}`} />
         </div>
         <Separator orientation="vertical" className="mx-8 hidden bg-white/10 lg:block" />

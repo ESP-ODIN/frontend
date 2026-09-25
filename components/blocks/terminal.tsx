@@ -8,15 +8,12 @@ type LineKind = "comment" | "command" | "output" | "result"
 type TerminalLine = {
   kind: LineKind
   text: string
-  /** Délai avant l'apparition de la ligne, en ms */
   delay?: number
 }
 
 type TerminalProps = {
   className?: string
-  /** Chemin affiché dans la barre de titre */
   title?: string
-  /** Rejoue l'animation en boucle une fois la séquence terminée */
   loop?: boolean
 }
 
@@ -32,7 +29,6 @@ const lines: TerminalLine[] = [
   { kind: "result", text: "3 suggestions · 0 blocking error ✓", delay: 900 },
 ]
 
-/** Vitesse de frappe par caractère (ms). Les sorties s'affichent d'un bloc. */
 const TYPING_SPEED = 42
 
 const prefix: Record<LineKind, string> = {
@@ -58,7 +54,6 @@ export function Terminal({
   const [started, setStarted] = useState(false)
   const [typed, setTyped] = useState<string[]>([])
 
-  // L'animation ne démarre que lorsque le terminal entre dans le viewport.
   useEffect(() => {
     const node = containerRef.current
     if (!node) return
@@ -101,8 +96,6 @@ export function Terminal({
           await wait(line.delay ?? 400)
           if (cancelled) return
 
-          // Les lignes tapées par l'utilisateur s'écrivent caractère par caractère,
-          // les sorties de la CLI apparaissent instantanément.
           if (line.kind === "comment" || line.kind === "command") {
             for (let length = 1; length <= line.text.length; length++) {
               await wait(TYPING_SPEED)

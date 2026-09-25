@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import { ArrowRight, Menu, Search, X } from "lucide-react"
+import { ArrowRight, Menu, Search, Upload, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,7 @@ export function FloatingNav({
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const showPublish = usePathname() === "/marketplace"
 
   useEffect(() => {
     if (!smoothScroll) return
@@ -86,6 +88,32 @@ export function FloatingNav({
             >
               <Search className="size-4" />
             </DialogPrimitive.Trigger>
+
+            {showPublish && (
+              <Magnetic>
+                {scrolled ? (
+                  <Button
+                    className="fx-shine rounded-full"
+                    size="icon-sm"
+                    aria-label="Publier un agent"
+                    render={<Link href="/publish" />}
+                  >
+                    <Upload />
+                  </Button>
+                ) : (
+                  <Button
+                    className="fx-shine rounded-full px-3 sm:px-4"
+                    size="sm"
+                    icon={ArrowRight}
+                    iconPosition="right"
+                    render={<Link href="/publish" />}
+                  >
+                    <span className="hidden sm:inline">Publier un agent</span>
+                    <span className="sm:hidden">Publier</span>
+                  </Button>
+                )}
+              </Magnetic>
+            )}
 
             {showCta && (
               <Magnetic>
@@ -163,6 +191,18 @@ export function FloatingNav({
                     {link.label}
                   </Link>
                 ))}
+                {showPublish && (
+                  <div className="mt-4 border-t border-muted/40 pt-4">
+                    <Button
+                      className="w-full rounded-lg"
+                      variant="default"
+                      size="sm"
+                      render={<Link href="/publish" onClick={() => setOpen(false)} />}
+                    >
+                      Publier un agent
+                    </Button>
+                  </div>
+                )}
                 {showCta && (
                   <div className="mt-4 border-t border-muted/40 pt-4">
                     <Button

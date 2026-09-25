@@ -47,7 +47,6 @@ export function useAgentInteractions(slug: string) {
       call(slug)
         .then(setState)
         .catch(() => {
-          // A real API call can fail — roll back to the pre-mutation state.
           setState(rollbackTo)
         })
     },

@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 type SpotlightPanelProps = {
   children: ReactNode
   className?: string
-  /** Use on panels that already sit on a dark background. */
   dark?: boolean
 }
 

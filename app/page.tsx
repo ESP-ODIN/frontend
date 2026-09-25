@@ -1,5 +1,3 @@
-// Landing page
-
 import { FloatingNav } from "@/components/layout/floating-nav"
 import { Hero } from "@/components/blocks/landing/hero"
 import { Stats } from "@/components/blocks/landing/stats"
