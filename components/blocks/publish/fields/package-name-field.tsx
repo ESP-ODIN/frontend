@@ -29,8 +29,8 @@ function NameCheckIndicator({
 }
 
 export function PackageNameField() {
-  const { data, updateGeneral, nameCheckStatus } = usePublishWizard()
-  const packageName = data.general.packageName
+  const { data, updateSection, nameCheckStatus } = usePublishWizard()
+  const packageName = data.package.name
 
   const formatError =
     packageName.length > 0 && !isPackageNameFormatValid(packageName)
@@ -63,7 +63,7 @@ export function PackageNameField() {
         id="package-name"
         value={packageName}
         onChange={(event) =>
-          updateGeneral({ packageName: event.target.value.toLowerCase() })
+          updateSection("package", { name: event.target.value.toLowerCase() })
         }
         placeholder="mon-agent"
         className="font-mono"

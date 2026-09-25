@@ -5,7 +5,7 @@ import { FieldShell } from "@/components/blocks/publish/fields/field-shell"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 
 export function EntrypointField() {
-  const { data, updateManifest } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <FieldShell
@@ -16,8 +16,10 @@ export function EntrypointField() {
     >
       <Input
         id="entrypoint"
-        value={data.manifest.entrypoint}
-        onChange={(event) => updateManifest({ entrypoint: event.target.value })}
+        value={data.run.entrypoint}
+        onChange={(event) =>
+          updateSection("run", { entrypoint: event.target.value })
+        }
         placeholder="main.py"
         className="font-mono"
       />

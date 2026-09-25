@@ -1,10 +1,12 @@
 import { MAX_TAGS } from "./constants"
 import type {
-  GeneralInfo,
-  ManifestInfo,
   NameCheckStatus,
-  PermissionsInfo,
+  PackageSection,
+  PermissionsSection,
   PublishFormData,
+  RunSection,
+  SourceSection,
+  TerminalSection,
 } from "./types"
 
 export const PACKAGE_NAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -35,63 +37,55 @@ export function isEnvVarNameValid(name: string): boolean {
   return ENV_VAR_NAME_REGEX.test(name)
 }
 
-export function isValidHttpUrl(value: string): boolean {
-  try {
-    const url = new URL(value)
-    return url.protocol === "http:" || url.protocol === "https:"
-  } catch {
-    return false
-  }
+// In "repository" mode the fields must come from a scan of the *current* repo URL,
+// so editing the URL after a scan forces a re-scan before moving on.
+export function isManifestSourceReady(source: SourceSection): boolean {
+  if (source.kind === "repository")
+    return source.scannedRepoUrl === source.repoUrl
+  return source.kind === "form"
 }
 
-export function isGeneralStepValid(
-  general: GeneralInfo,
+export function isSourceStepValid(source: SourceSection): boolean {
+  return isGithubRepoUrlValid(source.repoUrl) && isManifestSourceReady(source)
+}
+
+export function isDescriptionValid(description: string): boolean {
+  return description.trim().length > 0 && description.length <= 120
+}
+
+export function isPackageStepValid(
+  pkg: PackageSection,
   nameCheckStatus: NameCheckStatus
 ): boolean {
   return (
-    isPackageNameFormatValid(general.packageName) &&
+    isPackageNameFormatValid(pkg.name) &&
     nameCheckStatus === "available" &&
-    general.description.trim().length > 0 &&
-    general.description.length <= 120 &&
-    general.tags.length <= MAX_TAGS &&
-    general.type.length > 0 &&
-    general.runtime.length > 0 &&
-    general.category.length > 0
+    isSemverValid(pkg.version) &&
+    isDescriptionValid(pkg.description) &&
+    pkg.type.length > 0 &&
+    pkg.category.length > 0 &&
+    pkg.tags.length <= MAX_TAGS &&
+    pkg.changelog.trim().length > 0
   )
 }
 
-// In "repository" mode the fields must come from a scan of the *current* repo URL,
-// so editing the URL after a scan forces a re-scan before moving on.
-export function isManifestSourceReady(manifest: ManifestInfo): boolean {
-  if (manifest.source === "repository")
-    return manifest.scannedRepoUrl === manifest.repoUrl
-  return manifest.source === "form"
+export function isRunStepValid(run: RunSection): boolean {
+  return run.runtime.length > 0 && run.entrypoint.trim().length > 0
 }
 
-export function isManifestStepValid(manifest: ManifestInfo): boolean {
-  return (
-    isGithubRepoUrlValid(manifest.repoUrl) &&
-    isManifestSourceReady(manifest) &&
-    isSemverValid(manifest.version) &&
-    manifest.entrypoint.trim().length > 0 &&
-    manifest.changelog.trim().length > 0
-  )
+export function isTerminalAccessValid(terminal: TerminalSection): boolean {
+  return terminal.access !== "restricted" || terminal.commands.length > 0
 }
 
-export function isTerminalAccessValid(permissions: PermissionsInfo): boolean {
-  return (
-    permissions.terminalAccess !== "restricted" ||
-    permissions.allowedCommands.length > 0
-  )
-}
-
-export function isPermissionsStepValid(permissions: PermissionsInfo): boolean {
+export function isPermissionsStepValid(
+  permissions: PermissionsSection
+): boolean {
   const declaresSomething =
-    permissions.internetAccess ||
-    permissions.filesystemAccess !== "none" ||
-    permissions.terminalAccess !== "none" ||
-    permissions.envVars.length > 0
-  return declaresSomething && isTerminalAccessValid(permissions)
+    permissions.network ||
+    permissions.filesystem !== "none" ||
+    permissions.terminal.access !== "none" ||
+    permissions.env.length > 0
+  return declaresSomething && isTerminalAccessValid(permissions.terminal)
 }
 
 export type ChecklistItem = { id: string; label: string; done: boolean }
@@ -100,57 +94,54 @@ export function getChecklistItems(
   data: PublishFormData,
   nameCheckStatus: NameCheckStatus
 ): ChecklistItem[] {
-  const { general, manifest, permissions } = data
+  const { source, package: pkg, run, permissions } = data
 
   return [
     {
-      id: "name",
-      label: "Nom du package valide et disponible",
-      done:
-        isPackageNameFormatValid(general.packageName) &&
-        nameCheckStatus === "available",
-    },
-    {
-      id: "description",
-      label: "Description renseignée",
-      done:
-        general.description.trim().length > 0 &&
-        general.description.length <= 120,
-    },
-    {
-      id: "type",
-      label: "Type d'agent sélectionné",
-      done: general.type.length > 0,
-    },
-    {
-      id: "runtime",
-      label: "Runtime déclaré",
-      done: general.runtime.length > 0,
-    },
-    {
-      id: "category",
-      label: "Catégorie sélectionnée",
-      done: general.category.length > 0,
-    },
-    {
       id: "repo",
       label: "Lien du repo GitHub renseigné",
-      done: isGithubRepoUrlValid(manifest.repoUrl),
+      done: isGithubRepoUrlValid(source.repoUrl),
     },
     {
       id: "manifest",
       label: "Manifest importé ou créé",
-      done: isManifestSourceReady(manifest),
+      done: isManifestSourceReady(source),
+    },
+    {
+      id: "name",
+      label: "Nom du package valide et disponible",
+      done:
+        isPackageNameFormatValid(pkg.name) && nameCheckStatus === "available",
     },
     {
       id: "version",
       label: "Version au format semver",
-      done: isSemverValid(manifest.version),
+      done: isSemverValid(pkg.version),
+    },
+    {
+      id: "description",
+      label: "Description renseignée",
+      done: isDescriptionValid(pkg.description),
+    },
+    {
+      id: "category",
+      label: "Catégorie sélectionnée",
+      done: pkg.category.length > 0,
     },
     {
       id: "changelog",
       label: "Changelog rédigé",
-      done: manifest.changelog.trim().length > 0,
+      done: pkg.changelog.trim().length > 0,
+    },
+    {
+      id: "runtime",
+      label: "Runtime déclaré",
+      done: run.runtime.length > 0,
+    },
+    {
+      id: "entrypoint",
+      label: "Entrypoint renseigné",
+      done: run.entrypoint.trim().length > 0,
     },
     {
       id: "permissions",

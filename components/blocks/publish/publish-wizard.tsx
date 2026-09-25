@@ -5,8 +5,9 @@ import {
   usePublishWizard,
 } from "@/components/blocks/publish/wizard-context"
 import { StepperNav } from "@/components/blocks/publish/stepper-nav"
-import { StepGeneral } from "@/components/blocks/publish/steps/step-general"
-import { StepManifest } from "@/components/blocks/publish/steps/step-manifest"
+import { StepSource } from "@/components/blocks/publish/steps/step-source"
+import { StepPackage } from "@/components/blocks/publish/steps/step-package"
+import { StepRun } from "@/components/blocks/publish/steps/step-run"
 import { StepPermissions } from "@/components/blocks/publish/steps/step-permissions"
 import { StepReview } from "@/components/blocks/publish/steps/step-review"
 import { WizardSidebar } from "@/components/blocks/publish/sidebar/wizard-sidebar"
@@ -16,10 +17,12 @@ function WizardSteps() {
   const { currentStepId } = usePublishWizard()
 
   switch (currentStepId) {
-    case "general":
-      return <StepGeneral />
-    case "manifest":
-      return <StepManifest />
+    case "source":
+      return <StepSource />
+    case "package":
+      return <StepPackage />
+    case "run":
+      return <StepRun />
     case "permissions":
       return <StepPermissions />
     case "review":

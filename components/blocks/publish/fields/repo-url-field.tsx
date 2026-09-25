@@ -24,30 +24,21 @@ type ScanState =
   | { status: "not-found" }
   | { status: "error"; message: string }
 
-// Only fills keys the owner hasn't touched yet (still at their default value),
-// so a scan never overwrites what was typed in step 1 or in the permissions.
-function fillUntouched<T extends object>(
-  current: T,
-  defaults: T,
-  scanned: Partial<T>
-): Partial<T> {
-  const patch: Partial<T> = {}
+// Undefined keys (absent or invalid in the file) fall back to their default value.
+function withDefaults<T extends object>(defaults: T, scanned: Partial<T>): T {
+  const result = { ...defaults }
   for (const key of Object.keys(scanned) as (keyof T)[]) {
     const value = scanned[key]
-    if (value === undefined) continue
-    if (JSON.stringify(current[key]) === JSON.stringify(defaults[key])) {
-      patch[key] = value
-    }
+    if (value !== undefined) result[key] = value as T[keyof T]
   }
-  return patch
+  return result
 }
 
 export function RepoUrlField() {
-  const { data, updateGeneral, updateManifest, updatePermissions } =
-    usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
   const [scan, setScan] = useState<ScanState>({ status: "idle" })
-  const { repoUrl, scannedRepoUrl, source } = data.manifest
-  const isImport = source === "repository"
+  const { repoUrl, scannedRepoUrl, kind } = data.source
+  const isImport = kind === "repository"
   const isUrlValid = isGithubRepoUrlValid(repoUrl)
   const isScanStale =
     isImport && scannedRepoUrl !== "" && scannedRepoUrl !== repoUrl
@@ -61,53 +52,38 @@ export function RepoUrlField() {
       if (!result.found) {
         // No manifest.toml: nothing gets prefilled, the owner is sent to the manual form.
         // Values left over from a previous repo's scan are wiped so they can't leak in.
-        const { version, entrypoint, args, changelog, readme } =
-          DEFAULT_FORM_DATA.manifest
-        updateManifest({
-          source: "form",
+        updateSection("source", {
+          kind: "form",
           scannedRepoUrl: "",
-          ...(scannedRepoUrl !== "" && {
-            version,
-            entrypoint,
-            args,
-            changelog,
-            readme,
-          }),
+          readmeFile: DEFAULT_FORM_DATA.source.readmeFile,
         })
+        if (scannedRepoUrl !== "") {
+          updateSection("package", DEFAULT_FORM_DATA.package)
+          updateSection("run", DEFAULT_FORM_DATA.run)
+          updateSection("permissions", DEFAULT_FORM_DATA.permissions)
+        }
         setScan({ status: "not-found" })
         return
       }
-      const { scanned, readme, changelog } = result
-      // Manifest-step fields mirror the file exactly: an explicit scan overwrites them.
-      updateManifest({
-        version: scanned.manifest.version ?? "",
-        entrypoint: scanned.manifest.entrypoint ?? "",
-        args: scanned.manifest.args ?? [],
-        homepageUrl: scanned.manifest.homepageUrl ?? "",
-        readme,
-        changelog,
+      const { scanned } = result
+      // Every section mirrors the file: an explicit (re)scan overwrites what was there.
+      updateSection("source", {
         scannedRepoUrl: repoUrl,
+        readmeFile: scanned.readmeFile,
       })
-      updateGeneral(
-        fillUntouched(data.general, DEFAULT_FORM_DATA.general, scanned.general)
+      updateSection(
+        "package",
+        withDefaults(DEFAULT_FORM_DATA.package, scanned.package)
       )
-      updatePermissions(
-        fillUntouched(
-          data.permissions,
-          DEFAULT_FORM_DATA.permissions,
-          scanned.permissions
-        )
-      )
-
-      const warnings = [...result.warnings]
-      const typedName = data.general.packageName
-      const manifestName = scanned.general.packageName
-      if (typedName && manifestName && typedName !== manifestName) {
-        warnings.unshift(
-          `Le manifest déclare « ${manifestName} » mais le package s'appelle « ${typedName} » à l'étape 1.`
-        )
-      }
-      setScan({ status: "done", warnings })
+      updateSection("run", withDefaults(DEFAULT_FORM_DATA.run, scanned.run))
+      updateSection("permissions", {
+        ...withDefaults(DEFAULT_FORM_DATA.permissions, scanned.permissions),
+        terminal: withDefaults(
+          DEFAULT_FORM_DATA.permissions.terminal,
+          scanned.terminal
+        ),
+      })
+      setScan({ status: "done", warnings: result.warnings })
     } catch (error) {
       setScan({
         status: "error",
@@ -135,7 +111,7 @@ export function RepoUrlField() {
         hint={
           isImport
             ? "Le manifest.toml à la racine du dépôt préremplira le formulaire. S'il n'existe pas, vous passerez en création manuelle."
-            : "Le dépôt qui contient le code de votre agent."
+            : "Le dépôt qui contient le code de votre agent. Son README sera affiché sur la fiche agent."
         }
       >
         <div className="flex gap-2">
@@ -143,7 +119,7 @@ export function RepoUrlField() {
             id="repo-url"
             value={repoUrl}
             onChange={(event) => {
-              updateManifest({ repoUrl: event.target.value })
+              updateSection("source", { repoUrl: event.target.value })
               if (scan.status !== "scanning") setScan({ status: "idle" })
             }}
             onKeyDown={(event) => {
@@ -188,8 +164,8 @@ export function RepoUrlField() {
               ce dépôt.
             </p>
             <p className="text-xs text-muted-foreground">
-              On est passé en création manuelle : remplissez le formulaire
-              ci-dessous, les informations seront enregistrées côté Odin.
+              On est passé en création manuelle : remplissez les étapes
+              suivantes, le manifest sera enregistré côté Odin.
             </p>
           </div>
         </div>
@@ -200,8 +176,8 @@ export function RepoUrlField() {
           <p className="flex items-center gap-2 text-sm font-medium text-foreground">
             <CircleCheck className="size-4 shrink-0 text-primary" />
             <span>
-              <span className="font-mono">manifest.toml</span> importé. Les
-              champs vides des étapes 1 et Permissions ont aussi été complétés.
+              <span className="font-mono">manifest.toml</span> importé : les
+              étapes Package, Exécution et Permissions sont préremplies.
             </span>
           </p>
           {scan.warnings.length > 0 && (

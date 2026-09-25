@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 const MAX_LENGTH = 120
 
 export function DescriptionField() {
-  const { data, updateGeneral } = usePublishWizard()
-  const value = data.general.description
+  const { data, updateSection } = usePublishWizard()
+  const value = data.package.description
 
   return (
     <FieldShell
@@ -33,7 +33,9 @@ export function DescriptionField() {
         id="description"
         value={value}
         maxLength={MAX_LENGTH}
-        onChange={(event) => updateGeneral({ description: event.target.value })}
+        onChange={(event) =>
+          updateSection("package", { description: event.target.value })
+        }
         placeholder="Ce que fait votre agent, en une phrase."
         className="min-h-20"
       />

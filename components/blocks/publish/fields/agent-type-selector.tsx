@@ -5,7 +5,7 @@ import { ChoiceCard } from "@/components/blocks/publish/fields/choice-card"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 
 export function AgentTypeSelector() {
-  const { data, updateGeneral } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -19,8 +19,8 @@ export function AgentTypeSelector() {
             icon={option.icon}
             label={option.label}
             description={option.description}
-            selected={data.general.type === option.id}
-            onSelect={() => updateGeneral({ type: option.id })}
+            selected={data.package.type === option.id}
+            onSelect={() => updateSection("package", { type: option.id })}
           />
         ))}
       </div>

@@ -7,14 +7,16 @@ import { RUNTIME_OPTIONS } from "@/lib/publish/constants"
 import type { RuntimeId } from "@/lib/publish/types"
 
 export function RuntimeSelect() {
-  const { data, updateGeneral } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <FieldShell id="runtime" label="Runtime" required>
       <SelectInput
         id="runtime"
-        value={data.general.runtime}
-        onChange={(value) => updateGeneral({ runtime: value as RuntimeId })}
+        value={data.run.runtime}
+        onChange={(value) =>
+          updateSection("run", { runtime: value as RuntimeId })
+        }
         options={RUNTIME_OPTIONS.map((option) => ({
           value: option.id,
           label: option.label,

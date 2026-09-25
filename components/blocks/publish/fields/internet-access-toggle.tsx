@@ -5,7 +5,7 @@ import { ToggleSwitch } from "@/components/blocks/publish/fields/toggle-switch"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 
 export function InternetAccessToggle() {
-  const { data, updatePermissions } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <FieldShell
@@ -15,8 +15,10 @@ export function InternetAccessToggle() {
     >
       <ToggleSwitch
         id="internet-access"
-        checked={data.permissions.internetAccess}
-        onChange={(checked) => updatePermissions({ internetAccess: checked })}
+        checked={data.permissions.network}
+        onChange={(checked) =>
+          updateSection("permissions", { network: checked })
+        }
         label="Accès internet"
       />
     </FieldShell>

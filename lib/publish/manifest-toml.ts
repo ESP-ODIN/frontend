@@ -3,43 +3,49 @@ import { parse, TomlError } from "smol-toml"
 import { categories } from "@/lib/data/categories"
 import {
   AGENT_TYPE_OPTIONS,
+  DEFAULT_README_FILE,
   FILESYSTEM_ACCESS_OPTIONS,
   MAX_TAGS,
   RUNTIME_OPTIONS,
   TERMINAL_ACCESS_OPTIONS,
 } from "./constants"
-import type { GeneralInfo, ManifestInfo, PermissionsInfo } from "./types"
+import type {
+  Manifest,
+  PackageSection,
+  PermissionsSection,
+  PublishFormData,
+  RunSection,
+  RuntimeId,
+  TerminalSection,
+} from "./types"
 import {
   isCommandNameValid,
   isEnvVarNameValid,
+  isGithubRepoUrlValid,
   isPackageNameFormatValid,
   isSemverValid,
-  isValidHttpUrl,
 } from "./validation"
 
-// Reads a manifest.toml into the form's shape. Every key is optional: a missing key
+// Reads a manifest.toml into the form's shape (and back, see buildManifest). Every key is optional: a missing key
 // leaves the field empty, an invalid one is skipped and reported as a warning, so a
 // half-valid manifest still prefills everything it can.
 //
 // Expected format:
-//   [package]  name, version, description, type, category, tags, homepage, readme, changelog
+//   [package]  name, version, description, type, category, tags, repository,
+//              readme (path of the README in the repo), changelog (Markdown notes of this version)
 //   [run]      runtime, entrypoint, args
 //   [permissions]           network, filesystem, env
 //   [permissions.terminal]  access, commands
 
 export type ScannedManifest = {
-  general: Partial<
-    Pick<
-      GeneralInfo,
-      "packageName" | "description" | "type" | "category" | "tags" | "runtime"
-    >
-  >
-  manifest: Partial<
-    Pick<ManifestInfo, "version" | "entrypoint" | "args" | "homepageUrl">
-  >
-  permissions: Partial<PermissionsInfo>
-  /** Repo-relative paths of the files whose content fills the README / changelog. */
-  files: { readme: string; changelog: string }
+  package: Partial<PackageSection>
+  run: Partial<RunSection>
+  permissions: Partial<Omit<PermissionsSection, "terminal">>
+  terminal: Partial<TerminalSection>
+  /** GitHub URL declared in the file — the scanned repo stays the source of truth. */
+  repository?: string
+  /** Repo-relative path of the README. */
+  readmeFile: string
 }
 
 export type ManifestParseResult = {
@@ -114,12 +120,18 @@ export function parseManifestToml(source: string): ManifestParseResult {
   }
 
   const scanned: ScannedManifest = {
-    general: {
-      packageName: read(
+    package: {
+      name: read(
         "package.name",
         pkg.name,
         isStringMatching(isPackageNameFormatValid),
         "minuscules, chiffres et tirets uniquement"
+      ),
+      version: read(
+        "package.version",
+        pkg.version,
+        isStringMatching(isSemverValid),
+        "format semver attendu (ex. 1.0.0)"
       ),
       description: read(
         "package.description",
@@ -140,25 +152,19 @@ export function parseManifestToml(source: string): ManifestParseResult {
         "catégorie inconnue du marketplace"
       ),
       tags: tags?.slice(0, MAX_TAGS),
+      changelog: read(
+        "package.changelog",
+        pkg.changelog,
+        isString,
+        "texte Markdown attendu"
+      )?.trim(),
+    },
+    run: {
       runtime: read(
         "run.runtime",
         run.runtime,
         isOneOf(RUNTIME_OPTIONS.map((option) => option.id)),
         `valeurs possibles : ${RUNTIME_OPTIONS.map((option) => option.id).join(", ")}`
-      ),
-    },
-    manifest: {
-      version: read(
-        "package.version",
-        pkg.version,
-        isStringMatching(isSemverValid),
-        "format semver attendu (ex. 1.0.0)"
-      ),
-      homepageUrl: read(
-        "package.homepage",
-        pkg.homepage,
-        isStringMatching(isValidHttpUrl),
-        "URL http(s) attendue"
       ),
       entrypoint: read(
         "run.entrypoint",
@@ -174,79 +180,170 @@ export function parseManifestToml(source: string): ManifestParseResult {
       ),
     },
     permissions: {
-      internetAccess: read(
+      network: read(
         "permissions.network",
         perms.network,
         (value): value is boolean => typeof value === "boolean",
         "true ou false attendu"
       ),
-      filesystemAccess: read(
+      filesystem: read(
         "permissions.filesystem",
         perms.filesystem,
         isOneOf(FILESYSTEM_ACCESS_OPTIONS.map((option) => option.id)),
         `valeurs possibles : ${FILESYSTEM_ACCESS_OPTIONS.map((option) => option.id).join(", ")}`
       ),
-      envVars: read(
+      env: read(
         "permissions.env",
         perms.env,
         isStringList(isEnvVarNameValid),
         "noms en MAJUSCULES_AVEC_UNDERSCORES attendus"
       ),
-      terminalAccess: read(
+    },
+    terminal: {
+      access: read(
         "permissions.terminal.access",
         terminal.access,
         isOneOf(TERMINAL_ACCESS_OPTIONS.map((option) => option.id)),
         `valeurs possibles : ${TERMINAL_ACCESS_OPTIONS.map((option) => option.id).join(", ")}`
       ),
-      allowedCommands: read(
+      commands: read(
         "permissions.terminal.commands",
         terminal.commands,
         isStringList(isCommandNameValid),
         "noms de commandes sans espace attendus"
       ),
     },
-    files: {
-      readme:
-        read(
-          "package.readme",
-          pkg.readme,
-          isString,
-          "chemin de fichier attendu"
-        ) ?? "README.md",
-      changelog:
-        read(
-          "package.changelog",
-          pkg.changelog,
-          isString,
-          "chemin de fichier attendu"
-        ) ?? "CHANGELOG.md",
-    },
+    repository: read(
+      "package.repository",
+      pkg.repository,
+      isStringMatching(isGithubRepoUrlValid),
+      "URL https://github.com/org/repo attendue"
+    ),
+    readmeFile:
+      read(
+        "package.readme",
+        pkg.readme,
+        isString,
+        "chemin de fichier attendu"
+      ) ?? DEFAULT_README_FILE,
   }
 
   return { scanned, warnings }
 }
 
-// Pulls the section of a CHANGELOG.md that documents `version` — e.g. "## 1.2.0" or
-// "## [1.2.0] - 2026-01-01" — up to the next heading of the same or higher level.
-export function extractChangelogSection(
-  changelog: string,
-  version: string
+// The form already mirrors the TOML tables: this only drops what the file doesn't carry
+// (commands when the terminal isn't restricted) and pulls the repo
+// URL and README path from the source step.
+// Assumes a valid form — the recap is only reachable once every step is.
+export function buildManifest(data: PublishFormData): Manifest {
+  const { package: pkg, run, permissions, source } = data
+  const { access, commands } = permissions.terminal
+
+  return {
+    package: {
+      name: pkg.name,
+      version: pkg.version,
+      description: pkg.description,
+      type: pkg.type,
+      category: pkg.category,
+      tags: pkg.tags,
+      repository: source.repoUrl.trim(),
+      readme: source.readmeFile,
+      changelog: pkg.changelog.trim(),
+    },
+    run: {
+      runtime: run.runtime as RuntimeId,
+      entrypoint: run.entrypoint.trim(),
+      args: run.args,
+    },
+    permissions: {
+      network: permissions.network,
+      filesystem: permissions.filesystem,
+      env: permissions.env,
+      terminal: {
+        access,
+        ...(access === "restricted" && { commands }),
+      },
+    },
+  }
+}
+
+type TomlValue = string | boolean | string[]
+
+// JSON string escapes are valid TOML basic-string escapes; TOML additionally forbids a raw DEL.
+function tomlString(value: string): string {
+  return JSON.stringify(value).replace(/\x7f/g, "\\u007f")
+}
+
+// Multi-line basic string for Markdown: every `"` and `\\` is escaped so no `"""` can close
+// it early, and control characters other than tab / newline are escaped as TOML requires.
+// The newline after the opening quotes is dropped by TOML parsers; the one before the
+// closing quotes is kept, hence the trim() when reading and building the changelog.
+function tomlMultilineString(value: string): string {
+  const escaped = value
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(
+      /[\x00-\x08\x0b-\x1f\x7f]/g,
+      (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`
+    )
+  return `"""\n${escaped}\n"""`
+}
+
+function tomlValue(value: TomlValue): string {
+  if (typeof value === "boolean") return String(value)
+  if (Array.isArray(value)) return `[${value.map(tomlString).join(", ")}]`
+  return value.includes("\n") ? tomlMultilineString(value) : tomlString(value)
+}
+
+function tomlTable(
+  name: string,
+  entries: [key: string, value: TomlValue | undefined][]
 ): string {
-  const lines = changelog.split("\n")
-  const escaped = version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  const versionPattern = new RegExp(`(^|[^\\w.])v?${escaped}([^\\w.]|$)`)
-
-  const start = lines.findIndex(
-    (line) => /^#{1,6}\s/.test(line) && versionPattern.test(line)
+  const present = entries.filter(
+    (entry): entry is [string, TomlValue] => entry[1] !== undefined
   )
-  if (start === -1) return ""
+  const width = Math.max(...present.map(([key]) => key.length))
+  return [
+    `[${name}]`,
+    ...present.map(
+      ([key, value]) => `${key.padEnd(width)} = ${tomlValue(value)}`
+    ),
+  ].join("\n")
+}
 
-  const level = /^(#+)/.exec(lines[start])![1].length
-  const end = lines.findIndex(
-    (line, index) => index > start && new RegExp(`^#{1,${level}}\\s`).test(line)
+// Hand-written rather than smol-toml's stringify to keep the conventional key order
+// and the aligned `=` of a hand-edited manifest.toml.
+export function stringifyManifestToml(manifest: Manifest): string {
+  const { package: pkg, run, permissions } = manifest
+
+  return (
+    [
+      tomlTable("package", [
+        ["name", pkg.name],
+        ["version", pkg.version],
+        ["description", pkg.description],
+        ["type", pkg.type],
+        ["category", pkg.category],
+        ["tags", pkg.tags],
+        ["repository", pkg.repository],
+        ["readme", pkg.readme],
+        ["changelog", pkg.changelog],
+      ]),
+      tomlTable("run", [
+        ["runtime", run.runtime],
+        ["entrypoint", run.entrypoint],
+        ["args", run.args],
+      ]),
+      tomlTable("permissions", [
+        ["network", permissions.network],
+        ["filesystem", permissions.filesystem],
+        ["env", permissions.env],
+      ]),
+      tomlTable("permissions.terminal", [
+        ["access", permissions.terminal.access],
+        ["commands", permissions.terminal.commands],
+      ]),
+    ].join("\n\n") + "\n"
   )
-  return lines
-    .slice(start, end === -1 ? undefined : end)
-    .join("\n")
-    .trim()
 }

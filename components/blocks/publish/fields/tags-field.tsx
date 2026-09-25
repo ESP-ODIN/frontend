@@ -10,9 +10,9 @@ import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 import { MAX_TAGS } from "@/lib/publish/constants"
 
 export function TagsField() {
-  const { data, updateGeneral } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
   const [draft, setDraft] = useState("")
-  const tags = data.general.tags
+  const tags = data.package.tags
   const isFull = tags.length >= MAX_TAGS
 
   function commitDraft(raw: string) {
@@ -22,7 +22,7 @@ export function TagsField() {
       .filter(Boolean)
     if (newTags.length === 0) return
     // Extra tags past the limit are dropped rather than rejecting the whole paste.
-    updateGeneral({
+    updateSection("package", {
       tags: Array.from(new Set([...tags, ...newTags])).slice(0, MAX_TAGS),
     })
   }
@@ -37,7 +37,7 @@ export function TagsField() {
   }
 
   function removeTag(tag: string) {
-    updateGeneral({ tags: tags.filter((item) => item !== tag) })
+    updateSection("package", { tags: tags.filter((item) => item !== tag) })
   }
 
   return (

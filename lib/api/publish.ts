@@ -1,6 +1,5 @@
 import { agents } from "@/lib/data/agents"
 import {
-  extractChangelogSection,
   ManifestSyntaxError,
   parseManifestToml,
   type ScannedManifest,
@@ -62,8 +61,6 @@ export type ManifestScanResult =
   | {
       found: true
       scanned: ScannedManifest
-      readme: string
-      changelog: string
       warnings: string[]
     }
   | { found: false }
@@ -74,6 +71,11 @@ function parseGithubRepo(repoUrl: string): { owner: string; repo: string } {
     .split("/")
     .filter(Boolean)
   return { owner, repo }
+}
+
+function normalizeRepoUrl(repoUrl: string): string {
+  const { owner, repo } = parseGithubRepo(repoUrl)
+  return `${owner}/${repo}`.toLowerCase()
 }
 
 // Manifest-provided paths are repo-relative; anything escaping the repo is refused.
@@ -139,24 +141,25 @@ export async function scanManifestFromRepo(
   }
   const { scanned, warnings } = parsed
 
-  // README / CHANGELOG are best-effort: a missing file just leaves the field to fill by hand.
-  const [readme, changelogFile] = await Promise.all([
-    fetchRepoFile(owner, repo, scanned.files.readme).catch(() => null),
-    fetchRepoFile(owner, repo, scanned.files.changelog).catch(() => null),
-  ])
-  const version = scanned.manifest.version
-  const changelog =
-    changelogFile && version
-      ? extractChangelogSection(changelogFile, version)
-      : ""
-
-  if (changelogFile && version && !changelog) {
+  // The README isn't copied: the marketplace reads it from the repo, so only its presence is checked.
+  const readme = await fetchRepoFile(owner, repo, scanned.readmeFile).catch(
+    () => ""
+  )
+  if (readme === null) {
     warnings.push(
-      `Aucune section « ${version} » trouvée dans ${scanned.files.changelog}.`
+      `${scanned.readmeFile} introuvable dans le dépôt : la fiche agent n'aura pas de README.`
+    )
+  }
+  if (
+    scanned.repository &&
+    normalizeRepoUrl(scanned.repository) !== normalizeRepoUrl(repoUrl)
+  ) {
+    warnings.push(
+      `« package.repository » pointe vers ${scanned.repository} : c'est le dépôt scanné qui sera enregistré.`
     )
   }
 
-  return { found: true, scanned, readme: readme ?? "", changelog, warnings }
+  return { found: true, scanned, warnings }
 }
 
 export type PublishResult =
@@ -167,10 +170,12 @@ export async function publishAgent(
 ): Promise<PublishResult> {
   try {
     return await mockRequest(
-      { ok: true as const, slug: payload.name },
+      { ok: true as const, slug: payload.manifest.package.name },
       {
         delayMs: 1400,
-        shouldFail: payload.name.toLowerCase().includes("force-error"),
+        shouldFail: payload.manifest.package.name
+          .toLowerCase()
+          .includes("force-error"),
       }
     )
   } catch (error) {

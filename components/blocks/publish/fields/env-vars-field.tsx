@@ -5,7 +5,7 @@ import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 import { isEnvVarNameValid } from "@/lib/publish/validation"
 
 export function EnvVarsField() {
-  const { data, updatePermissions } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <StringListField
@@ -13,8 +13,8 @@ export function EnvVarsField() {
       label="Variables d'environnement requises"
       hint="Le nom de la variable uniquement, ex. OPENAI_API_KEY."
       placeholder="OPENAI_API_KEY"
-      items={data.permissions.envVars}
-      onChange={(envVars) => updatePermissions({ envVars })}
+      items={data.permissions.env}
+      onChange={(env) => updateSection("permissions", { env })}
       validate={isEnvVarNameValid}
       invalidHint="Majuscules, chiffres et underscores uniquement."
     />

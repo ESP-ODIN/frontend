@@ -6,14 +6,14 @@ import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 import { categories } from "@/lib/data/categories"
 
 export function CategorySelect() {
-  const { data, updateGeneral } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <FieldShell id="category" label="Catégorie" required>
       <SelectInput
         id="category"
-        value={data.general.category}
-        onChange={(value) => updateGeneral({ category: value })}
+        value={data.package.category}
+        onChange={(value) => updateSection("package", { category: value })}
         options={categories.map((category) => ({
           value: category.slug,
           label: category.label,

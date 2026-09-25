@@ -6,9 +6,13 @@ description = "Résume les nouvelles PR GitHub et poste un récap sur Slack tout
 type        = "workflow"
 category    = "dev-tools"
 tags        = ["github", "slack", "cli"]
-homepage    = "https://docs.pr-summarizer.dev"
+repository  = "https://github.com/ESP-ODIN/pr-summarizer"
 readme      = "README.md"
-changelog   = "CHANGELOG.md"
+changelog   = """
+## 1.0.0
+
+- Première publication.
+"""
 
 [run]
 runtime    = "python3"

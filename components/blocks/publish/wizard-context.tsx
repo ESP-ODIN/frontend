@@ -20,16 +20,14 @@ import {
   type PublishDraft,
 } from "@/lib/publish/url-state"
 import {
-  isGeneralStepValid,
-  isManifestStepValid,
   isPackageNameFormatValid,
+  isPackageStepValid,
   isPermissionsStepValid,
+  isRunStepValid,
+  isSourceStepValid,
 } from "@/lib/publish/validation"
 import type {
-  GeneralInfo,
-  ManifestInfo,
   NameCheckStatus,
-  PermissionsInfo,
   PublishFormData,
   WizardStepId,
 } from "@/lib/publish/types"
@@ -42,9 +40,11 @@ type SubmissionState =
 
 type WizardContextValue = {
   data: PublishFormData
-  updateGeneral: (patch: Partial<GeneralInfo>) => void
-  updateManifest: (patch: Partial<ManifestInfo>) => void
-  updatePermissions: (patch: Partial<PermissionsInfo>) => void
+  /** Shallow-merges `patch` into one manifest section of the form. */
+  updateSection: <K extends keyof PublishFormData>(
+    section: K,
+    patch: Partial<PublishFormData[K]>
+  ) => void
   nameCheckStatus: NameCheckStatus
   currentStepIndex: number
   currentStepId: WizardStepId
@@ -59,7 +59,7 @@ type WizardContextValue = {
 const WizardContext = createContext<WizardContextValue | null>(null)
 
 // Lives in the provider rather than in the name field so a draft restored on a later
-// step still gets its name re-checked (the field itself is only mounted on step 1).
+// step still gets its name re-checked (the field itself is only mounted on the package step).
 function useNameAvailability(packageName: string): NameCheckStatus {
   const [status, setStatus] = useState<NameCheckStatus>("idle")
   const debouncedName = useDebouncedValue(packageName, 400)
@@ -121,29 +121,28 @@ export function PublishWizardProvider({
   const [submission, setSubmission] = useState<SubmissionState>({
     status: "idle",
   })
-  const nameCheckStatus = useNameAvailability(data.general.packageName)
+  const nameCheckStatus = useNameAvailability(data.package.name)
 
   useDraftUrlSync(data, currentStepIndex, submission.status === "success")
 
-  const updateGeneral = useCallback((patch: Partial<GeneralInfo>) => {
-    setData((prev) => ({ ...prev, general: { ...prev.general, ...patch } }))
-  }, [])
-
-  const updateManifest = useCallback((patch: Partial<ManifestInfo>) => {
-    setData((prev) => ({ ...prev, manifest: { ...prev.manifest, ...patch } }))
-  }, [])
-
-  const updatePermissions = useCallback((patch: Partial<PermissionsInfo>) => {
-    setData((prev) => ({
-      ...prev,
-      permissions: { ...prev.permissions, ...patch },
-    }))
-  }, [])
+  const updateSection = useCallback(
+    <K extends keyof PublishFormData>(
+      section: K,
+      patch: Partial<PublishFormData[K]>
+    ) => {
+      setData((prev) => ({
+        ...prev,
+        [section]: { ...prev[section], ...patch },
+      }))
+    },
+    []
+  )
 
   const stepValidity = useMemo<Record<WizardStepId, boolean>>(
     () => ({
-      general: isGeneralStepValid(data.general, nameCheckStatus),
-      manifest: isManifestStepValid(data.manifest),
+      source: isSourceStepValid(data.source),
+      package: isPackageStepValid(data.package, nameCheckStatus),
+      run: isRunStepValid(data.run),
       permissions: isPermissionsStepValid(data.permissions),
       review: true,
     }),
@@ -174,9 +173,7 @@ export function PublishWizardProvider({
 
   const value: WizardContextValue = {
     data,
-    updateGeneral,
-    updateManifest,
-    updatePermissions,
+    updateSection,
     nameCheckStatus,
     currentStepIndex,
     currentStepId: WIZARD_STEPS[currentStepIndex].id,

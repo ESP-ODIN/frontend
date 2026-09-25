@@ -5,7 +5,7 @@ import { ChoiceCard } from "@/components/blocks/publish/fields/choice-card"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 
 export function ManifestSourceSelector() {
-  const { data, updateManifest } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -19,8 +19,8 @@ export function ManifestSourceSelector() {
             icon={option.icon}
             label={option.label}
             description={option.description}
-            selected={data.manifest.source === option.id}
-            onSelect={() => updateManifest({ source: option.id })}
+            selected={data.source.kind === option.id}
+            onSelect={() => updateSection("source", { kind: option.id })}
           />
         ))}
       </div>

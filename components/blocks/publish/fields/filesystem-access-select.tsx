@@ -7,15 +7,17 @@ import { FILESYSTEM_ACCESS_OPTIONS } from "@/lib/publish/constants"
 import type { FilesystemAccess } from "@/lib/publish/types"
 
 export function FilesystemAccessSelect() {
-  const { data, updatePermissions } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <FieldShell id="filesystem-access" label="Accès filesystem">
       <SelectInput
         id="filesystem-access"
-        value={data.permissions.filesystemAccess}
+        value={data.permissions.filesystem}
         onChange={(value) =>
-          updatePermissions({ filesystemAccess: value as FilesystemAccess })
+          updateSection("permissions", {
+            filesystem: value as FilesystemAccess,
+          })
         }
         options={FILESYSTEM_ACCESS_OPTIONS.map((option) => ({
           value: option.id,

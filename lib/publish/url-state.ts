@@ -61,60 +61,65 @@ function record(value: unknown): Record<string, unknown> {
 }
 
 function sanitizeFormData(raw: unknown): PublishFormData {
-  const { general: g, manifest: m, permissions: p } = DEFAULT_FORM_DATA
-  const general = record(record(raw).general)
-  const manifest = record(record(raw).manifest)
+  const { source: s, package: p, run: r, permissions: perm } = DEFAULT_FORM_DATA
+  const source = record(record(raw).source)
+  const pkg = record(record(raw).package)
+  const run = record(record(raw).run)
   const permissions = record(record(raw).permissions)
+  const terminal = record(permissions.terminal)
 
   return {
-    general: {
-      packageName: str(general.packageName, g.packageName),
-      description: str(general.description, g.description),
-      type: oneOf(
-        general.type,
-        AGENT_TYPE_OPTIONS.map((o) => o.id),
-        g.type
-      ),
-      tags: strList(general.tags).slice(0, MAX_TAGS),
-      runtime: oneOf(
-        general.runtime,
-        ["", ...RUNTIME_OPTIONS.map((o) => o.id)],
-        g.runtime
-      ),
-      category: str(general.category, g.category),
-    },
-    manifest: {
-      source: oneOf(
-        manifest.source,
+    source: {
+      kind: oneOf(
+        source.kind,
         ["", ...MANIFEST_SOURCE_OPTIONS.map((o) => o.id)],
-        m.source
+        s.kind
       ),
-      repoUrl: str(manifest.repoUrl, m.repoUrl),
-      scannedRepoUrl: str(manifest.scannedRepoUrl, m.scannedRepoUrl),
-      version: str(manifest.version, m.version),
-      entrypoint: str(manifest.entrypoint, m.entrypoint),
-      args: strList(manifest.args),
-      changelog: str(manifest.changelog, m.changelog),
-      readme: str(manifest.readme, m.readme),
-      homepageUrl: str(manifest.homepageUrl, m.homepageUrl),
+      repoUrl: str(source.repoUrl, s.repoUrl),
+      scannedRepoUrl: str(source.scannedRepoUrl, s.scannedRepoUrl),
+      readmeFile: str(source.readmeFile, s.readmeFile),
+    },
+    package: {
+      name: str(pkg.name, p.name),
+      version: str(pkg.version, p.version),
+      description: str(pkg.description, p.description),
+      type: oneOf(
+        pkg.type,
+        AGENT_TYPE_OPTIONS.map((o) => o.id),
+        p.type
+      ),
+      category: str(pkg.category, p.category),
+      tags: strList(pkg.tags).slice(0, MAX_TAGS),
+      changelog: str(pkg.changelog, p.changelog),
+    },
+    run: {
+      runtime: oneOf(
+        run.runtime,
+        ["", ...RUNTIME_OPTIONS.map((o) => o.id)],
+        r.runtime
+      ),
+      entrypoint: str(run.entrypoint, r.entrypoint),
+      args: strList(run.args),
     },
     permissions: {
-      internetAccess:
-        typeof permissions.internetAccess === "boolean"
-          ? permissions.internetAccess
-          : p.internetAccess,
-      filesystemAccess: oneOf(
-        permissions.filesystemAccess,
+      network:
+        typeof permissions.network === "boolean"
+          ? permissions.network
+          : perm.network,
+      filesystem: oneOf(
+        permissions.filesystem,
         FILESYSTEM_ACCESS_OPTIONS.map((o) => o.id),
-        p.filesystemAccess
+        perm.filesystem
       ),
-      terminalAccess: oneOf(
-        permissions.terminalAccess,
-        TERMINAL_ACCESS_OPTIONS.map((o) => o.id),
-        p.terminalAccess
-      ),
-      allowedCommands: strList(permissions.allowedCommands),
-      envVars: strList(permissions.envVars),
+      env: strList(permissions.env),
+      terminal: {
+        access: oneOf(
+          terminal.access,
+          TERMINAL_ACCESS_OPTIONS.map((o) => o.id),
+          perm.terminal.access
+        ),
+        commands: strList(terminal.commands),
+      },
     },
   }
 }

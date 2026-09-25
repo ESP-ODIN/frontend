@@ -6,8 +6,8 @@ import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 import { isSemverValid } from "@/lib/publish/validation"
 
 export function VersionField() {
-  const { data, updateManifest } = usePublishWizard()
-  const value = data.manifest.version
+  const { data, updateSection } = usePublishWizard()
+  const value = data.package.version
   const error =
     value.length > 0 && !isSemverValid(value)
       ? "Format attendu : 1.0.0"
@@ -24,7 +24,9 @@ export function VersionField() {
       <Input
         id="version"
         value={value}
-        onChange={(event) => updateManifest({ version: event.target.value })}
+        onChange={(event) =>
+          updateSection("package", { version: event.target.value })
+        }
         placeholder="1.0.0"
         className="font-mono"
         aria-invalid={Boolean(error)}

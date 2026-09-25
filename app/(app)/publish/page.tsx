@@ -5,7 +5,7 @@ import { DRAFT_PARAM, parseDraft } from "@/lib/publish/url-state"
 
 export const metadata: Metadata = {
   title: "Publier un agent — Odin",
-  description: "Publiez votre agent sur le marketplace Odin en quatre étapes.",
+  description: "Publiez votre agent sur le marketplace Odin en cinq étapes.",
 }
 
 export default async function Page({

@@ -1,61 +1,59 @@
 import { FolderLock, Globe, KeyRound, SquareTerminal } from "lucide-react"
 
 import { Badge } from "@/components/blocks/badge"
-import type { PermissionsInfo } from "@/lib/publish/types"
+import type { PermissionsSection } from "@/lib/publish/types"
 
-const FILESYSTEM_LABELS: Record<PermissionsInfo["filesystemAccess"], string> = {
+const FILESYSTEM_LABELS: Record<PermissionsSection["filesystem"], string> = {
   none: "Aucun accès filesystem",
   "read-only": "Filesystem lecture seule",
   "read-write": "Filesystem lecture/écriture",
 }
 
 function terminalLabel({
-  terminalAccess,
-  allowedCommands,
-}: PermissionsInfo): string {
-  if (terminalAccess === "none") return "Pas d'accès terminal"
-  if (terminalAccess === "full") return "Terminal : accès complet"
-  const count = allowedCommands.length
+  access,
+  commands,
+}: PermissionsSection["terminal"]): string {
+  if (access === "none") return "Pas d'accès terminal"
+  if (access === "full") return "Terminal : accès complet"
+  const count = commands.length
   return `Terminal : ${count} commande${count !== 1 ? "s" : ""} autorisée${count !== 1 ? "s" : ""}`
 }
 
 export function PermissionSummary({
   permissions,
 }: {
-  permissions: PermissionsInfo
+  permissions: PermissionsSection
 }) {
   return (
     <div className="flex flex-wrap gap-2">
       <Badge
-        variant={permissions.internetAccess ? "primary" : "muted"}
+        variant={permissions.network ? "primary" : "muted"}
         className="gap-1.5"
       >
         <Globe className="size-3" />
-        {permissions.internetAccess
-          ? "Internet autorisé"
-          : "Pas d'accès internet"}
+        {permissions.network ? "Internet autorisé" : "Pas d'accès internet"}
       </Badge>
       <Badge
-        variant={permissions.filesystemAccess !== "none" ? "primary" : "muted"}
+        variant={permissions.filesystem !== "none" ? "primary" : "muted"}
         className="gap-1.5"
       >
         <FolderLock className="size-3" />
-        {FILESYSTEM_LABELS[permissions.filesystemAccess]}
+        {FILESYSTEM_LABELS[permissions.filesystem]}
       </Badge>
       <Badge
-        variant={permissions.terminalAccess !== "none" ? "primary" : "muted"}
+        variant={permissions.terminal.access !== "none" ? "primary" : "muted"}
         className="gap-1.5"
       >
         <SquareTerminal className="size-3" />
-        {terminalLabel(permissions)}
+        {terminalLabel(permissions.terminal)}
       </Badge>
       <Badge
-        variant={permissions.envVars.length > 0 ? "primary" : "muted"}
+        variant={permissions.env.length > 0 ? "primary" : "muted"}
         className="gap-1.5"
       >
         <KeyRound className="size-3" />
-        {permissions.envVars.length} variable
-        {permissions.envVars.length !== 1 && "s"} d&apos;env.
+        {permissions.env.length} variable
+        {permissions.env.length !== 1 && "s"} d&apos;env.
       </Badge>
     </div>
   )

@@ -9,8 +9,8 @@ import { isCommandNameValid } from "@/lib/publish/validation"
 import type { TerminalAccess } from "@/lib/publish/types"
 
 export function TerminalAccessSelect() {
-  const { data, updatePermissions } = usePublishWizard()
-  const { terminalAccess, allowedCommands } = data.permissions
+  const { data, updateSection } = usePublishWizard()
+  const { terminal } = data.permissions
 
   return (
     <div className="flex flex-col gap-4">
@@ -21,9 +21,11 @@ export function TerminalAccessSelect() {
       >
         <SelectInput
           id="terminal-access"
-          value={terminalAccess}
+          value={terminal.access}
           onChange={(value) =>
-            updatePermissions({ terminalAccess: value as TerminalAccess })
+            updateSection("permissions", {
+              terminal: { ...terminal, access: value as TerminalAccess },
+            })
           }
           options={TERMINAL_ACCESS_OPTIONS.map((option) => ({
             value: option.id,
@@ -32,7 +34,7 @@ export function TerminalAccessSelect() {
           }))}
         />
       </FieldShell>
-      {terminalAccess === "restricted" && (
+      {terminal.access === "restricted" && (
         <div className="animate-in duration-300 fade-in-0 slide-in-from-top-1">
           <StringListField
             id="allowed-commands"
@@ -40,9 +42,11 @@ export function TerminalAccessSelect() {
             required
             hint="Le nom du binaire uniquement, ex. git, npm, docker."
             placeholder="git"
-            items={allowedCommands}
+            items={terminal.commands}
             onChange={(commands) =>
-              updatePermissions({ allowedCommands: commands })
+              updateSection("permissions", {
+                terminal: { ...terminal, commands },
+              })
             }
             validate={isCommandNameValid}
             invalidHint="Un nom de commande, sans espace ni argument."

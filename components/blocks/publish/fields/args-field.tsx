@@ -4,7 +4,7 @@ import { StringListField } from "@/components/blocks/publish/fields/string-list-
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 
 export function ArgsField() {
-  const { data, updateManifest } = usePublishWizard()
+  const { data, updateSection } = usePublishWizard()
 
   return (
     <StringListField
@@ -12,8 +12,8 @@ export function ArgsField() {
       label="Arguments attendus"
       hint="Un argument par ligne, ex. --config."
       placeholder="--config"
-      items={data.manifest.args}
-      onChange={(args) => updateManifest({ args })}
+      items={data.run.args}
+      onChange={(args) => updateSection("run", { args })}
     />
   )
 }

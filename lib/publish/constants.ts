@@ -111,38 +111,54 @@ export const SECURITY_REVIEW = {
   ],
 }
 
-export const WIZARD_STEPS: { id: WizardStepId; label: string }[] = [
-  { id: "general", label: "Informations générales" },
-  { id: "manifest", label: "Manifest" },
-  { id: "permissions", label: "Permissions" },
-  { id: "review", label: "Publier" },
+// One step per manifest.toml table, so the form reads like the file it produces.
+export const WIZARD_STEPS: {
+  id: WizardStepId
+  label: string
+  /** TOML table(s) the step fills — shown next to the step title. */
+  tables: string[]
+}[] = [
+  { id: "source", label: "Source", tables: [] },
+  { id: "package", label: "Package", tables: ["package"] },
+  { id: "run", label: "Exécution", tables: ["run"] },
+  {
+    id: "permissions",
+    label: "Permissions",
+    tables: ["permissions", "permissions.terminal"],
+  },
+  { id: "review", label: "Récapitulatif", tables: [] },
 ]
 
+export const DEFAULT_README_FILE = "README.md"
+
 export const DEFAULT_FORM_DATA: PublishFormData = {
-  general: {
-    packageName: "",
-    description: "",
-    type: "workflow",
-    tags: [],
-    runtime: "",
-    category: "",
-  },
-  manifest: {
-    source: "",
+  source: {
+    kind: "",
     repoUrl: "",
     scannedRepoUrl: "",
+    readmeFile: DEFAULT_README_FILE,
+  },
+  package: {
+    name: "",
     version: "",
+    description: "",
+    type: "workflow",
+    category: "",
+    tags: [],
+    changelog: "",
+  },
+  run: {
+    runtime: "",
     entrypoint: "",
     args: [],
-    changelog: "",
-    readme: "",
-    homepageUrl: "",
   },
   permissions: {
-    internetAccess: false,
-    filesystemAccess: "none",
-    terminalAccess: "none",
-    allowedCommands: [],
-    envVars: [],
+    network: false,
+    filesystem: "none",
+    env: [],
+    terminal: {
+      access: "none",
+      commands: [],
+    },
   },
 }
