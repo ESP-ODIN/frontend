@@ -43,8 +43,8 @@ export function StepReview() {
 
   return (
     <StepShell
-      title="Récapitulatif"
-      description="Le manifest généré à partir du formulaire. C'est lui qui sera enregistré à la publication."
+      title="Summary"
+      description="The manifest generated from the form. This is what will be stored on publication."
       footer={
         submission.status === "success" ? null : (
           <Button
@@ -54,7 +54,7 @@ export function StepReview() {
             onClick={handlePublish}
             className="rounded-lg"
           >
-            Publier l&apos;agent
+            Publish the agent
           </Button>
         )
       }
@@ -62,7 +62,7 @@ export function StepReview() {
       <ManifestPreview toml={toml} />
 
       <ReviewSection
-        title="Soumission"
+        title="Submission"
         rows={[
           { label: "Source", value: sourceLabel },
           {
@@ -72,7 +72,7 @@ export function StepReview() {
                 <span className="font-mono">
                   {payload.manifest.package.readme}
                 </span>{" "}
-                lu depuis le dépôt
+                read from the repository
               </span>
             ),
           },

@@ -24,14 +24,14 @@ export function Cta({ className }: CtaProps) {
       <div className="relative flex flex-col items-center gap-6">
         <ScrollReveal>
           <h2 className="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Envoyez votre premier agent avant le déjeuner.
+            Ship your first agent before lunch.
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={80}>
           <p className="max-w-2xl text-white/50">
-            Gratuit pour les auteurs individuels et les agents open source. Aucune carte de crédit.
-            Choisissez votre fournisseur de modèle.
+            Free for individual authors and open source agents. No credit card. Pick your model
+            provider.
           </p>
         </ScrollReveal>
 
@@ -46,7 +46,7 @@ export function Cta({ className }: CtaProps) {
                 iconPosition="right"
                 render={<Link href="/docs/install" />}
               >
-                Obtenir la CLI
+                Get the CLI
               </Button>
             </Magnetic>
           </div>
@@ -57,7 +57,7 @@ export function Cta({ className }: CtaProps) {
               className="rounded-full border border-white/15 bg-white/5 px-6 text-white hover:bg-white/10 hover:text-white"
               render={<Link href="/docs" />}
             >
-              Consulter la documentation
+              Read the documentation
             </Button>
           </Magnetic>
         </ScrollReveal>

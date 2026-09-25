@@ -16,7 +16,7 @@ export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
   if (similar.length === 0) return null
 
   return (
-    <AgentSidebarPanel title="Agents similaires">
+    <AgentSidebarPanel title="Similar agents">
       <ul className="flex flex-col gap-3">
         {similar.map((agent) => (
           <li key={agent.slug}>

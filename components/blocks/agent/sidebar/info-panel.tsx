@@ -12,14 +12,14 @@ export function AgentInfoPanel({ agent, detail }: AgentInfoPanelProps) {
   const rows = [
     { label: "Version", value: agent.version },
     { label: "Runtime", value: detail.runtimeLabel },
-    { label: "Licence", value: detail.license },
-    { label: "Mis à jour", value: detail.updatedLabel },
-    { label: "Publié", value: detail.publishedLabel },
-    { label: "Taille", value: detail.sizeLabel },
+    { label: "License", value: detail.license },
+    { label: "Updated", value: detail.updatedLabel },
+    { label: "Published", value: detail.publishedLabel },
+    { label: "Size", value: detail.sizeLabel },
   ]
 
   return (
-    <AgentSidebarPanel title="Informations">
+    <AgentSidebarPanel title="Information">
       <dl className="flex flex-col gap-3 [&>dd]:m-0">
         {rows.map((row) => (
           <div key={row.label} className="flex flex-col text-sm">

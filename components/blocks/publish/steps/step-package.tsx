@@ -14,9 +14,9 @@ export function StepPackage() {
   return (
     <StepShell
       title="Package"
-      description="Identité, classification et notes de version de votre agent."
+      description="Your agent's identity, classification and release notes."
     >
-      <FormSection title="Identité" table="package">
+      <FormSection title="Identity" table="package">
         <div className="grid gap-6 sm:grid-cols-2">
           <PackageNameField />
           <VersionField />
@@ -30,7 +30,7 @@ export function StepPackage() {
         <TagsField />
       </FormSection>
 
-      <FormSection title="Notes de version" table="package">
+      <FormSection title="Release notes" table="package">
         <ChangelogField />
       </FormSection>
     </StepShell>

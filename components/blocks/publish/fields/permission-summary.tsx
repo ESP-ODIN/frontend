@@ -4,19 +4,19 @@ import { Badge } from "@/components/blocks/badge"
 import type { PermissionsSection } from "@/lib/publish/types"
 
 const FILESYSTEM_LABELS: Record<PermissionsSection["filesystem"], string> = {
-  none: "Aucun accès filesystem",
-  "read-only": "Filesystem lecture seule",
-  "read-write": "Filesystem lecture/écriture",
+  none: "No filesystem access",
+  "read-only": "Read-only filesystem",
+  "read-write": "Read/write filesystem",
 }
 
 function terminalLabel({
   access,
   commands,
 }: PermissionsSection["terminal"]): string {
-  if (access === "none") return "Pas d'accès terminal"
-  if (access === "full") return "Terminal : accès complet"
+  if (access === "none") return "No terminal access"
+  if (access === "full") return "Terminal: full access"
   const count = commands.length
-  return `Terminal : ${count} commande${count !== 1 ? "s" : ""} autorisée${count !== 1 ? "s" : ""}`
+  return `Terminal: ${count} allowed command${count !== 1 ? "s" : ""}`
 }
 
 export function PermissionSummary({
@@ -31,7 +31,7 @@ export function PermissionSummary({
         className="gap-1.5"
       >
         <Globe className="size-3" />
-        {permissions.network ? "Internet autorisé" : "Pas d'accès internet"}
+        {permissions.network ? "Internet allowed" : "No internet access"}
       </Badge>
       <Badge
         variant={permissions.filesystem !== "none" ? "primary" : "muted"}
@@ -52,8 +52,8 @@ export function PermissionSummary({
         className="gap-1.5"
       >
         <KeyRound className="size-3" />
-        {permissions.env.length} variable
-        {permissions.env.length !== 1 && "s"} d&apos;env.
+        {permissions.env.length} env. variable
+        {permissions.env.length !== 1 && "s"}
       </Badge>
     </div>
   )

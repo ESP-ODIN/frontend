@@ -45,7 +45,7 @@ export function StepShell({
             disabled={isFirst}
             className="rounded-lg"
           >
-            Retour
+            Back
           </Button>
           {footer !== undefined ? (
             footer
@@ -58,7 +58,7 @@ export function StepShell({
               disabled={!stepValidity[currentStepId]}
               className="rounded-lg"
             >
-              Continuer
+              Continue
             </Button>
           )}
         </div>

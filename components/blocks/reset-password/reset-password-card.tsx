@@ -19,11 +19,11 @@ export function ResetPasswordCard({ token }: ResetPasswordCardProps) {
             <Logo showName={false} />
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 font-mono text-xs tracking-wider text-primary">
               <KeyRound className="size-3" />
-              NOUVEAU MOT DE PASSE
+              NEW PASSWORD
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Nouveau mot de passe</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">New password</h1>
             <p className="text-sm text-muted-foreground">
-              Choisissez un nouveau mot de passe pour votre compte.
+              Choose a new password for your account.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export function ResetPasswordCard({ token }: ResetPasswordCardProps) {
 
           <p className="text-center text-sm text-muted-foreground">
             <Link href="/log-in" className="font-medium text-primary hover:underline">
-              Retour à la connexion
+              Back to login
             </Link>
           </p>
         </div>

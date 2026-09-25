@@ -15,11 +15,11 @@ export function ForgotPasswordCard() {
             <Logo showName={false} />
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 font-mono text-xs tracking-wider text-primary">
               <Mail className="size-3" />
-              RÉCUPÉRATION DE COMPTE
+              ACCOUNT RECOVERY
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Mot de passe oublié</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Forgot password</h1>
             <p className="text-sm text-muted-foreground">
-              Entrez votre email et nous vous enverrons un lien de réinitialisation.
+              Enter your email and we&apos;ll send you a reset link.
             </p>
           </div>
 
@@ -27,7 +27,7 @@ export function ForgotPasswordCard() {
 
           <p className="text-center text-sm text-muted-foreground">
             <Link href="/log-in" className="font-medium text-primary hover:underline">
-              Retour à la connexion
+              Back to login
             </Link>
           </p>
         </div>

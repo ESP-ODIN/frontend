@@ -6,12 +6,12 @@ type AgentStatsBarProps = {
 
 export function AgentStatsBar({ detail }: AgentStatsBarProps) {
   const stats = [
-    { label: "Installations", value: detail.installsLabel },
+    { label: "Installs", value: detail.installsLabel },
     { label: "Stars", value: detail.starsLabel },
     { label: "Forks", value: detail.forksLabel },
-    { label: "Note communauté", value: detail.ratingLabel },
+    { label: "Community rating", value: detail.ratingLabel },
     { label: "Runtime", value: detail.runtimeLabel },
-    { label: "Tests de sécurité passés", value: detail.uptimeLabel },
+    { label: "Security tests passed", value: detail.uptimeLabel },
   ]
 
   return (

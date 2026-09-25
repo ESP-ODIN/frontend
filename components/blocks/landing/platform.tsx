@@ -27,7 +27,7 @@ type FeedPost = {
   name: string
   handle: string
   time: string
-  badge: "REX" | "TUTORIAL" | "QUESTION"
+  badge: "REPORT" | "TUTORIAL" | "QUESTION"
   badgeVariant: "primary" | "inverted" | "muted"
   text: string
   avatarBg: string
@@ -39,9 +39,9 @@ const feed: FeedPost[] = [
     name: "Maëlys D.",
     handle: "@maelys_d",
     time: "2h",
-    badge: "REX",
+    badge: "REPORT",
     badgeVariant: "primary",
-    text: "3 semaines de code-reviewer en CI — ce qu'on a appris sur les coûts token",
+    text: "3 weeks of code-reviewer in CI — what we learned about token costs",
     avatarBg: "bg-primary/10 text-primary",
   },
   {
@@ -51,7 +51,7 @@ const feed: FeedPost[] = [
     time: "5h",
     badge: "TUTORIAL",
     badgeVariant: "inverted",
-    text: "Builder un agent de veille techno avec l'Odin SDK + HN + arXiv",
+    text: "Building a tech-watch agent with the Odin SDK + HN + arXiv",
     avatarBg: "bg-amber-100 text-amber-900",
   },
 ]
@@ -87,19 +87,19 @@ export function Platform() {
   return (
     <div id="platform" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
-        eyebrow="LA PLATEFORME"
-        title="Trois surfaces, un seul écosystème."
-        description="L'interface en ligne de commande (CLI) permet d'exécuter les agents. La place de marché permet de les trouver. La communauté permet à l'écosystème de s'améliorer, un REX à la fois."
+        eyebrow="THE PLATFORM"
+        title="Three surfaces, one ecosystem."
+        description="The command line interface (CLI) runs agents. The marketplace helps you find them. The community makes the ecosystem better, one field report at a time."
       />
 
       <div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-3">
         <ScrollReveal delay={0}>
           <SurfaceCard
             eyebrow="CLI"
-            title="Gestionnaire d'agents"
-            description="Un seul fichier binaire. Installation, mise à jour, exécution, audit. Fonctionne sous Linux, macOS et Windows."
+            title="Agent manager"
+            description="A single binary. Install, update, run, audit. Works on Linux, macOS and Windows."
             href="/docs"
-            cta="Consultez la documentation"
+            cta="Read the docs"
           >
             <div className="flex flex-col gap-1.5 rounded-xl bg-[#141210] p-4 font-mono text-[13px] leading-6">
               {cliLines.map((line) => (
@@ -116,11 +116,11 @@ export function Platform() {
 
         <ScrollReveal delay={100}>
           <SurfaceCard
-            eyebrow="BOUTIQUE"
-            title="Découvrir et évaluer des agents"
-            description="Consultez les journaux de modifications, vérifiez les autorisations, comparez les versions"
+            eyebrow="STORE"
+            title="Discover and evaluate agents"
+            description="Read changelogs, check permissions, compare versions"
             href="/marketplace"
-            cta="Parcourir la boutique"
+            cta="Browse the store"
           >
             <div className="flex flex-col gap-2 rounded-xl border border-muted/40 p-2">
               {agents.slice(0, 3).map((agent) => (
@@ -132,11 +132,11 @@ export function Platform() {
 
         <ScrollReveal delay={200}>
           <SurfaceCard
-            eyebrow="RÉSEAU SOCIAL"
-            title="REX, tutoriels, feed"
-            description="Inspirez-vous des opérateurs qui gèrent des agents à grande échelle. Partagez des configurations, publiez des tutoriels, suivez les auteurs."
+            eyebrow="SOCIAL NETWORK"
+            title="Field reports, tutorials, feed"
+            description="Learn from operators running agents at scale. Share configurations, publish tutorials, follow authors."
             href="/community"
-            cta="Rejoignez la communauté"
+            cta="Join the community"
           >
             <div className="flex flex-col divide-y divide-muted/40 rounded-xl border border-muted/40">
               {feed.map((post) => (

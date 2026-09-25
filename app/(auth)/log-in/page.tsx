@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { LoginCard } from "@/components/blocks/login/login-card"
 
 export const metadata: Metadata = {
-  title: "Se connecter — Odin",
-  description: "Connectez-vous à votre compte Odin.",
+  title: "Log in — Odin",
+  description: "Log in to your Odin account.",
 }
 
 export default function Page() {

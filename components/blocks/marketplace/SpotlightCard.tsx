@@ -27,21 +27,21 @@ export function SpotlightCard() {
         <ScrollReveal className="relative flex flex-col gap-5 sm:gap-8 lg:flex-row lg:gap-0">
         <div className="flex-2 flex flex-col gap-3 sm:gap-4">
             <div>
-                <p className="font-mono text-xs text-primary uppercase sm:text-sm">À la une · La sélection Odin</p>
+                <p className="font-mono text-xs text-primary uppercase sm:text-sm">Spotlight · Odin&apos;s pick</p>
                 <h2 className="text-xl font-mono font-bold mt-2 sm:text-2xl lg:text-3xl">{spotlightagent.manifest}</h2>
-                <h2 className="text-xl font-mono font-semibold mt-1 sm:text-2xl lg:text-3xl">v{spotlightagent.version} vient d'être lancé.</h2>
-                <p className="text-sm text-[#F6F1E6]/60 line-clamp-2 sm:line-clamp-none">Comparaisons en ligne, commentaires tenant compte du ton utilisé et un nouveau mode « expliquer la régression ».
-                L'agent de révision de code le plus installé sur Herald.
+                <h2 className="text-xl font-mono font-semibold mt-1 sm:text-2xl lg:text-3xl">v{spotlightagent.version} just launched.</h2>
+                <p className="text-sm text-[#F6F1E6]/60 line-clamp-2 sm:line-clamp-none">Inline diffs, tone-aware comments and a new “explain the regression” mode.
+                The most installed code review agent on Herald.
                 </p>
             </div>
             <div className="flex flex-wrap gap-2">
                 <Magnetic>
-                    <Button className="fx-shine" render={<Link href={`/agents/${spotlightagent.manifest}`} />}>Installer</Button>
+                    <Button className="fx-shine" render={<Link href={`/agents/${spotlightagent.manifest}`} />}>Install</Button>
                 </Magnetic>
-                <Button className="border-white/15 bg-white/5 text-[#F6F1E6] hover:bg-white/10 hover:text-[#F6F1E6]" variant="outline" render={<Link href={`/agents/${spotlightagent.manifest}`} />}>Voir détails</Button>
+                <Button className="border-white/15 bg-white/5 text-[#F6F1E6] hover:bg-white/10 hover:text-[#F6F1E6]" variant="outline" render={<Link href={`/agents/${spotlightagent.manifest}`} />}>View details</Button>
             </div>
             <p className="flex flex-wrap items-center gap-1 text-xs text-[#F6F1E6]/60 sm:text-sm">
-                <Star className="size-4" /> {spotlightagent.likes} • <MoveDown className="size-4" /> {spotlightagent.downloades} installations by @{spotlightagent.author} • Mis à jour il y a {spotlightagent.ladtupdated}
+                <Star className="size-4" /> {spotlightagent.likes} • <MoveDown className="size-4" /> {spotlightagent.downloades} installs by @{spotlightagent.author} • Updated {spotlightagent.ladtupdated} ago
             </p>
 
             <CopyCommand className="w-fit max-w-full overflow-x-auto text-xs lg:hidden" command={`odin install ${spotlightagent.manifest}`} />

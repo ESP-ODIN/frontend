@@ -87,7 +87,7 @@ export function AgentInstallBar({ agentSlug, agentName, detail }: AgentInstallBa
             following && "border-primary/60 bg-primary/10 text-primary"
           )}
         >
-          {following ? "Suivi" : "Follow"}
+          {following ? "Following" : "Follow"}
         </Button>
       </span>
     </div>

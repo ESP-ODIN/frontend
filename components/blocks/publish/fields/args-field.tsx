@@ -9,8 +9,8 @@ export function ArgsField() {
   return (
     <StringListField
       id="args"
-      label="Arguments attendus"
-      hint="Un argument par ligne, ex. --config."
+      label="Expected arguments"
+      hint="One argument per line, e.g. --config."
       placeholder="--config"
       items={data.run.args}
       onChange={(args) => updateSection("run", { args })}

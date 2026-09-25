@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { ForgotPasswordCard } from "@/components/blocks/forgot-password/forgot-password-card"
 
 export const metadata: Metadata = {
-  title: "Mot de passe oublié — Odin",
-  description: "Réinitialisez le mot de passe de votre compte Odin.",
+  title: "Forgot password — Odin",
+  description: "Reset the password for your Odin account.",
 }
 
 export default function Page() {

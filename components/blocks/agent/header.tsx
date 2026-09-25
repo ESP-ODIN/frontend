@@ -18,7 +18,7 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
           <Badge variant="outline">{agent.version}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">
-          par <span className="text-primary">{agent.author}</span> · mis à jour{" "}
+          by <span className="text-primary">{agent.author}</span> · updated{" "}
           {detail.updatedLabel} · {detail.categoryLabel}
         </p>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>

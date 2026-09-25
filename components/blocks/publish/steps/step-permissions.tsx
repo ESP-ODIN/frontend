@@ -15,9 +15,9 @@ export function StepPermissions() {
   return (
     <StepShell
       title="Permissions"
-      description="Les accès requis par votre agent, déclarés explicitement."
+      description="The access your agent requires, declared explicitly."
     >
-      <FormSection title="Accès système" table="permissions">
+      <FormSection title="System access" table="permissions">
         <InternetAccessToggle />
         <FilesystemAccessSelect />
         <EnvVarsField />
@@ -29,7 +29,7 @@ export function StepPermissions() {
 
       <div className="flex flex-col gap-2 rounded-2xl border border-muted/40 bg-muted/5 p-4">
         <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-          Résumé
+          Summary
         </p>
         <PermissionSummary permissions={data.permissions} />
       </div>

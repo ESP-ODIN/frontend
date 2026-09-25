@@ -3,15 +3,15 @@ import { ScrollReveal } from "@/components/motion/scroll-reveal"
 const stats = [
   {
     value: "+184",
-    label: "Cette semaine",
+    label: "This week",
   },
   {
     value: "14.2M",
-    label: "Installations / Mois",
+    label: "Installs / Month",
   },
   {
-    value: "99,98%",
-    label: "Paquets Signés",
+    value: "99.98%",
+    label: "Signed packages",
   },
 ]
 
@@ -24,9 +24,9 @@ export function Hero() {
                 MARKETPLACE
             </span>
             <h1 className="text-4xl font-bold sm:text-5xl">
-              Trouver votre <span className="fx-gradient-text">prochain agent</span>.
+              Find your <span className="fx-gradient-text">next agent</span>.
             </h1>
-            <p className="max-w-md text-foreground/60">2 481 agents provenant de plus de 38 000 auteurs. Lisez REX, vérifiez les autorisations, installez en une seule commande.</p>
+            <p className="max-w-md text-foreground/60">2,481 agents from over 38,000 authors. Read field reports, check permissions, install with a single command.</p>
         </ScrollReveal>
         <ScrollReveal delay={120} className="flex flex-wrap items-end justify-center gap-6 sm:gap-8 lg:justify-start">
             {stats.map((stat) => (

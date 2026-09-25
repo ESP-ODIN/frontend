@@ -7,9 +7,9 @@ import { Moon, Monitor, Sun } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const OPTIONS = [
-  { value: "light", icon: Sun, label: "Clair" },
-  { value: "dark", icon: Moon, label: "Sombre" },
-  { value: "system", icon: Monitor, label: "Système" },
+  { value: "light", icon: Sun, label: "Light" },
+  { value: "dark", icon: Moon, label: "Dark" },
+  { value: "system", icon: Monitor, label: "System" },
 ] as const
 
 type ThemeToggleProps = {
@@ -25,7 +25,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   return (
     <div
       role="radiogroup"
-      aria-label="Thème"
+      aria-label="Theme"
       className={cn("flex items-center gap-0.5 rounded-full border border-muted/40 p-0.5", className)}
     >
       {OPTIONS.map((option) => {

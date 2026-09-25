@@ -83,7 +83,7 @@ export function FloatingNav({
           <div className="flex shrink-0 items-center gap-1.5">
             <DialogPrimitive.Trigger
               handle={commandMenuHandle}
-              aria-label="Rechercher"
+              aria-label="Search"
               className="hidden size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted/10 hover:text-foreground sm:flex"
             >
               <Search className="size-4" />
@@ -95,7 +95,7 @@ export function FloatingNav({
                   <Button
                     className="fx-shine rounded-full"
                     size="icon-sm"
-                    aria-label="Publier un agent"
+                    aria-label="Publish an agent"
                     render={<Link href="/publish" />}
                   >
                     <Upload />
@@ -108,8 +108,8 @@ export function FloatingNav({
                     iconPosition="right"
                     render={<Link href="/publish" />}
                   >
-                    <span className="hidden sm:inline">Publier un agent</span>
-                    <span className="sm:hidden">Publier</span>
+                    <span className="hidden sm:inline">Publish an agent</span>
+                    <span className="sm:hidden">Publish</span>
                   </Button>
                 )}
               </Magnetic>
@@ -121,7 +121,7 @@ export function FloatingNav({
                   <Button
                     className="fx-shine rounded-full"
                     size="icon-sm"
-                    aria-label="Essayer Odin"
+                    aria-label="Try Odin"
                     render={<Link href={ctaHref} />}
                   >
                     <ArrowRight />
@@ -134,8 +134,8 @@ export function FloatingNav({
                     iconPosition="right"
                     render={<Link href={ctaHref} />}
                   >
-                    <span className="hidden sm:inline">Essayer Odin</span>
-                    <span className="sm:hidden">Essayer</span>
+                    <span className="hidden sm:inline">Try Odin</span>
+                    <span className="sm:hidden">Try</span>
                   </Button>
                 )}
               </Magnetic>
@@ -146,7 +146,7 @@ export function FloatingNav({
                 variant="outline"
                 size="icon-sm"
                 className="shrink-0 border-muted/50 bg-transparent lg:hidden"
-                aria-label="Ouvrir le menu"
+                aria-label="Open menu"
                 onClick={() => setOpen(true)}
               >
                 <Menu />
@@ -163,12 +163,12 @@ export function FloatingNav({
             <DialogPrimitive.Popup className="fixed inset-y-0 right-0 z-50 flex w-[85vw] max-w-sm flex-col border-l border-muted/40 bg-popover text-popover-foreground shadow-2xl outline-none data-open:animate-in data-open:slide-in-from-right data-open:fade-in-0 data-closed:animate-out data-closed:slide-out-to-right data-closed:fade-out-0 lg:hidden">
               <div className="flex shrink-0 items-center justify-between border-b border-muted/40 px-4 py-4">
                 <Logo />
-                <DialogPrimitive.Title className="sr-only">Menu de navigation</DialogPrimitive.Title>
+                <DialogPrimitive.Title className="sr-only">Navigation menu</DialogPrimitive.Title>
                 <DialogPrimitive.Close
                   render={
                     <button
                       type="button"
-                      aria-label="Fermer"
+                      aria-label="Close"
                       className="flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted/10 hover:text-foreground"
                     >
                       <X className="size-4" />
@@ -177,7 +177,7 @@ export function FloatingNav({
                 />
               </div>
               <DialogPrimitive.Description className="sr-only">
-                Naviguer sur le site Odin
+                Browse the Odin website
               </DialogPrimitive.Description>
 
               <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
@@ -199,7 +199,7 @@ export function FloatingNav({
                       size="sm"
                       render={<Link href="/publish" onClick={() => setOpen(false)} />}
                     >
-                      Publier un agent
+                      Publish an agent
                     </Button>
                   </div>
                 )}
@@ -211,7 +211,7 @@ export function FloatingNav({
                       size="sm"
                       render={<Link href={ctaHref} onClick={() => setOpen(false)} />}
                     >
-                      Essayer Odin
+                      Try Odin
                     </Button>
                   </div>
                 )}

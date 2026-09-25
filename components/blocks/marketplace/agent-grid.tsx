@@ -27,8 +27,8 @@ export function AgentGrid({ agents, className, pageSize = 9 }: AgentGridProps) {
   if (agents.length === 0) {
     return (
       <div className={cn(className, "flex flex-col items-center gap-2 rounded-xl border border-dashed border-border/60 py-16 text-center")}>
-        <p className="font-medium text-foreground">Aucun agent ne correspond à ces filtres.</p>
-        <p className="text-sm text-muted-foreground">Essayez d&apos;en retirer quelques-uns.</p>
+        <p className="font-medium text-foreground">No agent matches these filters.</p>
+        <p className="text-sm text-muted-foreground">Try removing a few.</p>
       </div>
     )
   }

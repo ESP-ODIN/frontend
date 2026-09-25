@@ -10,8 +10,8 @@ export function StepSource() {
 
   return (
     <StepShell
-      title="Source du manifest"
-      description="Importez votre manifest.toml depuis GitHub, ou créez-le étape par étape."
+      title="Manifest source"
+      description="Import your manifest.toml from GitHub, or build it step by step."
     >
       <ManifestSourceSelector />
       {data.source.kind !== "" && <RepoUrlField />}

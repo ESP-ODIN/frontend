@@ -27,7 +27,7 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
   "code-reviewer": {
     categoryLabel: "Developer tools",
     categorySlug: "developer-tools",
-    updatedLabel: "il y a 2h",
+    updatedLabel: "2h ago",
     installsLabel: "128k",
     starsLabel: "4,218",
     forksLabel: "312",
@@ -35,16 +35,16 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
     runtimeLabel: "TypeScript",
     uptimeLabel: "99.98%",
     license: "MIT",
-    publishedLabel: "mars 2025",
+    publishedLabel: "March 2025",
     sizeLabel: "1.4 MB",
     overview: [
-      "code-reviewer s'intègre dans votre pipeline CI et examine chaque pull request contre les conventions de votre codebase — style, sécurité, régressions potentielles. Il propose des diffs inline directement dans votre interface de revue (GitHub, GitLab, Bitbucket).",
-      "La v2.4 introduit le mode explain regression : lorsqu'une régression est détectée, l'agent retrace la chaîne de causalité entre la modification et l'effet observé dans les tests.",
+      "code-reviewer plugs into your CI pipeline and reviews every pull request against your codebase's conventions — style, security, potential regressions. It suggests inline diffs directly in your review interface (GitHub, GitLab, Bitbucket).",
+      "v2.4 introduces the explain regression mode: when a regression is detected, the agent traces the chain of causality between the change and the effect observed in the tests.",
     ],
     installSteps: [
       { comment: "1. Installer l'agent", command: "odin install code-reviewer" },
       {
-        comment: "2. Lancer une revue sur la branche courante",
+        comment: "2. Run a review on the current branch",
         command: "odin run code-reviewer --path . --target origin/main",
       },
     ],
@@ -59,24 +59,24 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
     ],
     checks: [
       {
-        title: "Régressions logiques",
-        description: "compare le comportement attendu (tests existants) aux changements introduits.",
+        title: "Logic regressions",
+        description: "compares expected behavior (existing tests) with the introduced changes.",
       },
       {
-        title: "Sécurité",
-        description: "détecte les injections, les secrets exposés, les dépendances vulnérables.",
+        title: "Security",
+        description: "detects injections, exposed secrets and vulnerable dependencies.",
       },
       {
         title: "Style & conventions",
-        description: "s'adapte à votre ESLint / Prettier config existante.",
+        description: "adapts to your existing ESLint / Prettier config.",
       },
       {
         title: "Performance",
-        description: "signale les N+1, les re-renders inutiles, les allocations prévisibles.",
+        description: "flags N+1 queries, unnecessary re-renders and predictable allocations.",
       },
       {
         title: "Documentation",
-        description: "vérifie que les fonctions publiques modifiées ont des JSDoc à jour.",
+        description: "checks that modified public functions have up-to-date JSDoc.",
       },
     ],
     permissions: [
@@ -101,7 +101,7 @@ export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
   return {
     categoryLabel: agent.category.label,
     categorySlug: agent.category.slug,
-    updatedLabel: "il y a quelques jours",
+    updatedLabel: "a few days ago",
     installsLabel: agent.downloads,
     starsLabel: agent.stars,
     forksLabel: "—",
@@ -120,7 +120,7 @@ export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
     configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
     checks: agent.tags.map((tag) => ({
       title: tag,
-      description: `Vérifications liées à ${tag.toLowerCase()}.`,
+      description: `Checks related to ${tag.toLowerCase()}.`,
     })),
     permissions: [
       { label: "net:read", granted: true },

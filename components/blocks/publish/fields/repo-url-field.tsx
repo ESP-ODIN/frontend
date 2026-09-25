@@ -86,14 +86,14 @@ export function RepoUrlField() {
         message:
           error instanceof Error
             ? error.message
-            : "Impossible de lire ce dépôt pour l'instant. Réessayez.",
+            : "Unable to read this repository right now. Please try again.",
       })
     }
   }
 
   const formatError =
     repoUrl.length > 0 && !isUrlValid
-      ? "Format attendu : https://github.com/org/repo"
+      ? "Expected format: https://github.com/org/repo"
       : undefined
   const scanError = scan.status === "error" ? scan.message : undefined
 
@@ -101,13 +101,13 @@ export function RepoUrlField() {
     <div className="flex flex-col gap-3">
       <FieldShell
         id="repo-url"
-        label="Lien du repo GitHub"
+        label="GitHub repo link"
         required
         error={formatError ?? scanError}
         hint={
           isImport
-            ? "Le manifest.toml à la racine du dépôt préremplira le formulaire. S'il n'existe pas, vous passerez en création manuelle."
-            : "Le dépôt qui contient le code de votre agent. Son README sera affiché sur la fiche agent."
+            ? "The manifest.toml at the root of the repository will prefill the form. If it doesn't exist, you'll switch to manual creation."
+            : "The repository containing your agent's code. Its README will be shown on the agent page."
         }
       >
         <div className="flex gap-2">
@@ -124,7 +124,7 @@ export function RepoUrlField() {
                 handleScan()
               }
             }}
-            placeholder="https://github.com/mon-org/mon-agent"
+            placeholder="https://github.com/my-org/my-agent"
             className="font-mono"
             aria-invalid={Boolean(formatError ?? scanError)}
           />
@@ -139,12 +139,12 @@ export function RepoUrlField() {
               {scan.status === "scanning" ? (
                 <>
                   <Loader2 data-icon="inline-start" className="animate-spin" />
-                  Scan…
+                  Scanning…
                 </>
               ) : scannedRepoUrl === repoUrl && repoUrl !== "" ? (
-                "Rescanner"
+                "Rescan"
               ) : (
-                "Scanner"
+                "Scan"
               )}
             </Button>
           )}
@@ -156,12 +156,12 @@ export function RepoUrlField() {
           <FileX2 className="mt-0.5 size-4 shrink-0 text-primary" />
           <div className="flex flex-col gap-1">
             <p className="text-sm font-medium text-foreground">
-              Aucun <span className="font-mono">manifest.toml</span> trouvé dans
-              ce dépôt.
+              No <span className="font-mono">manifest.toml</span> found in this
+              repository.
             </p>
             <p className="text-xs text-muted-foreground">
-              On est passé en création manuelle : remplissez les étapes
-              suivantes, le manifest sera enregistré côté Odin.
+              We switched to manual creation: fill in the next steps, the
+              manifest will be stored on Odin&apos;s side.
             </p>
           </div>
         </div>
@@ -172,8 +172,8 @@ export function RepoUrlField() {
           <p className="flex items-center gap-2 text-sm font-medium text-foreground">
             <CircleCheck className="size-4 shrink-0 text-primary" />
             <span>
-              <span className="font-mono">manifest.toml</span> importé : les
-              étapes Package, Exécution et Permissions sont préremplies.
+              <span className="font-mono">manifest.toml</span> imported: the
+              Package, Run and Permissions steps are prefilled.
             </span>
           </p>
           {scan.warnings.length > 0 && (
@@ -195,7 +195,7 @@ export function RepoUrlField() {
       {isScanStale && (
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <AlertTriangle className="size-3.5 shrink-0 text-primary" />
-          Le lien a changé depuis le dernier scan : relancez-le pour continuer.
+          The link changed since the last scan: run it again to continue.
         </p>
       )}
     </div>

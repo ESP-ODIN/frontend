@@ -74,7 +74,7 @@ export function StringListField({
           size="icon"
           icon={Plus}
           onClick={addItem}
-          aria-label="Ajouter"
+          aria-label="Add"
         />
       </div>
       {items.length > 0 && (

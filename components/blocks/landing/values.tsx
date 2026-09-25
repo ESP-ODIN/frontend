@@ -17,28 +17,28 @@ type ValueItem = {
 
 const values: ValueItem[] = [
   {
-    label: "Partage",
+    label: "Sharing",
     description:
-      "Je donne la visibilité à mes agents et j'échange avec la communauté — chaque publication enrichit l'écosystème commun.",
+      "I give my agents visibility and connect with the community — every release enriches the shared ecosystem.",
     icon: Users,
     href: "/publish",
-    cta: "Publier un agent",
+    cta: "Publish an agent",
   },
   {
-    label: "Sécurité",
+    label: "Security",
     description:
-      "Chaque agent est vérifié, ses actions sont contrôlées et tracées. Vous savez exactement ce que fait votre agent — et ce qu'il ne peut pas faire.",
+      "Every agent is verified, its actions are controlled and traced. You know exactly what your agent does — and what it can't do.",
     icon: Shield,
     href: "/permissions",
-    cta: "Voir les permissions",
+    cta: "See permissions",
   },
   {
-    label: "Accessibilité",
+    label: "Accessibility",
     description:
-      "L'utilisation d'agents à la portée de tous — une commande suffit. Pas de configuration complexe, pas de prérequis techniques.",
+      "Agents within everyone's reach — one command is all it takes. No complex setup, no technical prerequisites.",
     icon: Zap,
     href: "/get-started",
-    cta: "Commencer maintenant",
+    cta: "Get started now",
   },
 ]
 
@@ -49,7 +49,7 @@ type ValuesProps = {
 export function Values({ className }: ValuesProps) {
   return (
     <div id="values" className={cn("flex scroll-mt-28 flex-col items-center gap-10", className)}>
-      <SectionHeader eyebrow="NOS VALEURS" title="Ce qui rend Odin différent." />
+      <SectionHeader eyebrow="OUR VALUES" title="What makes Odin different." />
 
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
         {values.map(({ label, description, icon, href, cta }, index) => (
