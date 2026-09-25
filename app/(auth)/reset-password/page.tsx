@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { ResetPasswordCard } from "@/components/blocks/reset-password/reset-password-card"
 
 export const metadata: Metadata = {
-  title: "Réinitialiser le mot de passe — Odin",
-  description: "Choisissez un nouveau mot de passe pour votre compte Odin.",
+  title: "Reset password — Odin",
+  description: "Choose a new password for your Odin account.",
 }
 
 type PageProps = {

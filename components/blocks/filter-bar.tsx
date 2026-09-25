@@ -56,7 +56,7 @@ function FilterCheckbox({
       {Icon && <Icon className="size-3.5 shrink-0 text-muted-foreground" />}
       <span className="flex-1">{name}</span>
       <span className="rounded-full bg-muted/15 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
-        {count.toLocaleString("fr-FR")}
+        {count.toLocaleString("en-US")}
       </span>
     </label>
   )
@@ -94,19 +94,19 @@ export function FilterBar({ className, filters, onChange }: FilterBarProps) {
   return (
     <div className={cn(className, "flex w-full flex-col gap-5 lg:w-56")}>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-bold text-foreground">Filtres</p>
+        <p className="text-sm font-bold text-foreground">Filters</p>
         {hasActiveFilters(filters) && (
           <button
             type="button"
             onClick={() => onChange(emptyFilters)}
             className="text-xs font-medium text-primary hover:underline"
           >
-            Réinitialiser
+            Reset
           </button>
         )}
       </div>
 
-      <FilterSection title="Catégories">
+      <FilterSection title="Categories">
         {categories.map((item) => (
           <FilterCheckbox
             key={item.slug}
@@ -143,7 +143,7 @@ export function FilterBar({ className, filters, onChange }: FilterBarProps) {
         ))}
       </FilterSection>
 
-      <FilterSection title="Mise à jour">
+      <FilterSection title="Updated">
         {updates.map((item) => (
           <FilterCheckbox
             key={item.slug}

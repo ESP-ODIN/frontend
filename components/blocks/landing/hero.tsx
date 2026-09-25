@@ -33,15 +33,15 @@ export function Hero() {
 
         <ScrollReveal delay={80} className="mt-6 max-w-3xl">
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            Le gestionnaire de paquets pour{" "}
-            <span className="fx-gradient-text">agents IA</span>.
+            The package manager for{" "}
+            <span className="fx-gradient-text">AI agents</span>.
           </h1>
         </ScrollReveal>
 
         <ScrollReveal delay={160}>
           <p className="mx-auto mt-6 max-w-lg text-md text-white/55">
-            Découvrez, installez et partagez des agents intelligents à partir d&apos;une seule ligne de
-            commande. Sandboxés par défaut, signés par leurs auteurs.
+            Discover, install and share intelligent agents from a single command line. Sandboxed
+            by default, signed by their authors.
           </p>
         </ScrollReveal>
 
@@ -53,7 +53,7 @@ export function Hero() {
               iconPosition="right"
               render={<Link href="/marketplace" />}
             >
-              Parcourir la boutique
+              Browse the store
             </Button>
           </Magnetic>
         </ScrollReveal>
@@ -66,12 +66,12 @@ export function Hero() {
 
         <ScrollReveal delay={340} className="mt-4 flex items-center gap-1.5 text-xs text-white/40">
           <ShieldCheck className="size-3.5 text-primary" />
-          Exécution en sandbox · manifestes signés · 99,98% de tests de sécurité passés
+          Sandboxed execution · signed manifests · 99.98% of security tests passed
         </ScrollReveal>
 
         <ScrollReveal delay={400} className="mt-14 w-full">
           <p className="mb-4 font-mono text-[11px] tracking-wider text-white/30 uppercase">
-            Compatible avec votre stack
+            Works with your stack
           </p>
           <Marquee
             items={providers}

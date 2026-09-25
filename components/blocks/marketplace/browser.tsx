@@ -26,8 +26,7 @@ export function MarketplaceBrowser() {
         <FilterSheet filters={filters} onChange={setFilters} activeCount={activeCount} />
         <SpotlightCard />
         <p className="text-sm text-muted-foreground">
-          {filteredAgents.length.toLocaleString("fr-FR")} agent{filteredAgents.length !== 1 && "s"} trouvé
-          {filteredAgents.length !== 1 && "s"}
+          {filteredAgents.length.toLocaleString("en-US")} agent{filteredAgents.length !== 1 && "s"} found
         </p>
         <AgentGrid agents={filteredAgents} />
       </div>

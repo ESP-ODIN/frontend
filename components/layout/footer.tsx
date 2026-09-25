@@ -64,8 +64,8 @@ export function Footer({ className }: FooterProps) {
         <div className="flex max-w-xs flex-col gap-3">
           <Logo />
           <p className="text-sm text-muted-foreground">
-            Le package manager des agents IA. Découvrez, installez, partagez — comme npm, pour
-            l&apos;intelligence artificielle.
+            The package manager for AI agents. Discover, install, share — like npm, for
+            artificial intelligence.
           </p>
         </div>
 

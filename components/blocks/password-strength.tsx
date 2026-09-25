@@ -8,8 +8,8 @@ type PasswordStrengthProps = {
 }
 
 const LEVELS = [
-  { label: "Faible", bar: "bg-red-500", text: "text-red-600" },
-  { label: "Moyen", bar: "bg-orange-500", text: "text-orange-600" },
+  { label: "Weak", bar: "bg-red-500", text: "text-red-600" },
+  { label: "Medium", bar: "bg-orange-500", text: "text-orange-600" },
   { label: "Bon", bar: "bg-yellow-500", text: "text-yellow-700" },
   { label: "Excellent", bar: "bg-emerald-500", text: "text-emerald-600" },
 ] as const
@@ -51,7 +51,7 @@ export function PasswordStrength({ password, className }: PasswordStrengthProps)
         ))}
       </div>
       <p className={cn("text-xs font-medium transition-colors duration-300", active.text)}>
-        Sécurité du mot de passe : {active.label}
+        Password strength: {active.label}
       </p>
     </div>
   )

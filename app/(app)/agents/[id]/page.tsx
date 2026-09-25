@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const agent = await getAgent(id)
 
   return {
-    title: agent ? `${agent.name} — Odin` : "Agent introuvable — Odin",
+    title: agent ? `${agent.name} — Odin` : "Agent not found — Odin",
     description: agent?.description,
   }
 }

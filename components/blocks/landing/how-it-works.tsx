@@ -13,39 +13,39 @@ type FeatureItem = {
 
 const features: FeatureItem[] = [
   {
-    title: "Une commande d'installation",
+    title: "One install command",
     description:
-      "Chaque agent sur Odin s'installe et s'exécute via la même CLI. Pas de configuration sur mesure, pas de scripts copiés-collés.",
+      "Every agent on Odin installs and runs through the same CLI. No custom setup, no copy-pasted scripts.",
     icon: Package,
   },
   {
-    title: "En mode « sandbox » par défaut",
+    title: "Sandboxed by default",
     description:
-      "Les agents s'exécutent dans des environnements isolés. L'accès réseau, fichiers et outils est déclaré dans le manifest et validé à l'installation.",
+      "Agents run in isolated environments. Network, file and tool access is declared in the manifest and validated at install time.",
     icon: Shield,
   },
   {
-    title: "Semver, mais pour les agents",
+    title: "Semver, but for agents",
     description:
-      "Épinglez une version. Revenez en arrière instantanément. Lisez des changelogs qui expliquent comment le comportement de l'agent a évolué entre les versions.",
+      "Pin a version. Roll back instantly. Read changelogs that explain how the agent's behavior changed between versions.",
     icon: GitBranch,
   },
   {
-    title: "Conçu autour d'une communauté",
+    title: "Built around a community",
     description:
-      "Lisez des REX de gens qui font tourner l'agent en production. Suivez des auteurs, regardez des tutoriels. Le marketplace est aussi un réseau social.",
+      "Read field reports from people running the agent in production. Follow authors, watch tutorials. The marketplace is also a social network.",
     icon: Users,
   },
   {
-    title: "Flux de travail ou autonomes",
+    title: "Workflows or autonomous",
     description:
-      "Publiez un workflow déterministe aux étapes prévisibles, ou un agent entièrement autonome qui construit son propre plan. Les deux partagent le même contrat de packaging.",
+      "Publish a deterministic workflow with predictable steps, or a fully autonomous agent that builds its own plan. Both share the same packaging contract.",
     icon: Zap,
   },
   {
-    title: "SDK pour n'importe quel environnement",
+    title: "SDKs for any environment",
     description:
-      "Créez des agents en TypeScript, Python ou Rust. Apportez votre propre fournisseur de LLM. Odin gère la distribution, la signature et les mises à jour.",
+      "Build agents in TypeScript, Python or Rust. Bring your own LLM provider. Odin handles distribution, signing and updates.",
     icon: Code,
   },
 ]
@@ -54,9 +54,9 @@ export function HowItWorks() {
   return (
     <div id="how-it-works" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
-        eyebrow="COMMENT ÇA FONCTIONNE"
-        title="Considérez les agents comme des colis."
-        description="Manifestes standards. Versions sémantiques. Éditeurs signés. Exécution en sandbox. Tout ce qu'on attend d'un écosystème de paquets moderne — appliqué aux agents autonomes."
+        eyebrow="HOW IT WORKS"
+        title="Think of agents as packages."
+        description="Standard manifests. Semantic versions. Signed publishers. Sandboxed execution. Everything you expect from a modern package ecosystem — applied to autonomous agents."
       />
 
       <div className="relative grid w-full grid-cols-1 gap-4 lg:grid-cols-3">

@@ -13,8 +13,8 @@ export function FeaturedAgents() {
   return (
     <div id="agents" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
-        eyebrow="SÉLECTIONNÉS CETTE SEMAINE"
-        title="Sélectionnés avec soin par l'équipe du registre."
+        eyebrow="PICKED THIS WEEK"
+        title="Hand-picked by the registry team."
       />
 
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-3">
@@ -36,7 +36,7 @@ export function FeaturedAgents() {
           className="rounded-full"
           render={<Link href="/marketplace" />}
         >
-          Explorer tous les agents
+          Explore all agents
         </Button>
       </Magnetic>
     </div>

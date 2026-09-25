@@ -9,10 +9,10 @@ import { ArgsField } from "@/components/blocks/publish/fields/args-field"
 export function StepRun() {
   return (
     <StepShell
-      title="Exécution"
-      description="Comment Odin démarre votre agent."
+      title="Run"
+      description="How Odin starts your agent."
     >
-      <FormSection title="Lancement" table="run">
+      <FormSection title="Launch" table="run">
         <div className="grid gap-6 sm:grid-cols-2">
           <RuntimeSelect />
           <EntrypointField />

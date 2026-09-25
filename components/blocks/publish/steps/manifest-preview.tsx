@@ -67,7 +67,7 @@ export function ManifestPreview({ toml }: { toml: string }) {
             size="icon-sm"
             icon={copied ? Check : Copy}
             onClick={handleCopy}
-            aria-label="Copier le manifest"
+            aria-label="Copy the manifest"
           />
           <Button
             type="button"
@@ -75,7 +75,7 @@ export function ManifestPreview({ toml }: { toml: string }) {
             size="icon-sm"
             icon={Download}
             onClick={handleDownload}
-            aria-label="Télécharger le manifest"
+            aria-label="Download the manifest"
           />
         </div>
       </div>
