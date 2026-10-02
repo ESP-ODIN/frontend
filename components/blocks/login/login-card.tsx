@@ -16,11 +16,11 @@ export function LoginCard() {
             <Logo showName={false} />
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 font-mono text-xs tracking-wider text-primary">
               <Lock className="size-3" />
-              ACCÈS SÉCURISÉ
+              SECURE ACCESS
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Se connecter</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Log in</h1>
             <p className="text-sm text-muted-foreground">
-              Connectez-vous à Odin pour retrouver vos agents.
+              Log in to Odin to get back to your agents.
             </p>
           </div>
 
@@ -28,16 +28,16 @@ export function LoginCard() {
 
           <div className="flex items-center gap-3">
             <span className="h-px flex-1 bg-muted/30" />
-            <span className="text-xs tracking-wider text-muted-foreground uppercase">ou</span>
+            <span className="text-xs tracking-wider text-muted-foreground uppercase">or</span>
             <span className="h-px flex-1 bg-muted/30" />
           </div>
 
           <LoginForm />
 
           <p className="text-center text-sm text-muted-foreground">
-            Vous n&apos;avez pas de compte ?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/sign-in" className="font-medium text-primary hover:underline">
-              Créer un compte
+              Create an account
             </Link>
           </p>
         </div>

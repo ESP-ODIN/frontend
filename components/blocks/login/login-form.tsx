@@ -45,20 +45,20 @@ export function LoginForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="john.abruzzi@exemple.com"
+          placeholder="john.abruzzi@example.com"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
           <label htmlFor="password" className="text-sm font-medium text-foreground">
-            Mot de passe
+            Password
           </label>
           <Link
             href="/forgot-password"
             className="text-xs text-muted-foreground hover:text-foreground hover:underline"
           >
-            Mot de passe oublié ?
+            Forgot password?
           </Link>
         </div>
         <Input
@@ -76,7 +76,7 @@ export function LoginForm() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
-        {isSubmitting ? "Connexion..." : "Se connecter"}
+        {isSubmitting ? "Logging in..." : "Log in"}
       </Button>
     </form>
   )

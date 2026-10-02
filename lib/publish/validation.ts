@@ -97,53 +97,53 @@ export function getChecklistItems(
   return [
     {
       id: "repo",
-      label: "Lien du repo GitHub renseigné",
+      label: "GitHub repo link provided",
       done: isGithubRepoUrlValid(source.repoUrl),
     },
     {
       id: "manifest",
-      label: "Manifest importé ou créé",
+      label: "Manifest imported or created",
       done: isManifestSourceReady(source),
     },
     {
       id: "name",
-      label: "Nom du package valide et disponible",
+      label: "Package name valid and available",
       done:
         isPackageNameFormatValid(pkg.name) && nameCheckStatus === "available",
     },
     {
       id: "version",
-      label: "Version au format semver",
+      label: "Version in semver format",
       done: isSemverValid(pkg.version),
     },
     {
       id: "description",
-      label: "Description renseignée",
+      label: "Description provided",
       done: isDescriptionValid(pkg.description),
     },
     {
       id: "category",
-      label: "Catégorie sélectionnée",
+      label: "Category selected",
       done: pkg.category.length > 0,
     },
     {
       id: "changelog",
-      label: "Changelog rédigé",
+      label: "Changelog written",
       done: pkg.changelog.trim().length > 0,
     },
     {
       id: "runtime",
-      label: "Runtime déclaré",
+      label: "Runtime declared",
       done: run.runtime.length > 0,
     },
     {
       id: "entrypoint",
-      label: "Entrypoint renseigné",
+      label: "Entrypoint provided",
       done: run.entrypoint.trim().length > 0,
     },
     {
       id: "permissions",
-      label: "Permissions déclarées",
+      label: "Permissions declared",
       done: isPermissionsStepValid(permissions),
     },
   ]

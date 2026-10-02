@@ -34,24 +34,24 @@ export function PackageNameField() {
 
   const formatError =
     packageName.length > 0 && !isPackageNameFormatValid(packageName)
-      ? "Minuscules et tirets uniquement (ex. mon-agent)."
+      ? "Lowercase letters and hyphens only (e.g. my-agent)."
       : undefined
 
   const statusError = formatError
     ? undefined
     : nameCheckStatus === "taken"
-      ? "Ce nom est déjà utilisé."
+      ? "This name is already taken."
       : nameCheckStatus === "error"
-        ? "Impossible de vérifier ce nom pour l'instant."
+        ? "Unable to check this name right now."
         : undefined
 
   return (
     <FieldShell
       id="package-name"
-      label="Nom du package"
+      label="Package name"
       required
       error={formatError ?? statusError}
-      hint="Minuscules, chiffres et tirets uniquement (kebab-case)."
+      hint="Lowercase letters, digits and hyphens only (kebab-case)."
       trailing={
         <NameCheckIndicator
           status={nameCheckStatus}
@@ -65,7 +65,7 @@ export function PackageNameField() {
         onChange={(event) =>
           updateSection("package", { name: event.target.value.toLowerCase() })
         }
-        placeholder="mon-agent"
+        placeholder="my-agent"
         className="font-mono"
         pattern={PACKAGE_NAME_REGEX.source}
         aria-invalid={Boolean(formatError ?? statusError)}

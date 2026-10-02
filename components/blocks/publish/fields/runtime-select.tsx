@@ -21,7 +21,7 @@ export function RuntimeSelect() {
           value: option.id,
           label: option.label,
         }))}
-        placeholder="Sélectionner un runtime"
+        placeholder="Select a runtime"
       />
     </FieldShell>
   )

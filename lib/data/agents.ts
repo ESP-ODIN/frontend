@@ -26,13 +26,13 @@ import {
 
 import type { Agent } from "@/components/blocks/agent-icon"
 
-const DEV_TOOLS = { slug: "dev-tools", label: "Outils de développement" }
-const DATA_ANALYTICS = { slug: "data-analytics", label: "Données et analyses" }
-const DESIGN = { slug: "design", label: "Conception" }
-const PRODUCTIVITY = { slug: "productivity", label: "Productivité" }
-const SECURITY = { slug: "security", label: "Sécurité" }
-const CUSTOMER_SERVICE = { slug: "customer-service", label: "Service client" }
-const RESEARCH = { slug: "research", label: "Recherche" }
+const DEV_TOOLS = { slug: "dev-tools", label: "Developer tools" }
+const DATA_ANALYTICS = { slug: "data-analytics", label: "Data & analytics" }
+const DESIGN = { slug: "design", label: "Design" }
+const PRODUCTIVITY = { slug: "productivity", label: "Productivity" }
+const SECURITY = { slug: "security", label: "Security" }
+const CUSTOMER_SERVICE = { slug: "customer-service", label: "Customer service" }
+const RESEARCH = { slug: "research", label: "Research" }
 const MARKETING = { slug: "marketing", label: "Marketing" }
 
 export const agents: Agent[] = [

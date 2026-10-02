@@ -22,7 +22,7 @@ export function RegisterForm() {
     setError(null)
 
     if (password !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.")
+      setError("Passwords do not match.")
       return
     }
 
@@ -67,13 +67,13 @@ export function RegisterForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="john.abruzzi@exemple.com"
+          placeholder="john.abruzzi@example.com"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="password" className="text-sm font-medium text-foreground">
-          Mot de passe
+          Password
         </label>
         <Input
           id="password"
@@ -91,7 +91,7 @@ export function RegisterForm() {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="confirm-password" className="text-sm font-medium text-foreground">
-          Confirmer le mot de passe
+          Confirm password
         </label>
         <Input
           id="confirm-password"
@@ -109,7 +109,7 @@ export function RegisterForm() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
-        {isSubmitting ? "Création du compte..." : "Créer mon compte"}
+        {isSubmitting ? "Creating account..." : "Create my account"}
       </Button>
     </form>
   )

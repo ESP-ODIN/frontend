@@ -10,13 +10,13 @@ export function EnvVarsField() {
   return (
     <StringListField
       id="env-vars"
-      label="Variables d'environnement requises"
-      hint="Le nom de la variable uniquement, ex. OPENAI_API_KEY."
+      label="Required environment variables"
+      hint="The variable name only, e.g. OPENAI_API_KEY."
       placeholder="OPENAI_API_KEY"
       items={data.permissions.env}
       onChange={(env) => updateSection("permissions", { env })}
       validate={isEnvVarNameValid}
-      invalidHint="Majuscules, chiffres et underscores uniquement."
+      invalidHint="Uppercase letters, digits and underscores only."
     />
   )
 }

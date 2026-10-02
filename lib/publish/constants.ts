@@ -21,14 +21,14 @@ export const AGENT_TYPE_OPTIONS: AgentTypeOption[] = [
     id: "workflow",
     label: "Workflow",
     description:
-      "Une suite d'étapes déterministes que l'agent exécute dans l'ordre.",
+      "A sequence of deterministic steps the agent runs in order.",
     icon: Workflow,
   },
   {
     id: "autonomous",
     label: "Autonomous",
     description:
-      "L'agent construit et adapte son propre plan pour atteindre l'objectif.",
+      "The agent builds and adapts its own plan to reach the goal.",
     icon: Bot,
   },
 ]
@@ -36,7 +36,7 @@ export const AGENT_TYPE_OPTIONS: AgentTypeOption[] = [
 export const RUNTIME_OPTIONS: { id: RuntimeId; label: string }[] = [
   { id: "python3", label: "Python 3" },
   { id: "node", label: "Node.js" },
-  { id: "binary", label: "Binaire natif" },
+  { id: "binary", label: "Native binary" },
   { id: "docker", label: "Docker" },
 ]
 
@@ -44,9 +44,9 @@ export const FILESYSTEM_ACCESS_OPTIONS: {
   id: FilesystemAccess
   label: string
 }[] = [
-  { id: "none", label: "Aucun accès" },
-  { id: "read-only", label: "Lecture seule" },
-  { id: "read-write", label: "Lecture / écriture" },
+  { id: "none", label: "No access" },
+  { id: "read-only", label: "Read only" },
+  { id: "read-write", label: "Read / write" },
 ]
 
 export const TERMINAL_ACCESS_OPTIONS: {
@@ -56,18 +56,18 @@ export const TERMINAL_ACCESS_OPTIONS: {
 }[] = [
   {
     id: "none",
-    label: "Aucun accès",
-    description: "L'agent n'exécute aucune commande système.",
+    label: "No access",
+    description: "The agent doesn't run any system command.",
   },
   {
     id: "restricted",
-    label: "Commandes autorisées uniquement",
-    description: "L'agent ne peut exécuter que les commandes listées.",
+    label: "Allowed commands only",
+    description: "The agent can only run the listed commands.",
   },
   {
     id: "full",
-    label: "Accès complet",
-    description: "L'agent peut exécuter n'importe quelle commande shell.",
+    label: "Full access",
+    description: "The agent can run any shell command.",
   },
 ]
 
@@ -79,16 +79,16 @@ export const MANIFEST_SOURCE_OPTIONS: {
 }[] = [
   {
     id: "repository",
-    label: "Importer depuis GitHub",
+    label: "Import from GitHub",
     description:
-      "On scanne le manifest.toml de votre dépôt et on préremplit le formulaire.",
+      "We scan the manifest.toml in your repository and prefill the form.",
     icon: FolderGit2,
   },
   {
     id: "form",
-    label: "Créer avec le formulaire",
+    label: "Create with the form",
     description:
-      "Pas de manifest.toml ? Renseignez-le ici, il sera enregistré côté Odin.",
+      "No manifest.toml? Fill it in here, it will be stored on Odin's side.",
     icon: FilePen,
   },
 ]
@@ -96,12 +96,12 @@ export const MANIFEST_SOURCE_OPTIONS: {
 export const MAX_TAGS = 4
 
 export const SECURITY_REVIEW = {
-  estimatedDuration: "24 à 48 heures",
+  estimatedDuration: "24 to 48 hours",
   checks: [
-    "Analyse statique du code",
-    "Scan des vulnérabilités",
-    "Vérification des permissions déclarées",
-    "Exécution de tests en sandbox",
+    "Static code analysis",
+    "Vulnerability scan",
+    "Declared permissions check",
+    "Sandboxed test run",
   ],
 }
 
@@ -112,13 +112,13 @@ export const WIZARD_STEPS: {
 }[] = [
   { id: "source", label: "Source", tables: [] },
   { id: "package", label: "Package", tables: ["package"] },
-  { id: "run", label: "Exécution", tables: ["run"] },
+  { id: "run", label: "Run", tables: ["run"] },
   {
     id: "permissions",
     label: "Permissions",
     tables: ["permissions", "permissions.terminal"],
   },
-  { id: "review", label: "Récapitulatif", tables: [] },
+  { id: "review", label: "Summary", tables: [] },
 ]
 
 export const DEFAULT_README_FILE = "README.md"

@@ -8,19 +8,19 @@ export type MarketplaceCategory = {
 }
 
 export const categories: MarketplaceCategory[] = [
-  { slug: "dev-tools", label: "Outils de développement", icon: Code2 },
-  { slug: "data-analytics", label: "Données et analyses", icon: Database },
-  { slug: "design", label: "Conception", icon: Palette },
-  { slug: "productivity", label: "Productivité", icon: Zap },
-  { slug: "security", label: "Sécurité", icon: ShieldCheck },
-  { slug: "customer-service", label: "Service client", icon: Headphones },
-  { slug: "research", label: "Recherche", icon: FlaskConical },
+  { slug: "dev-tools", label: "Developer tools", icon: Code2 },
+  { slug: "data-analytics", label: "Data & analytics", icon: Database },
+  { slug: "design", label: "Design", icon: Palette },
+  { slug: "productivity", label: "Productivity", icon: Zap },
+  { slug: "security", label: "Security", icon: ShieldCheck },
+  { slug: "customer-service", label: "Customer service", icon: Headphones },
+  { slug: "research", label: "Research", icon: FlaskConical },
   { slug: "marketing", label: "Marketing", icon: Megaphone },
 ]
 
 export const types: { slug: "workflow" | "autonomous"; label: string }[] = [
   { slug: "workflow", label: "Workflow" },
-  { slug: "autonomous", label: "Agent autonome" },
+  { slug: "autonomous", label: "Autonomous agent" },
 ]
 
 export const languages: { slug: "typescript" | "python" | "rust" | "multi-runtime"; label: string }[] = [
@@ -31,7 +31,7 @@ export const languages: { slug: "typescript" | "python" | "rust" | "multi-runtim
 ]
 
 export const updates: { slug: "last-24h" | "last-week" | "last-month"; label: string }[] = [
-  { slug: "last-24h", label: "Dernières 24 heures" },
-  { slug: "last-week", label: "La semaine dernière" },
-  { slug: "last-month", label: "Le mois dernier" },
+  { slug: "last-24h", label: "Last 24 hours" },
+  { slug: "last-week", label: "Last week" },
+  { slug: "last-month", label: "Last month" },
 ]

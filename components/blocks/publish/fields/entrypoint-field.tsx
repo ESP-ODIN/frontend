@@ -12,7 +12,7 @@ export function EntrypointField() {
       id="entrypoint"
       label="Entrypoint"
       required
-      hint="Fichier de démarrage, ex. main.py."
+      hint="Startup file, e.g. main.py."
     >
       <Input
         id="entrypoint"

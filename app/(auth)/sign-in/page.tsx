@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { RegisterCard } from "@/components/blocks/register/register-card"
 
 export const metadata: Metadata = {
-  title: "Créer un compte — Odin",
-  description: "Créez votre compte Odin pour publier et installer des agents IA.",
+  title: "Create an account — Odin",
+  description: "Create your Odin account to publish and install AI agents.",
 }
 
 export default function Page() {

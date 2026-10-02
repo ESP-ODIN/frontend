@@ -10,7 +10,7 @@ export function ManifestSourceSelector() {
   return (
     <div className="flex flex-col gap-1.5">
       <p className="text-sm font-medium text-foreground">
-        Source du manifest<span className="ml-0.5 text-primary">*</span>
+        Manifest source<span className="ml-0.5 text-primary">*</span>
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
         {MANIFEST_SOURCE_OPTIONS.map((option) => (

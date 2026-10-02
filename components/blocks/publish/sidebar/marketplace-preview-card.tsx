@@ -18,9 +18,9 @@ export function MarketplacePreviewCard() {
           <AgentIcon label={initials} color="primary" />
           <div className="min-w-0">
             <p className="truncate font-mono text-sm font-bold text-foreground">
-              {pkg.name || "mon-agent"}
+              {pkg.name || "my-agent"}
             </p>
-            <p className="text-xs text-muted-foreground">by @vous</p>
+            <p className="text-xs text-muted-foreground">by @you</p>
           </div>
         </div>
         <Badge variant="outline" size="sm" className="shrink-0">
@@ -29,7 +29,7 @@ export function MarketplacePreviewCard() {
       </div>
 
       <p className="line-clamp-2 text-sm text-muted-foreground">
-        {pkg.description || "Votre description apparaîtra ici."}
+        {pkg.description || "Your description will appear here."}
       </p>
 
       {pkg.tags.length > 0 && (

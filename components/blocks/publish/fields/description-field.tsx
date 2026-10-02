@@ -14,7 +14,7 @@ export function DescriptionField() {
   return (
     <FieldShell
       id="description"
-      label="Description courte"
+      label="Short description"
       required
       trailing={
         <span
@@ -36,7 +36,7 @@ export function DescriptionField() {
         onChange={(event) =>
           updateSection("package", { description: event.target.value })
         }
-        placeholder="Ce que fait votre agent, en une phrase."
+        placeholder="What your agent does, in one sentence."
         className="min-h-20"
       />
     </FieldShell>

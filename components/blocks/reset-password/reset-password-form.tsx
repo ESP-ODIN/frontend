@@ -24,12 +24,12 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     setError(null)
 
     if (!token) {
-      setError("Lien de réinitialisation invalide ou expiré.")
+      setError("Invalid or expired reset link.")
       return
     }
 
     if (password !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.")
+      setError("Passwords do not match.")
       return
     }
 
@@ -49,7 +49,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label htmlFor="password" className="text-sm font-medium text-foreground">
-          Nouveau mot de passe
+          New password
         </label>
         <Input
           id="password"
@@ -67,7 +67,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="confirm-password" className="text-sm font-medium text-foreground">
-          Confirmer le mot de passe
+          Confirm password
         </label>
         <Input
           id="confirm-password"
@@ -85,7 +85,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
-        {isSubmitting ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
+        {isSubmitting ? "Resetting..." : "Reset password"}
       </Button>
     </form>
   )

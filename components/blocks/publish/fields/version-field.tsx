@@ -10,7 +10,7 @@ export function VersionField() {
   const value = data.package.version
   const error =
     value.length > 0 && !isSemverValid(value)
-      ? "Format attendu : 1.0.0"
+      ? "Expected format: 1.0.0"
       : undefined
 
   return (
@@ -19,7 +19,7 @@ export function VersionField() {
       label="Version"
       required
       error={error}
-      hint={error ? undefined : "Semver, ex. 1.0.0."}
+      hint={error ? undefined : "Semver, e.g. 1.0.0."}
     >
       <Input
         id="version"

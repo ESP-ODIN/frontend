@@ -34,15 +34,15 @@ export function SecurityReviewDialog({
             <ShieldCheck className="size-7" />
           </div>
           <DialogTitle className="font-heading text-xl font-bold">
-            Votre agent part en vérification
+            Your agent is going through review
           </DialogTitle>
           <DialogDescription>
-            Avant d&apos;apparaître sur le marketplace,{" "}
+            Before appearing on the marketplace,{" "}
             <span className="font-mono font-semibold text-foreground">
               {slug}
             </span>{" "}
-            passe par notre pipeline de tests de sécurité. Il n&apos;est pas
-            encore publié.
+            goes through our security testing pipeline. It isn&apos;t published
+            yet.
           </DialogDescription>
         </div>
 
@@ -61,7 +61,7 @@ export function SecurityReviewDialog({
           <div className="flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
             <Clock className="mt-0.5 size-4 shrink-0 text-primary" />
             <div>
-              <p className="text-xs text-muted-foreground">Durée estimée</p>
+              <p className="text-xs text-muted-foreground">Estimated duration</p>
               <p className="font-heading text-base font-bold text-foreground">
                 {SECURITY_REVIEW.estimatedDuration}
               </p>
@@ -70,8 +70,8 @@ export function SecurityReviewDialog({
           <div className="flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
             <Mail className="mt-0.5 size-4 shrink-0 text-primary" />
             <p className="text-xs text-foreground">
-              Vous recevrez un email dès que l&apos;agent est publié, ou si un
-              problème est détecté.
+              You&apos;ll get an email as soon as the agent is published, or if
+              an issue is found.
             </p>
           </div>
         </div>
@@ -82,10 +82,10 @@ export function SecurityReviewDialog({
             className="rounded-lg"
             render={<Link href="/marketplace" />}
           >
-            Retour au marketplace
+            Back to the marketplace
           </Button>
           <Button className="rounded-lg" onClick={() => onOpenChange(false)}>
-            J&apos;ai compris
+            Got it
           </Button>
         </div>
       </DialogContent>

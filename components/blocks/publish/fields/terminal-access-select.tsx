@@ -16,8 +16,8 @@ export function TerminalAccessSelect() {
     <div className="flex flex-col gap-4">
       <FieldShell
         id="terminal-access"
-        label="Accès terminal"
-        hint="L'agent peut-il exécuter des commandes shell sur la machine ?"
+        label="Terminal access"
+        hint="Can the agent run shell commands on the machine?"
       >
         <SelectInput
           id="terminal-access"
@@ -38,9 +38,9 @@ export function TerminalAccessSelect() {
         <div className="animate-in duration-300 fade-in-0 slide-in-from-top-1">
           <StringListField
             id="allowed-commands"
-            label="Commandes autorisées"
+            label="Allowed commands"
             required
-            hint="Le nom du binaire uniquement, ex. git, npm, docker."
+            hint="The binary name only, e.g. git, npm, docker."
             placeholder="git"
             items={terminal.commands}
             onChange={(commands) =>
@@ -49,7 +49,7 @@ export function TerminalAccessSelect() {
               })
             }
             validate={isCommandNameValid}
-            invalidHint="Un nom de commande, sans espace ni argument."
+            invalidHint="A command name, without spaces or arguments."
           />
         </div>
       )}

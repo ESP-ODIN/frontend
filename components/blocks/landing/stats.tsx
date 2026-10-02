@@ -14,10 +14,10 @@ type StatItem = {
 }
 
 const stats: StatItem[] = [
-  { icon: Boxes, target: 2481, label: "AGENTS PUBLIÉS" },
-  { icon: Download, target: 14.2, decimals: 1, suffix: "M", label: "INSTALLATIONS / MOIS" },
-  { icon: Users, target: 38, suffix: "K", label: "AUTEURS" },
-  { icon: ShieldCheck, target: 99.98, decimals: 2, suffix: "%", label: "TESTS DE SÉCURITÉ PASSÉS" },
+  { icon: Boxes, target: 2481, label: "PUBLISHED AGENTS" },
+  { icon: Download, target: 14.2, decimals: 1, suffix: "M", label: "INSTALLS / MONTH" },
+  { icon: Users, target: 38, suffix: "K", label: "AUTHORS" },
+  { icon: ShieldCheck, target: 99.98, decimals: 2, suffix: "%", label: "SECURITY TESTS PASSED" },
 ]
 
 export function Stats() {

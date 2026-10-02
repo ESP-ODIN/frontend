@@ -31,8 +31,8 @@ export function ForgotPasswordForm() {
   if (isSubmitted) {
     return (
       <p className="text-center text-sm text-muted-foreground">
-        Si un compte existe pour <span className="font-medium text-foreground">{email}</span>, vous
-        recevrez un email avec un lien de réinitialisation.
+        If an account exists for <span className="font-medium text-foreground">{email}</span>,
+        you&apos;ll receive an email with a reset link.
       </p>
     )
   }
@@ -51,14 +51,14 @@ export function ForgotPasswordForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="john.abruzzi@exemple.com"
+          placeholder="john.abruzzi@example.com"
         />
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" className="fx-shine mt-2 rounded-lg" disabled={isSubmitting}>
-        {isSubmitting ? "Envoi..." : "Envoyer le lien de réinitialisation"}
+        {isSubmitting ? "Sending..." : "Send reset link"}
       </Button>
     </form>
   )

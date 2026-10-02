@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Marketplace — Odin",
-  description: "Découvrez et installez des agents IA.",
+  description: "Discover and install AI agents.",
 }
 
 export default function Page() {

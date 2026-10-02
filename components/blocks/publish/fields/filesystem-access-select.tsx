@@ -10,7 +10,7 @@ export function FilesystemAccessSelect() {
   const { data, updateSection } = usePublishWizard()
 
   return (
-    <FieldShell id="filesystem-access" label="Accès filesystem">
+    <FieldShell id="filesystem-access" label="Filesystem access">
       <SelectInput
         id="filesystem-access"
         value={data.permissions.filesystem}

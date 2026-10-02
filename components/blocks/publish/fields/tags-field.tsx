@@ -45,8 +45,8 @@ export function TagsField() {
       label="Tags"
       hint={
         isFull
-          ? `Maximum ${MAX_TAGS} tags : retirez-en un pour en ajouter un autre.`
-          : "Séparez les tags par une virgule."
+          ? `Maximum ${MAX_TAGS} tags: remove one to add another.`
+          : "Separate tags with a comma."
       }
       trailing={
         <span className="font-mono text-xs text-muted-foreground">
@@ -62,7 +62,7 @@ export function TagsField() {
           commitDraft(draft)
           setDraft("")
         }}
-        placeholder={isFull ? "Limite atteinte" : "cli, automation, github"}
+        placeholder={isFull ? "Limit reached" : "cli, automation, github"}
         disabled={isFull}
       />
       {tags.length > 0 && (

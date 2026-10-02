@@ -10,9 +10,9 @@ import { Cta } from "@/components/blocks/landing/cta"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 const links = [
-  { label: "Fonctionnalités", href: "#values" },
-  { label: "Comment ça marche", href: "#how-it-works" },
-  { label: "Plateforme", href: "#platform" },
+  { label: "Features", href: "#values" },
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Platform", href: "#platform" },
   { label: "Agents", href: "#agents" },
 ]
 

@@ -21,9 +21,9 @@ type ResultItem = {
 }
 
 const pages = [
-  { label: "Accueil", href: "/", sublabel: "Page d'accueil d'Odin" },
-  { label: "Marketplace", href: "/marketplace", sublabel: "Parcourir tous les agents" },
-  { label: "Publish", href: "/publish", sublabel: "Publier un nouvel agent" }
+  { label: "Home", href: "/", sublabel: "Odin home page" },
+  { label: "Marketplace", href: "/marketplace", sublabel: "Browse all agents" },
+  { label: "Publish", href: "/publish", sublabel: "Publish a new agent" }
 ]
 
 const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.slug}`))
@@ -144,9 +144,9 @@ export function CommandMenu() {
           initialFocus={inputRef}
           className="fixed top-[18%] left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-muted/40 bg-popover text-popover-foreground shadow-2xl outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
         >
-          <DialogPrimitive.Title className="sr-only">Rechercher</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">Search</DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
-            Rechercher des agents et naviguer sur Odin
+            Search agents and navigate Odin
           </DialogPrimitive.Description>
 
           <div className="flex items-center gap-3 border-b border-muted/40 px-4">
@@ -159,7 +159,7 @@ export function CommandMenu() {
                 setActiveIndex(0)
               }}
               onKeyDown={onInputKeyDown}
-              placeholder="Rechercher des agents, des pages…"
+              placeholder="Search agents, pages…"
               className="h-12 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <kbd className="shrink-0 rounded-md border border-muted/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
@@ -170,7 +170,7 @@ export function CommandMenu() {
           <div className="max-h-80 overflow-y-auto p-2">
             {groups.length === 0 && (
               <p className="p-6 text-center text-sm text-muted-foreground">
-                Aucun résultat pour « {query} »
+                No results for “{query}”
               </p>
             )}
             {groups.map(([group, groupItems]) => (
@@ -204,9 +204,9 @@ export function CommandMenu() {
             <ThemeToggle />
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5">
-                <CornerDownLeft className="size-3" /> sélectionner
+                <CornerDownLeft className="size-3" /> select
               </span>
-              <span>↑↓ naviguer</span>
+              <span>↑↓ navigate</span>
             </div>
           </div>
         </DialogPrimitive.Popup>

@@ -9,7 +9,7 @@ export function CategorySelect() {
   const { data, updateSection } = usePublishWizard()
 
   return (
-    <FieldShell id="category" label="Catégorie" required>
+    <FieldShell id="category" label="Category" required>
       <SelectInput
         id="category"
         value={data.package.category}
@@ -18,7 +18,7 @@ export function CategorySelect() {
           value: category.slug,
           label: category.label,
         }))}
-        placeholder="Sélectionner une catégorie"
+        placeholder="Select a category"
       />
     </FieldShell>
   )

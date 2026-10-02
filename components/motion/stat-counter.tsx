@@ -64,7 +64,7 @@ export function StatCounter({
     return () => cancelAnimationFrame(frame)
   }, [started, target, duration])
 
-  const formatted = value.toLocaleString("fr-FR", {
+  const formatted = value.toLocaleString("en-US", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   })

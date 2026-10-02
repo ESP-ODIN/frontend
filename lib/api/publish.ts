@@ -15,7 +15,7 @@ async function mockRequest<T>(
   await wait(options?.delayMs ?? NETWORK_DELAY_MS)
   if (options?.shouldFail) {
     throw new Error(
-      options.errorMessage ?? "Une erreur réseau est survenue. Réessayez."
+      options.errorMessage ?? "A network error occurred. Please try again."
     )
   }
   return result
@@ -34,7 +34,7 @@ export async function checkNameAvailability(
   return mockRequest(
     {
       available: !taken,
-      reason: taken ? "Ce nom est déjà pris par un autre package." : undefined,
+      reason: taken ? "This name is already taken by another package." : undefined,
     },
     { delayMs: 500, shouldFail: normalized.includes("force-error") }
   )
@@ -92,7 +92,7 @@ export async function publishAgent(
     return {
       ok: false,
       error:
-        error instanceof Error ? error.message : "Échec de la publication.",
+        error instanceof Error ? error.message : "Publication failed.",
     }
   }
 }

@@ -11,10 +11,10 @@ type AgentTabsSectionProps = {
 }
 
 const tabs = [
-  { id: "overview", label: "Vue d'ensemble" },
+  { id: "overview", label: "Overview" },
   { id: "changelog", label: "Changelog" },
-  { id: "community", label: "REX communauté", count: 38 },
-  { id: "security", label: "Sécurité" },
+  { id: "community", label: "Community reports", count: 38 },
+  { id: "security", label: "Security" },
 ] as const
 
 export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
@@ -50,7 +50,7 @@ export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
       {active === "overview" ? (
         <AgentOverview detail={detail} />
       ) : (
-        <p className="text-muted-foreground">Bientôt disponible.</p>
+        <p className="text-muted-foreground">Coming soon.</p>
       )}
     </div>
   )

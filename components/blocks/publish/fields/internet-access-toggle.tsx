@@ -10,8 +10,8 @@ export function InternetAccessToggle() {
   return (
     <FieldShell
       id="internet-access"
-      label="Accès internet"
-      hint="L'agent peut-il effectuer des requêtes réseau sortantes ?"
+      label="Internet access"
+      hint="Can the agent make outbound network requests?"
     >
       <ToggleSwitch
         id="internet-access"
@@ -19,7 +19,7 @@ export function InternetAccessToggle() {
         onChange={(checked) =>
           updateSection("permissions", { network: checked })
         }
-        label="Accès internet"
+        label="Internet access"
       />
     </FieldShell>
   )

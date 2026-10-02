@@ -14,7 +14,7 @@ export function PublishResult() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="size-4 animate-spin" />
-        Envoi en cours...
+        Sending...
       </div>
     )
   }
@@ -24,16 +24,16 @@ export function PublishResult() {
       <div className="fx-pop flex flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
         <ShieldCheck className="size-8 text-primary" />
         <p className="font-heading text-lg font-bold text-foreground">
-          Agent soumis !
+          Agent submitted!
         </p>
         <p className="text-sm text-muted-foreground">
           <span className="font-mono text-foreground">{submission.slug}</span>{" "}
-          est en cours de vérification de sécurité (environ{" "}
-          {SECURITY_REVIEW.estimatedDuration}). Vous recevrez un email dès
-          qu&apos;il sera publié, ou si un problème est détecté.
+          is going through security review (about{" "}
+          {SECURITY_REVIEW.estimatedDuration}). You&apos;ll get an email as soon
+          as it&apos;s published, or if an issue is found.
         </p>
         <Button render={<Link href="/marketplace" />} className="rounded-lg">
-          Retour au marketplace
+          Back to the marketplace
         </Button>
       </div>
     )
@@ -51,7 +51,7 @@ export function PublishResult() {
           className="rounded-lg"
           onClick={() => setSubmission({ status: "idle" })}
         >
-          Réessayer
+          Try again
         </Button>
       </div>
     )
