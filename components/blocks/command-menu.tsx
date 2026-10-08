@@ -6,8 +6,8 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { ArrowRight, CornerDownLeft, Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { agents } from "@/lib/data/agents"
-import { AgentIcon } from "@/components/blocks/agent-icon"
+import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
+import type { AppPage } from "@/lib/app-pages"
 import { ThemeToggle } from "@/components/blocks/theme-toggle"
 
 export const commandMenuHandle = DialogPrimitive.createHandle()
@@ -20,59 +20,63 @@ type ResultItem = {
   render: () => React.ReactNode
 }
 
-const pages = [
-  { label: "Home", href: "/", sublabel: "Odin home page" },
-  { label: "Marketplace", href: "/marketplace", sublabel: "Browse all agents" },
-  { label: "Publish", href: "/publish", sublabel: "Publish a new agent" }
-]
+function toAgentItem(agent: Agent): ResultItem {
+  return {
+    id: `agent-${agent.id}`,
+    href: `/agents/${agent.id}`,
+    group: "Agents",
+    keywords: `${agent.name} ${agent.creator_id} ${agent.description}`,
+    render: () => (
+      <>
+        <AgentIcon icon={agent.icon} name={agent.name} className="size-8 rounded-md text-xs" />
+        <div className="flex flex-col overflow-hidden text-left">
+          <span className="truncate font-mono text-sm font-bold text-foreground">
+            {agent.name}
+          </span>
+          <span className="truncate text-xs text-muted-foreground">by {agent.creator_id}</span>
+        </div>
+      </>
+    ),
+  }
+}
 
-const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.id}`))
+function toPageItem(page: AppPage): ResultItem {
+  return {
+    id: `page-${page.href}`,
+    href: page.href,
+    group: "Pages",
+    keywords: `${page.href} ${page.label} ${page.description}`,
+    render: () => (
+      <>
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted/10">
+          <ArrowRight className="size-4 text-muted-foreground" />
+        </div>
+        <div className="flex flex-col overflow-hidden text-left">
+          <span className="truncate text-sm font-medium text-foreground">{page.label}</span>
+          <span className="truncate text-xs text-muted-foreground">{page.description || page.href}</span>
+        </div>
+      </>
+    ),
+  }
+}
 
-const items: ResultItem[] = [
-  ...agents.map(
-    (agent): ResultItem => ({
-      id: `agent-${agent.id}`,
-      href: `/agents/${agent.id}`,
-      group: "Agents",
-      keywords: `${agent.name} ${agent.creator_id} ${agent.description}`,
-      render: () => (
-        <>
-          <AgentIcon icon={agent.icon} name={agent.name} className="size-8 rounded-md text-xs" />
-          <div className="flex flex-col overflow-hidden text-left">
-            <span className="truncate font-mono text-sm font-bold text-foreground">
-              {agent.name}
-            </span>
-            <span className="truncate text-xs text-muted-foreground">by {agent.creator_id}</span>
-          </div>
-        </>
-      ),
-    })
-  ),
-  ...pages.map(
-    (page): ResultItem => ({
-      id: `page-${page.href}`,
-      href: page.href,
-      group: "Pages",
-      keywords: `${page.label} ${page.sublabel}`,
-      render: () => (
-        <>
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted/10">
-            <ArrowRight className="size-4 text-muted-foreground" />
-          </div>
-          <div className="flex flex-col overflow-hidden text-left">
-            <span className="truncate text-sm font-medium text-foreground">{page.label}</span>
-            <span className="truncate text-xs text-muted-foreground">{page.sublabel}</span>
-          </div>
-        </>
-      ),
-    })
-  ),
-]
+async function fetchList<T>(url: string): Promise<T[]> {
+  try {
+    const res = await fetch(url)
+    if (!res.ok) return []
+    const { data } = (await res.json()) as { data: T[] }
+    return data
+  } catch {
+    return []
+  }
+}
 
 export function CommandMenu() {
   const router = useRouter()
   const [query, setQuery] = React.useState("")
   const [activeIndex, setActiveIndex] = React.useState(0)
+  const [agents, setAgents] = React.useState<Agent[]>([])
+  const [pages, setPages] = React.useState<AppPage[]>([])
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
@@ -91,10 +95,18 @@ export function CommandMenu() {
   }, [])
 
   const results = React.useMemo(() => {
+    const agentItems = agents.map(toAgentItem)
+    const pageItems = pages.map(toPageItem)
     const q = query.trim().toLowerCase()
-    if (!q) return items.filter((item) => item.group === "Pages" || exampleAgentIds.has(item.id))
-    return items.filter((item) => item.keywords.toLowerCase().includes(q))
-  }, [query])
+
+    // "/" switches to page navigation: "/mark" only searches pages
+    if (q.startsWith("/")) {
+      const pageQuery = q.slice(1)
+      return pageItems.filter((item) => item.keywords.toLowerCase().includes(pageQuery))
+    }
+    if (!q) return [...agentItems.slice(-3), ...pageItems]
+    return [...agentItems, ...pageItems].filter((item) => item.keywords.toLowerCase().includes(q))
+  }, [agents, pages, query])
 
   const groups = React.useMemo(() => {
     const map = new Map<string, ResultItem[]>()
@@ -127,7 +139,10 @@ export function CommandMenu() {
     <DialogPrimitive.Root
       handle={commandMenuHandle}
       onOpenChange={(nextOpen) => {
-        if (!nextOpen) {
+        if (nextOpen) {
+          fetchList<Agent>("/api/agents").then(setAgents)
+          fetchList<AppPage>("/api/pages").then(setPages)
+        } else {
           setQuery("")
           setActiveIndex(0)
         }
@@ -154,7 +169,7 @@ export function CommandMenu() {
                 setActiveIndex(0)
               }}
               onKeyDown={onInputKeyDown}
-              placeholder="Search agents, pages…"
+              placeholder="Search agents, or type / for pages…"
               className="h-12 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <kbd className="shrink-0 rounded-md border border-muted/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
