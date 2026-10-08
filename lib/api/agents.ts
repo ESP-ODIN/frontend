@@ -48,7 +48,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     description: apiAgent.description ?? "",
     downloads_count: apiAgent.downloads_count,
     is_official_pick: apiAgent.is_official_pick,
-    featured: apiAgent.featured ?? true,
+    featured: apiAgent.featured ?? false,
     category: apiAgent.category,
     agent_type: apiAgent.agent_type,
     runtime: apiAgent.runtime,
