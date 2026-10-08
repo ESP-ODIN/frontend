@@ -1,14 +1,13 @@
 import Link from "next/link"
 
-import type { CategoryId } from "@/lib/data/categories"
+import { getCategoryLabel, type CategoryId } from "@/lib/data/categories"
 
 type AgentBreadcrumbProps = {
   category: CategoryId
-  categoryLabel: string
   name: string
 }
 
-export function AgentBreadcrumb({ category, categoryLabel, name }: AgentBreadcrumbProps) {
+export function AgentBreadcrumb({ category, name }: AgentBreadcrumbProps) {
   return (
     <p className="font-mono text-sm text-muted-foreground">
       <Link href="/marketplace" className="hover:text-foreground">
@@ -16,7 +15,7 @@ export function AgentBreadcrumb({ category, categoryLabel, name }: AgentBreadcru
       </Link>{" "}
       /{" "}
       <Link href={`/marketplace?category=${category}`} className="hover:text-foreground">
-        {categoryLabel}
+        {getCategoryLabel(category)}
       </Link>{" "}
       / <span className="text-foreground">{name}</span>
     </p>

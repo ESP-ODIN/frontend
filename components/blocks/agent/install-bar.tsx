@@ -24,8 +24,10 @@ export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarP
   const fork = useExplosion<HTMLSpanElement>()
   const follow = useExplosion<HTMLSpanElement>()
 
-  const starsCount = formatCount(parseCount(detail.starsLabel) + (starred ? 1 : 0), detail.starsLabel)
-  const forksCount = formatCount(parseCount(detail.forksLabel) + (forked ? 1 : 0), detail.forksLabel)
+  const starsLabel = detail.starsLabel ?? "—"
+  const forksLabel = detail.forksLabel ?? "—"
+  const starsCount = formatCount(parseCount(starsLabel) + (starred ? 1 : 0), starsLabel)
+  const forksCount = formatCount(parseCount(forksLabel) + (forked ? 1 : 0), forksLabel)
 
   function handleStar() {
     star.explode(starred ? { mode: "implode" } : {})

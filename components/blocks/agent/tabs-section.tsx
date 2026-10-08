@@ -13,7 +13,7 @@ type AgentTabsSectionProps = {
 const tabs = [
   { id: "overview", label: "Overview" },
   { id: "changelog", label: "Changelog" },
-  { id: "community", label: "Community reports", count: 38 },
+  { id: "community", label: "Community reports" },
   { id: "security", label: "Security" },
 ] as const
 
@@ -36,11 +36,6 @@ export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
               )}
             >
               {tab.label}
-              {"count" in tab && (
-                <span className="rounded-full bg-muted/15 px-1.5 py-0.5 text-xs text-muted-foreground">
-                  {tab.count}
-                </span>
-              )}
             </button>
           ))}
         </div>

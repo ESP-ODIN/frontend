@@ -33,3 +33,7 @@ export const updates: { slug: "last-24h" | "last-week" | "last-month"; label: st
   { slug: "last-week", label: "Last week" },
   { slug: "last-month", label: "Last month" },
 ]
+
+export function getCategoryLabel(category: string): string {
+  return categories.find((item) => item.slug === category)?.label ?? category
+}

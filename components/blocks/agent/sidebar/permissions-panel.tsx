@@ -12,6 +12,7 @@ type AgentPermissionsPanelProps = {
 export function AgentPermissionsPanel({ detail }: AgentPermissionsPanelProps) {
   return (
     <AgentSidebarPanel title="Permissions">
+      {detail.permissions.length === 0 && <p className="font-mono text-sm text-muted-foreground">—</p>}
       <ul className="flex flex-col gap-2.5">
         {detail.permissions.map((permission) => (
           <li key={permission.label} className="flex flex-col gap-2 text-sm">

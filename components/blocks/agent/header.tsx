@@ -2,6 +2,8 @@ import type { Agent } from "@/components/blocks/agent-icon"
 import type { AgentDetail } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
+import { getCategoryLabel } from "@/lib/data/categories"
+import { formatTimeAgo } from "@/lib/format-time-ago"
 
 type AgentHeaderProps = {
   agent: Agent
@@ -19,7 +21,7 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
         </div>
         <p className="text-sm text-muted-foreground">
           by <span className="text-primary">{agent.creator_id}</span> · updated{" "}
-          {detail.updatedLabel} · {detail.categoryLabel}
+          {formatTimeAgo(detail.updated_at)} · {getCategoryLabel(detail.category)}
         </p>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>
       </div>

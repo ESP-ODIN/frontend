@@ -2,7 +2,7 @@ import { Check, type LucideIcon } from "lucide-react"
 
 import type { Agent } from "@/components/blocks/agent-icon"
 import { categories, updates } from "@/lib/data/categories"
-import { AGENT_TYPE_OPTIONS, RUNTIME_OPTIONS } from "@/lib/publish/constants"
+import { AGENT_TYPE_OPTIONS, getRuntimeLabel } from "@/lib/publish/constants"
 import { emptyFilters, getRecency, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
 import { cn } from "@/lib/utils"
 
@@ -85,7 +85,7 @@ export function FilterBar({ agents, className, filters, onChange }: FilterBarPro
   const runtimeCounts = countBy(agents, (agent) => agent.runtime)
   const runtimeOptions = [...runtimeCounts.keys()].sort().map((runtime) => ({
     id: runtime,
-    label: RUNTIME_OPTIONS.find((option) => option.id === runtime)?.label ?? runtime,
+    label: getRuntimeLabel(runtime),
   }))
   const updateCounts = countBy(agents, (agent) => getRecency(agent.updated_at))
 
