@@ -2,18 +2,8 @@ import type { LucideIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-export const agentColorVariants = {
-  primary: "bg-primary/10 text-primary",
-  amber: "bg-amber-100 text-amber-900",
-  blue: "bg-blue-100 text-blue-900",
-  red: "bg-red-100 text-red-900",
-  muted: "bg-muted/15 text-foreground",
-} as const
-
-export type AgentColor = keyof typeof agentColorVariants
-
 export type AgentType = "workflow" | "autonomous"
-export type AgentLanguage = "typescript" | "python" | "rust" | "multi-runtime"
+export type AgentRuntime = "typescript" | "python" | "rust" | "multi-runtime"
 export type AgentRecency = "last-24h" | "last-week" | "last-month"
 
 export type AgentCategory = {
@@ -22,39 +12,37 @@ export type AgentCategory = {
 }
 
 export type Agent = {
-  slug: string
+  id: string
   name: string
-  author: string
+  creator_id: string
   description: string
   tags: string[]
   stars: string
-  downloads: string
+  downloads_count: number
   version: string
-  color: AgentColor
-  featured?: boolean
+  icon?: LucideIcon
+  is_official_pick: boolean
   category: AgentCategory
-  type: AgentType
-  language: AgentLanguage
-  recency: AgentRecency
-} & ({ icon: LucideIcon; label?: never } | { icon?: never; label: string })
+  agent_type: AgentType
+  runtime: AgentRuntime
+  updated_at: string
+}
 
 type AgentIconProps = {
   icon?: LucideIcon
-  label?: string
-  color: AgentColor
+  name: string
   className?: string
 }
 
-export function AgentIcon({ icon: Icon, label, color, className }: AgentIconProps) {
+export function AgentIcon({ icon: Icon, name, className }: AgentIconProps) {
   return (
     <div
       className={cn(
-        "flex size-10 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold",
-        agentColorVariants[color],
+        "flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 font-mono text-sm font-bold text-primary",
         className
       )}
     >
-      {Icon ? <Icon className="size-5" /> : label}
+      {Icon ? <Icon className="size-5" /> : name.slice(0, 2).toUpperCase() || "??"}
     </div>
   )
 }

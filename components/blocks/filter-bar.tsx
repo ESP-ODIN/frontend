@@ -2,7 +2,7 @@ import { Check, type LucideIcon } from "lucide-react"
 
 import { agents } from "@/lib/data/agents"
 import { categories, languages, types, updates } from "@/lib/data/categories"
-import { emptyFilters, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
+import { emptyFilters, getRecency, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
 import { cn } from "@/lib/utils"
 
 type FilterBarProps = {
@@ -79,9 +79,9 @@ function FilterSection({
 
 export function FilterBar({ className, filters, onChange }: FilterBarProps) {
   const categoryCounts = countBy((agent) => agent.category.slug)
-  const typeCounts = countBy((agent) => agent.type)
-  const languageCounts = countBy((agent) => agent.language)
-  const updateCounts = countBy((agent) => agent.recency)
+  const typeCounts = countBy((agent) => agent.agent_type)
+  const languageCounts = countBy((agent) => agent.runtime)
+  const updateCounts = countBy((agent) => getRecency(agent.updated_at))
 
   function toggle(key: keyof MarketplaceFilters, value: string) {
     const list = filters[key]

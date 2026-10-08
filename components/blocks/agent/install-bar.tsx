@@ -11,15 +11,15 @@ import { useAgentInteractions } from "@/lib/hooks/use-agent-interactions"
 import { useExplosion } from "@/components/motion/explosion-burst"
 
 type AgentInstallBarProps = {
-  agentSlug: string
+  agentId: string
   agentName: string
   detail: AgentDetail
 }
 
 const FOLLOW_COLORS = ["#60a5fa", "#93c5fd", "#bfdbfe", "#e85d04", "#ffb35c"]
 
-export function AgentInstallBar({ agentSlug, agentName, detail }: AgentInstallBarProps) {
-  const { starred, forked, following, toggleStar, toggleFork, toggleFollow } = useAgentInteractions(agentSlug)
+export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarProps) {
+  const { starred, forked, following, toggleStar, toggleFork, toggleFollow } = useAgentInteractions(agentId)
   const star = useExplosion<HTMLSpanElement>()
   const fork = useExplosion<HTMLSpanElement>()
   const follow = useExplosion<HTMLSpanElement>()

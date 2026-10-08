@@ -1,4 +1,5 @@
 import type { Agent } from "@/components/blocks/agent-icon"
+import { formatCompactCount } from "@/lib/format-count"
 
 export type AgentDetail = {
   categoryLabel: string
@@ -90,7 +91,7 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
   },
 }
 
-const languageLabels: Record<Agent["language"], string> = {
+const runtimeLabels: Record<Agent["runtime"], string> = {
   typescript: "TypeScript",
   python: "Python",
   rust: "Rust",
@@ -102,11 +103,11 @@ export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
     categoryLabel: agent.category.label,
     categorySlug: agent.category.slug,
     updatedLabel: "a few days ago",
-    installsLabel: agent.downloads,
+    installsLabel: formatCompactCount(agent.downloads_count),
     starsLabel: agent.stars,
     forksLabel: "—",
     ratingLabel: "— / 5",
-    runtimeLabel: languageLabels[agent.language],
+    runtimeLabel: runtimeLabels[agent.runtime],
     uptimeLabel: "—",
     license: "MIT",
     publishedLabel: "2025",
@@ -129,6 +130,6 @@ export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
       { label: "env, shell", granted: false },
     ],
     dependencies: ["@anthropic/sdk ^0.24"],
-    similar: allAgents.filter((a) => a.slug !== agent.slug).slice(0, 3).map((a) => a.slug),
+    similar: allAgents.filter((a) => a.id !== agent.id).slice(0, 3).map((a) => a.id),
   }
 }

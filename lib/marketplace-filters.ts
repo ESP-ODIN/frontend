@@ -29,16 +29,26 @@ const recencyRank: Record<AgentRecency, number> = {
   "last-month": 2,
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000
+
+export function getRecency(updatedAt: string): AgentRecency {
+  const elapsed = Date.now() - new Date(updatedAt).getTime()
+  if (elapsed <= DAY_MS) return "last-24h"
+  if (elapsed <= 7 * DAY_MS) return "last-week"
+  return "last-month"
+}
+
 function matchesRecency(agent: Agent, selected: string[]) {
   if (selected.length === 0) return true
-  return selected.some((bucket) => recencyRank[agent.recency] <= recencyRank[bucket as AgentRecency])
+  const recency = getRecency(agent.updated_at)
+  return selected.some((bucket) => recencyRank[recency] <= recencyRank[bucket as AgentRecency])
 }
 
 export function filterAgents(agents: Agent[], filters: MarketplaceFilters) {
   return agents.filter((agent) => {
     if (filters.categories.length > 0 && !filters.categories.includes(agent.category.slug)) return false
-    if (filters.types.length > 0 && !filters.types.includes(agent.type)) return false
-    if (filters.languages.length > 0 && !filters.languages.includes(agent.language)) return false
+    if (filters.types.length > 0 && !filters.types.includes(agent.agent_type)) return false
+    if (filters.languages.length > 0 && !filters.languages.includes(agent.runtime)) return false
     if (!matchesRecency(agent, filters.updates)) return false
     return true
   })

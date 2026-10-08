@@ -26,28 +26,23 @@ const pages = [
   { label: "Publish", href: "/publish", sublabel: "Publish a new agent" }
 ]
 
-const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.slug}`))
+const exampleAgentIds = new Set(agents.slice(-3).map((agent) => `agent-${agent.id}`))
 
 const items: ResultItem[] = [
   ...agents.map(
     (agent): ResultItem => ({
-      id: `agent-${agent.slug}`,
-      href: `/agents/${agent.slug}`,
+      id: `agent-${agent.id}`,
+      href: `/agents/${agent.id}`,
       group: "Agents",
-      keywords: `${agent.name} ${agent.author} ${agent.description}`,
+      keywords: `${agent.name} ${agent.creator_id} ${agent.description}`,
       render: () => (
         <>
-          <AgentIcon
-            icon={agent.icon}
-            label={agent.label}
-            color={agent.color}
-            className="size-8 rounded-md text-xs"
-          />
+          <AgentIcon icon={agent.icon} name={agent.name} className="size-8 rounded-md text-xs" />
           <div className="flex flex-col overflow-hidden text-left">
             <span className="truncate font-mono text-sm font-bold text-foreground">
               {agent.name}
             </span>
-            <span className="truncate text-xs text-muted-foreground">by {agent.author}</span>
+            <span className="truncate text-xs text-muted-foreground">by {agent.creator_id}</span>
           </div>
         </>
       ),

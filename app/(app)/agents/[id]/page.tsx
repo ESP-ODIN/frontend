@@ -40,7 +40,7 @@ export default async function Page({ params }: PageProps) {
         <AgentHeader agent={agent} detail={detail} />
       </ScrollReveal>
       <ScrollReveal delay={120} className="flex flex-col gap-8">
-        <AgentInstallBar agentSlug={agent.slug} agentName={agent.name} detail={detail} />
+        <AgentInstallBar agentId={agent.id} agentName={agent.name} detail={detail} />
         <AgentStatsBar detail={detail} />
       </ScrollReveal>
       <Separator className="mb-0" />

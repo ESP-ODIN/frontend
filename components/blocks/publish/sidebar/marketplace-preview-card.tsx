@@ -9,13 +9,12 @@ import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 export function MarketplacePreviewCard() {
   const { data } = usePublishWizard()
   const { package: pkg } = data
-  const initials = pkg.name.slice(0, 2).toUpperCase() || "??"
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-muted/40 bg-background-100 p-5 transition-all duration-300">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <AgentIcon label={initials} color="primary" />
+          <AgentIcon name={pkg.name} />
           <div className="min-w-0">
             <p className="truncate font-mono text-sm font-bold text-foreground">
               {pkg.name || "my-agent"}

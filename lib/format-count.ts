@@ -22,3 +22,7 @@ export function formatCount(value: number, originalLabel: string): string {
 
   return new Intl.NumberFormat("en-US").format(value)
 }
+
+export function formatCompactCount(value: number): string {
+  return new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value).toLowerCase()
+}

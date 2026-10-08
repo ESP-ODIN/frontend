@@ -19,9 +19,9 @@ export function FeaturedAgents() {
 
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-3">
         {agents.slice(0, 3).map((agent, index) => (
-          <ScrollReveal key={agent.slug} delay={index * 100}>
+          <ScrollReveal key={agent.id} delay={index * 100}>
             <TiltCard className="rounded-xl">
-              <AgentCard agent={agent} featured />
+              <AgentCard agent={agent} />
             </TiltCard>
           </ScrollReveal>
         ))}
