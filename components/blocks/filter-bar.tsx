@@ -78,7 +78,7 @@ function FilterSection({
 }
 
 export function FilterBar({ className, filters, onChange }: FilterBarProps) {
-  const categoryCounts = countBy((agent) => agent.category.slug)
+  const categoryCounts = countBy((agent) => agent.category)
   const typeCounts = countBy((agent) => agent.agent_type)
   const languageCounts = countBy((agent) => agent.runtime)
   const updateCounts = countBy((agent) => getRecency(agent.updated_at))

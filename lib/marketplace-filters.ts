@@ -46,7 +46,7 @@ function matchesRecency(agent: Agent, selected: string[]) {
 
 export function filterAgents(agents: Agent[], filters: MarketplaceFilters) {
   return agents.filter((agent) => {
-    if (filters.categories.length > 0 && !filters.categories.includes(agent.category.slug)) return false
+    if (filters.categories.length > 0 && !filters.categories.includes(agent.category)) return false
     if (filters.types.length > 0 && !filters.types.includes(agent.agent_type)) return false
     if (filters.languages.length > 0 && !filters.languages.includes(agent.runtime)) return false
     if (!matchesRecency(agent, filters.updates)) return false

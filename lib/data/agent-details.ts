@@ -1,9 +1,10 @@
 import type { Agent } from "@/components/blocks/agent-icon"
+import { categories, type CategoryId } from "@/lib/data/categories"
 import { formatCompactCount } from "@/lib/format-count"
 
 export type AgentDetail = {
   categoryLabel: string
-  categorySlug: string
+  categorySlug: CategoryId
   updatedLabel: string
   installsLabel: string
   starsLabel: string
@@ -27,7 +28,7 @@ export type AgentDetail = {
 export const overrides: Record<string, Partial<AgentDetail>> = {
   "code-reviewer": {
     categoryLabel: "Developer tools",
-    categorySlug: "developer-tools",
+    categorySlug: "dev-tools",
     updatedLabel: "2h ago",
     installsLabel: "128k",
     starsLabel: "4,218",
@@ -100,8 +101,8 @@ const runtimeLabels: Record<Agent["runtime"], string> = {
 
 export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
   return {
-    categoryLabel: agent.category.label,
-    categorySlug: agent.category.slug,
+    categoryLabel: categories.find((category) => category.slug === agent.category)?.label ?? agent.category,
+    categorySlug: agent.category,
     updatedLabel: "a few days ago",
     installsLabel: formatCompactCount(agent.downloads_count),
     starsLabel: agent.stars,

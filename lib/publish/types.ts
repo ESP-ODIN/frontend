@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 
+import type { CategoryId } from "@/lib/data/categories"
+
 export type AgentTypeId = "workflow" | "autonomous"
 
 export type AgentTypeOption = {
@@ -35,7 +37,7 @@ export type PackageSection = {
   version: string
   description: string
   type: AgentTypeId
-  category: string
+  category: CategoryId | ""
   tags: string[]
   changelog: string
 }
@@ -79,7 +81,7 @@ export type Manifest = {
     version: string
     description: string
     type: AgentTypeId
-    category: string
+    category: CategoryId
     tags: string[]
     repository: string
     readme: string

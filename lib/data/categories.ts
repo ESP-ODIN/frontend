@@ -1,8 +1,18 @@
 import { Code2, Database, Headphones, FlaskConical, Megaphone, Palette, ShieldCheck, Zap } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
+export type CategoryId =
+  | "dev-tools"
+  | "data-analytics"
+  | "design"
+  | "productivity"
+  | "security"
+  | "customer-service"
+  | "research"
+  | "marketing"
+
 export type MarketplaceCategory = {
-  slug: string
+  slug: CategoryId
   label: string
   icon: LucideIcon
 }

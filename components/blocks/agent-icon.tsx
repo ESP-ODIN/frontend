@@ -1,15 +1,11 @@
 import type { LucideIcon } from "lucide-react"
 
+import type { CategoryId } from "@/lib/data/categories"
 import { cn } from "@/lib/utils"
 
 export type AgentType = "workflow" | "autonomous"
 export type AgentRuntime = "typescript" | "python" | "rust" | "multi-runtime"
 export type AgentRecency = "last-24h" | "last-week" | "last-month"
-
-export type AgentCategory = {
-  slug: string
-  label: string
-}
 
 export type Agent = {
   id: string
@@ -22,7 +18,7 @@ export type Agent = {
   version: string
   icon?: LucideIcon
   is_official_pick: boolean
-  category: AgentCategory
+  category: CategoryId
   agent_type: AgentType
   runtime: AgentRuntime
   updated_at: string
