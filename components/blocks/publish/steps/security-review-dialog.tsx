@@ -15,13 +15,13 @@ import { SECURITY_REVIEW } from "@/lib/publish/constants"
 type SecurityReviewDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  slug: string
+  name: string
 }
 
 export function SecurityReviewDialog({
   open,
   onOpenChange,
-  slug,
+  name,
 }: SecurityReviewDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} disablePointerDismissal>
@@ -39,7 +39,7 @@ export function SecurityReviewDialog({
           <DialogDescription>
             Before appearing on the marketplace,{" "}
             <span className="font-mono font-semibold text-foreground">
-              {slug}
+              {name}
             </span>{" "}
             goes through our security testing pipeline. It isn&apos;t published
             yet.

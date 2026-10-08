@@ -1,17 +1,19 @@
 import { Check, type LucideIcon } from "lucide-react"
 
-import { agents } from "@/lib/data/agents"
-import { categories, languages, types, updates } from "@/lib/data/categories"
+import type { Agent } from "@/components/blocks/agent-icon"
+import { categories, updates } from "@/lib/data/categories"
+import { AGENT_TYPE_OPTIONS, RUNTIME_OPTIONS } from "@/lib/publish/constants"
 import { emptyFilters, getRecency, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
 import { cn } from "@/lib/utils"
 
 type FilterBarProps = {
+  agents: Agent[]
   className?: string
   filters: MarketplaceFilters
   onChange: (next: MarketplaceFilters) => void
 }
 
-function countBy<T extends string>(pick: (agent: (typeof agents)[number]) => T) {
+function countBy<T extends string>(agents: Agent[], pick: (agent: Agent) => T) {
   const counts = new Map<T, number>()
   for (const agent of agents) {
     const key = pick(agent)
@@ -77,11 +79,15 @@ function FilterSection({
   )
 }
 
-export function FilterBar({ className, filters, onChange }: FilterBarProps) {
-  const categoryCounts = countBy((agent) => agent.category)
-  const typeCounts = countBy((agent) => agent.agent_type)
-  const languageCounts = countBy((agent) => agent.runtime)
-  const updateCounts = countBy((agent) => getRecency(agent.updated_at))
+export function FilterBar({ agents, className, filters, onChange }: FilterBarProps) {
+  const categoryCounts = countBy(agents, (agent) => agent.category)
+  const agentTypeCounts = countBy(agents, (agent) => agent.agent_type)
+  const runtimeCounts = countBy(agents, (agent) => agent.runtime)
+  const runtimeOptions = [...runtimeCounts.keys()].sort().map((runtime) => ({
+    id: runtime,
+    label: RUNTIME_OPTIONS.find((option) => option.id === runtime)?.label ?? runtime,
+  }))
+  const updateCounts = countBy(agents, (agent) => getRecency(agent.updated_at))
 
   function toggle(key: keyof MarketplaceFilters, value: string) {
     const list = filters[key]
@@ -120,25 +126,25 @@ export function FilterBar({ className, filters, onChange }: FilterBarProps) {
       </FilterSection>
 
       <FilterSection title="Type">
-        {types.map((item) => (
+        {AGENT_TYPE_OPTIONS.map((item) => (
           <FilterCheckbox
-            key={item.slug}
+            key={item.id}
             name={item.label}
-            count={typeCounts.get(item.slug) ?? 0}
-            checked={filters.types.includes(item.slug)}
-            onChange={() => toggle("types", item.slug)}
+            count={agentTypeCounts.get(item.id) ?? 0}
+            checked={filters.agent_types.includes(item.id)}
+            onChange={() => toggle("agent_types", item.id)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title="Language">
-        {languages.map((item) => (
+      <FilterSection title="Runtime">
+        {runtimeOptions.map((item) => (
           <FilterCheckbox
-            key={item.slug}
+            key={item.id}
             name={item.label}
-            count={languageCounts.get(item.slug) ?? 0}
-            checked={filters.languages.includes(item.slug)}
-            onChange={() => toggle("languages", item.slug)}
+            count={runtimeCounts.get(item.id) ?? 0}
+            checked={filters.runtimes.includes(item.id)}
+            onChange={() => toggle("runtimes", item.id)}
           />
         ))}
       </FilterSection>

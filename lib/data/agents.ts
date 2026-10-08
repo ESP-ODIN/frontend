@@ -45,7 +45,7 @@ export const agents: Agent[] = [
     is_official_pick: true,
     category: "dev-tools",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: hoursAgo(2),
   },
   {
@@ -61,7 +61,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "dev-tools",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: hoursAgo(2),
   },
   {
@@ -77,7 +77,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "dev-tools",
     agent_type: "autonomous",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(3),
   },
   {
@@ -93,7 +93,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "data-analytics",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(3),
   },
   {
@@ -109,7 +109,7 @@ export const agents: Agent[] = [
     is_official_pick: true,
     category: "data-analytics",
     agent_type: "workflow",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(20),
   },
   {
@@ -125,7 +125,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "data-analytics",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(20),
   },
   {
@@ -141,7 +141,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "design",
     agent_type: "autonomous",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(20),
   },
   {
@@ -157,7 +157,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "design",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(3),
   },
   {
@@ -173,7 +173,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "design",
     agent_type: "autonomous",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(20),
   },
   {
@@ -189,7 +189,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "productivity",
     agent_type: "workflow",
-    runtime: "rust",
+    runtime: "binary",
     updated_at: daysAgo(3),
   },
   {
@@ -205,7 +205,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "productivity",
     agent_type: "workflow",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(3),
   },
   {
@@ -221,7 +221,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "productivity",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: hoursAgo(2),
   },
   {
@@ -237,7 +237,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "security",
     agent_type: "autonomous",
-    runtime: "rust",
+    runtime: "binary",
     updated_at: hoursAgo(2),
   },
   {
@@ -253,7 +253,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "security",
     agent_type: "workflow",
-    runtime: "rust",
+    runtime: "binary",
     updated_at: hoursAgo(2),
   },
   {
@@ -269,7 +269,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "security",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(3),
   },
   {
@@ -285,7 +285,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "customer-service",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: hoursAgo(2),
   },
   {
@@ -301,7 +301,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "customer-service",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(3),
   },
   {
@@ -317,7 +317,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "customer-service",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(20),
   },
   {
@@ -333,7 +333,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "research",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(3),
   },
   {
@@ -349,7 +349,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "research",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: hoursAgo(2),
   },
   {
@@ -365,7 +365,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "research",
     agent_type: "autonomous",
-    runtime: "python",
+    runtime: "python3",
     updated_at: daysAgo(20),
   },
   {
@@ -381,7 +381,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "marketing",
     agent_type: "workflow",
-    runtime: "typescript",
+    runtime: "node",
     updated_at: daysAgo(3),
   },
   {
@@ -397,7 +397,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "marketing",
     agent_type: "autonomous",
-    runtime: "multi-runtime",
+    runtime: "docker",
     updated_at: daysAgo(20),
   },
   {
@@ -413,7 +413,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "marketing",
     agent_type: "workflow",
-    runtime: "rust",
+    runtime: "binary",
     updated_at: hoursAgo(2),
   },
   {
@@ -429,7 +429,7 @@ export const agents: Agent[] = [
     is_official_pick: false,
     category: "marketing",
     agent_type: "workflow",
-    runtime: "multi-runtime",
+    runtime: "docker",
     updated_at: daysAgo(20),
   },
 ]

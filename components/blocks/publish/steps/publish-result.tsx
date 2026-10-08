@@ -27,7 +27,7 @@ export function PublishResult() {
           Agent submitted!
         </p>
         <p className="text-sm text-muted-foreground">
-          <span className="font-mono text-foreground">{submission.slug}</span>{" "}
+          <span className="font-mono text-foreground">{submission.name}</span>{" "}
           is going through security review (about{" "}
           {SECURITY_REVIEW.estimatedDuration}). You&apos;ll get an email as soon
           as it&apos;s published, or if an issue is found.

@@ -36,7 +36,7 @@ export function StepReview() {
     if (result.ok) setIsReviewDialogOpen(true)
     setSubmission(
       result.ok
-        ? { status: "success", slug: result.slug }
+        ? { status: "success", name: result.name }
         : { status: "error", message: result.error }
     )
   }
@@ -84,7 +84,7 @@ export function StepReview() {
         <SecurityReviewDialog
           open={isReviewDialogOpen}
           onOpenChange={setIsReviewDialogOpen}
-          slug={submission.slug}
+          name={submission.name}
         />
       )}
     </StepShell>

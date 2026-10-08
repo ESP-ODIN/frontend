@@ -29,7 +29,7 @@ export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
                 <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Star className="size-3" />
-                  {agent.stars}
+                  {agent.stars ?? "—"}
                 </p>
               </div>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />

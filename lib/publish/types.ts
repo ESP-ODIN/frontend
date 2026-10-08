@@ -1,11 +1,10 @@
 import type { LucideIcon } from "lucide-react"
 
+import type { AgentType } from "@/components/blocks/agent-icon"
 import type { CategoryId } from "@/lib/data/categories"
 
-export type AgentTypeId = "workflow" | "autonomous"
-
 export type AgentTypeOption = {
-  id: AgentTypeId
+  id: AgentType
   label: string
   description: string
   icon: LucideIcon
@@ -36,7 +35,7 @@ export type PackageSection = {
   name: string
   version: string
   description: string
-  type: AgentTypeId
+  type: AgentType
   category: CategoryId | ""
   tags: string[]
   changelog: string
@@ -80,7 +79,7 @@ export type Manifest = {
     name: string
     version: string
     description: string
-    type: AgentTypeId
+    type: AgentType
     category: CategoryId
     tags: string[]
     repository: string

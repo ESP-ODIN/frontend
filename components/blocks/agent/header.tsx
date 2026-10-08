@@ -15,7 +15,7 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
       <div className="flex min-w-0 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-mono text-2xl font-bold text-foreground break-words sm:text-3xl">{agent.name}</h1>
-          <Badge variant="outline">{agent.version}</Badge>
+          <Badge variant="outline">{agent.version ?? "—"}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">
           by <span className="text-primary">{agent.creator_id}</span> · updated{" "}

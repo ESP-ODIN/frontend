@@ -34,7 +34,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <div className="flex flex-col gap-8 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
       <ScrollReveal>
-        <AgentBreadcrumb categorySlug={detail.categorySlug} name={agent.name} />
+        <AgentBreadcrumb category={detail.categorySlug} categoryLabel={detail.categoryLabel} name={agent.name} />
       </ScrollReveal>
       <ScrollReveal delay={60}>
         <AgentHeader agent={agent} detail={detail} />

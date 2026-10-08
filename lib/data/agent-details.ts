@@ -1,6 +1,8 @@
 import type { Agent } from "@/components/blocks/agent-icon"
 import { categories, type CategoryId } from "@/lib/data/categories"
+import { RUNTIME_OPTIONS } from "@/lib/publish/constants"
 import { formatCompactCount } from "@/lib/format-count"
+import { formatTimeAgo } from "@/lib/format-time-ago"
 
 export type AgentDetail = {
   categoryLabel: string
@@ -92,23 +94,16 @@ export const overrides: Record<string, Partial<AgentDetail>> = {
   },
 }
 
-const runtimeLabels: Record<Agent["runtime"], string> = {
-  typescript: "TypeScript",
-  python: "Python",
-  rust: "Rust",
-  "multi-runtime": "Multi-runtime",
-}
-
 export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
   return {
     categoryLabel: categories.find((category) => category.slug === agent.category)?.label ?? agent.category,
     categorySlug: agent.category,
-    updatedLabel: "a few days ago",
+    updatedLabel: formatTimeAgo(agent.updated_at),
     installsLabel: formatCompactCount(agent.downloads_count),
-    starsLabel: agent.stars,
+    starsLabel: agent.stars ?? "—",
     forksLabel: "—",
     ratingLabel: "— / 5",
-    runtimeLabel: runtimeLabels[agent.runtime],
+    runtimeLabel: RUNTIME_OPTIONS.find((option) => option.id === agent.runtime)?.label ?? agent.runtime,
     uptimeLabel: "—",
     license: "MIT",
     publishedLabel: "2025",
@@ -120,7 +115,7 @@ export function genericDetail(agent: Agent, allAgents: Agent[]): AgentDetail {
     ],
     configFilename: `.odin/${agent.name}.json`,
     configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
-    checks: agent.tags.map((tag) => ({
+    checks: (agent.tags ?? []).map((tag) => ({
       title: tag,
       description: `Checks related to ${tag.toLowerCase()}.`,
     })),

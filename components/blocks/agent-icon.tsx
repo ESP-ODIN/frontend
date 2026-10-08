@@ -4,7 +4,6 @@ import type { CategoryId } from "@/lib/data/categories"
 import { cn } from "@/lib/utils"
 
 export type AgentType = "workflow" | "autonomous"
-export type AgentRuntime = "typescript" | "python" | "rust" | "multi-runtime"
 export type AgentRecency = "last-24h" | "last-week" | "last-month"
 
 export type Agent = {
@@ -12,15 +11,15 @@ export type Agent = {
   name: string
   creator_id: string
   description: string
-  tags: string[]
-  stars: string
+  tags?: string[]
+  stars?: string
   downloads_count: number
-  version: string
+  version?: string
   icon?: LucideIcon
   is_official_pick: boolean
   category: CategoryId
   agent_type: AgentType
-  runtime: AgentRuntime
+  runtime: string
   updated_at: string
 }
 

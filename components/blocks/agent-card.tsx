@@ -35,9 +35,9 @@ export function AgentCard({ agent, className }: AgentCardProps) {
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Star className="size-3" />
-            {agent.stars}
+            {agent.stars ?? "—"}
           </span>
-          <span className="font-mono">{agent.version}</span>
+          <span className="font-mono">{agent.version ?? "—"}</span>
         </div>
         <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
       </Link>
@@ -65,22 +65,24 @@ export function AgentCard({ agent, className }: AgentCardProps) {
           <p className="text-muted-foreground">{agent.description}</p>
 
           <div className="flex flex-wrap gap-2">
-            {agent.tags.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
-            ))}
+            {agent.tags?.length ? (
+              agent.tags.map((tag) => <Badge key={tag}>{tag}</Badge>)
+            ) : (
+              <span className="text-sm text-muted-foreground">—</span>
+            )}
           </div>
 
           <div className="mt-auto flex items-center justify-between border-t border-muted/40 pt-4">
             <div className="flex items-center gap-3 font-mono text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Star className="size-3.5" />
-                {agent.stars}
+                {agent.stars ?? "—"}
               </span>
               <span className="flex items-center gap-1">
                 <Download className="size-3.5" />
                 {formatCompactCount(agent.downloads_count)}
               </span>
-              <span>{agent.version}</span>
+              <span>{agent.version ?? "—"}</span>
             </div>
             <span className="flex items-center gap-1 font-mono text-sm font-bold text-primary group-hover:underline">
               install
