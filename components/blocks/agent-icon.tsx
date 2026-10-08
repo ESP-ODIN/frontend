@@ -17,6 +17,7 @@ export type Agent = {
   version?: string
   icon?: LucideIcon
   is_official_pick: boolean
+  featured?: boolean
   category: CategoryId
   agent_type: AgentType
   runtime: string
