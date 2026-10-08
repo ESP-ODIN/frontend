@@ -10,6 +10,7 @@ type ApiAgent = {
   runtime: string
   description?: string
   is_official_pick: boolean
+  featured?: boolean
   downloads_count: number
   created_at: string
   updated_at: string
@@ -47,6 +48,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     description: apiAgent.description ?? "",
     downloads_count: apiAgent.downloads_count,
     is_official_pick: apiAgent.is_official_pick,
+    featured: apiAgent.featured ?? true,
     category: apiAgent.category,
     agent_type: apiAgent.agent_type,
     runtime: apiAgent.runtime,
