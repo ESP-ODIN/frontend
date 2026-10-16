@@ -3,7 +3,7 @@
 import { Bookmark, Check, Eye, ThumbsDown, ThumbsUp } from "lucide-react"
 
 import type { AgentDetail } from "@/lib/api/agents"
-import { Snippet } from "@/components/blocks/snippet-1"
+import { CopyCommand } from "@/components/motion/copy-command"
 import { ActionButton } from "@/components/blocks/agent/action-button"
 import { formatCount, parseCount } from "@/lib/format-count"
 import { useAgentInteractions } from "@/lib/hooks/use-agent-interactions"
@@ -56,7 +56,10 @@ export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarP
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Snippet text={`odin install ${agentName}`} dark width="fit-content" />
+      <CopyCommand
+        command={`odin install ${agentName}`}
+        className="max-w-full overflow-x-auto border-white/10 bg-[#14110C] hover:border-white/25"
+      />
 
       <div
         role="group"
