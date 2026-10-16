@@ -16,9 +16,6 @@ const columns: FooterColumn[] = [
     links: [
       { label: "Marketplace", href: "/marketplace" },
       { label: "CLI", href: "/docs/cli" },
-      { label: "SDK", href: "/docs/sdk" },
-      { label: "API", href: "/docs/api" },
-      { label: "Status", href: "/status" },
     ],
   },
   {
@@ -27,8 +24,6 @@ const columns: FooterColumn[] = [
       { label: "Discover", href: "/discover" },
       { label: "Featured agents", href: "/agents/featured" },
       { label: "Top authors", href: "/authors" },
-      { label: "Showcase", href: "/showcase" },
-      { label: "Discord", href: "/discord" },
     ],
   },
   {
@@ -38,15 +33,12 @@ const columns: FooterColumn[] = [
       { label: "Tutorials", href: "/tutorials" },
       { label: "Changelog", href: "/changelog" },
       { label: "Blog", href: "/blog" },
-      { label: "Examples", href: "/examples" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Press", href: "/press" },
       { label: "Contact", href: "/contact" },
       { label: "Legal", href: "/legal" },
     ],
