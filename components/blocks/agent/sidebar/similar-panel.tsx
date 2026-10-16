@@ -19,22 +19,17 @@ export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
     <AgentSidebarPanel title="Similar agents">
       <ul className="flex flex-col gap-3">
         {similar.map((agent) => (
-          <li key={agent.slug}>
+          <li key={agent.id}>
             <Link
-              href={`/agents/${agent.slug}`}
+              href={`/agents/${agent.id}`}
               className="group flex items-center gap-3 rounded-lg -mx-1 px-1 py-1 hover:bg-accent/50"
             >
-              <AgentIcon
-                icon={agent.icon}
-                label={agent.label}
-                color={agent.color}
-                className="size-8 text-xs"
-              />
+              <AgentIcon icon={agent.icon} name={agent.name} className="size-8 text-xs" />
               <div className="flex-1">
                 <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Star className="size-3" />
-                  {agent.stars}
+                  {agent.stars ?? "—"}
                 </p>
               </div>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />

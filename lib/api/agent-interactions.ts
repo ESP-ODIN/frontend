@@ -28,43 +28,43 @@ function writeStore(store: Record<string, AgentInteractionState>) {
   } catch {}
 }
 
-async function persist(slug: string, next: AgentInteractionState): Promise<AgentInteractionState> {
+async function persist(id: string, next: AgentInteractionState): Promise<AgentInteractionState> {
   const store = readStore()
-  store[slug] = next
+  store[id] = next
   writeStore(store)
   return next
 }
 
-export async function getAgentInteractions(slug: string): Promise<AgentInteractionState> {
-  return readStore()[slug] ?? defaultState
+export async function getAgentInteractions(id: string): Promise<AgentInteractionState> {
+  return readStore()[id] ?? defaultState
 }
 
-export async function starAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, starred: true })
+export async function starAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, starred: true })
 }
 
-export async function unstarAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, starred: false })
+export async function unstarAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, starred: false })
 }
 
-export async function forkAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, forked: true })
+export async function forkAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, forked: true })
 }
 
-export async function unforkAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, forked: false })
+export async function unforkAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, forked: false })
 }
 
-export async function followAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, following: true })
+export async function followAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, following: true })
 }
 
-export async function unfollowAgent(slug: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(slug)
-  return persist(slug, { ...current, following: false })
+export async function unfollowAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, following: false })
 }

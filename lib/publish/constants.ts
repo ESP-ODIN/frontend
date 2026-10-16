@@ -40,6 +40,10 @@ export const RUNTIME_OPTIONS: { id: RuntimeId; label: string }[] = [
   { id: "docker", label: "Docker" },
 ]
 
+export function getRuntimeLabel(runtime: string): string {
+  return RUNTIME_OPTIONS.find((option) => option.id === runtime)?.label ?? runtime
+}
+
 export const FILESYSTEM_ACCESS_OPTIONS: {
   id: FilesystemAccess
   label: string

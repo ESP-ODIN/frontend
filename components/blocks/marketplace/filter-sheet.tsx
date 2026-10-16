@@ -5,15 +5,17 @@ import { SlidersHorizontal, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { FilterBar } from "@/components/blocks/filter-bar"
+import type { Agent } from "@/components/blocks/agent-icon"
 import type { MarketplaceFilters } from "@/lib/marketplace-filters"
 
 type FilterSheetProps = {
+  agents: Agent[]
   filters: MarketplaceFilters
   onChange: (next: MarketplaceFilters) => void
   activeCount: number
 }
 
-export function FilterSheet({ filters, onChange, activeCount }: FilterSheetProps) {
+export function FilterSheet({ agents, filters, onChange, activeCount }: FilterSheetProps) {
   return (
     <DialogPrimitive.Root>
       <DialogPrimitive.Trigger
@@ -48,11 +50,11 @@ export function FilterSheet({ filters, onChange, activeCount }: FilterSheetProps
             />
           </div>
           <DialogPrimitive.Description className="sr-only">
-            Filter agents by category, type, language and update date
+            Filter agents by category, type, runtime and update date
           </DialogPrimitive.Description>
 
           <div className="flex-1 overflow-y-auto px-5 py-5">
-            <FilterBar className="w-full" filters={filters} onChange={onChange} />
+            <FilterBar className="w-full" agents={agents} filters={filters} onChange={onChange} />
           </div>
 
           <div className="shrink-0 border-t border-muted/40 p-4">

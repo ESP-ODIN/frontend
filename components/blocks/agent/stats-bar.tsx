@@ -1,4 +1,6 @@
 import type { AgentDetail } from "@/lib/api/agents"
+import { formatCompactCount } from "@/lib/format-count"
+import { getRuntimeLabel } from "@/lib/publish/constants"
 
 type AgentStatsBarProps = {
   detail: AgentDetail
@@ -6,12 +8,12 @@ type AgentStatsBarProps = {
 
 export function AgentStatsBar({ detail }: AgentStatsBarProps) {
   const stats = [
-    { label: "Installs", value: detail.installsLabel },
-    { label: "Stars", value: detail.starsLabel },
-    { label: "Forks", value: detail.forksLabel },
-    { label: "Community rating", value: detail.ratingLabel },
-    { label: "Runtime", value: detail.runtimeLabel },
-    { label: "Security tests passed", value: detail.uptimeLabel },
+    { label: "Installs", value: formatCompactCount(detail.downloads_count) },
+    { label: "Stars", value: detail.starsLabel ?? "—" },
+    { label: "Forks", value: detail.forksLabel ?? "—" },
+    { label: "Community rating", value: detail.ratingLabel ?? "—" },
+    { label: "Runtime", value: getRuntimeLabel(detail.runtime) },
+    { label: "Security tests passed", value: detail.uptimeLabel ?? "—" },
   ]
 
   return (

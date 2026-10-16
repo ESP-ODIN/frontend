@@ -8,6 +8,8 @@ import {
   TERMINAL_ACCESS_OPTIONS,
   WIZARD_STEPS,
 } from "./constants"
+import { categories } from "@/lib/data/categories"
+
 import type { PublishFormData } from "./types"
 
 export const DRAFT_PARAM = "draft"
@@ -84,7 +86,11 @@ function sanitizeFormData(raw: unknown): PublishFormData {
         AGENT_TYPE_OPTIONS.map((o) => o.id),
         p.type
       ),
-      category: str(pkg.category, p.category),
+      category: oneOf(
+        pkg.category,
+        ["", ...categories.map((c) => c.slug)],
+        p.category
+      ),
       tags: strList(pkg.tags).slice(0, MAX_TAGS),
       changelog: str(pkg.changelog, p.changelog),
     },

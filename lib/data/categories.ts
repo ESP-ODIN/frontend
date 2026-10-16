@@ -1,8 +1,18 @@
 import { Code2, Database, Headphones, FlaskConical, Megaphone, Palette, ShieldCheck, Zap } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
+export type CategoryId =
+  | "dev-tools"
+  | "data-analytics"
+  | "design"
+  | "productivity"
+  | "security"
+  | "customer-service"
+  | "research"
+  | "marketing"
+
 export type MarketplaceCategory = {
-  slug: string
+  slug: CategoryId
   label: string
   icon: LucideIcon
 }
@@ -18,20 +28,12 @@ export const categories: MarketplaceCategory[] = [
   { slug: "marketing", label: "Marketing", icon: Megaphone },
 ]
 
-export const types: { slug: "workflow" | "autonomous"; label: string }[] = [
-  { slug: "workflow", label: "Workflow" },
-  { slug: "autonomous", label: "Autonomous agent" },
-]
-
-export const languages: { slug: "typescript" | "python" | "rust" | "multi-runtime"; label: string }[] = [
-  { slug: "typescript", label: "TypeScript" },
-  { slug: "python", label: "Python" },
-  { slug: "rust", label: "Rust" },
-  { slug: "multi-runtime", label: "Multi-runtime" },
-]
-
 export const updates: { slug: "last-24h" | "last-week" | "last-month"; label: string }[] = [
   { slug: "last-24h", label: "Last 24 hours" },
   { slug: "last-week", label: "Last week" },
   { slug: "last-month", label: "Last month" },
 ]
+
+export function getCategoryLabel(category: string): string {
+  return categories.find((item) => item.slug === category)?.label ?? category
+}

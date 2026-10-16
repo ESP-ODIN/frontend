@@ -124,7 +124,7 @@ export function Platform() {
           >
             <div className="flex flex-col gap-2 rounded-xl border border-muted/40 p-2">
               {agents.slice(0, 3).map((agent) => (
-                <AgentListItem key={agent.slug} agent={agent} />
+                <AgentListItem key={agent.id} agent={agent} />
               ))}
             </div>
           </SurfaceCard>

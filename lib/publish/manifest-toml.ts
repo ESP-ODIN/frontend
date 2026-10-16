@@ -1,3 +1,5 @@
+import type { CategoryId } from "@/lib/data/categories"
+
 import type { Manifest, PublishFormData, RuntimeId } from "./types"
 
 export function buildManifest(data: PublishFormData): Manifest {
@@ -10,7 +12,7 @@ export function buildManifest(data: PublishFormData): Manifest {
       version: pkg.version,
       description: pkg.description,
       type: pkg.type,
-      category: pkg.category,
+      category: pkg.category as CategoryId,
       tags: pkg.tags,
       repository: source.repoUrl.trim(),
       readme: source.readmeFile,

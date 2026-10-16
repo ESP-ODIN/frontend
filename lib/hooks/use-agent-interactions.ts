@@ -19,38 +19,38 @@ const defaultState: AgentInteractionState = {
   following: false,
 }
 
-export function useAgentInteractions(slug: string) {
+export function useAgentInteractions(id: string) {
   const [state, setState] = useState<AgentInteractionState>(defaultState)
 
   useEffect(() => {
     let cancelled = false
 
-    getAgentInteractions(slug).then((next) => {
+    getAgentInteractions(id).then((next) => {
       if (!cancelled) setState(next)
     })
 
     return () => {
       cancelled = true
     }
-  }, [slug])
+  }, [id])
 
   const mutate = useCallback(
     (
       optimistic: (prev: AgentInteractionState) => AgentInteractionState,
-      call: (slug: string) => Promise<AgentInteractionState>
+      call: (id: string) => Promise<AgentInteractionState>
     ) => {
       let rollbackTo = defaultState
       setState((prev) => {
         rollbackTo = prev
         return optimistic(prev)
       })
-      call(slug)
+      call(id)
         .then(setState)
         .catch(() => {
           setState(rollbackTo)
         })
     },
-    [slug]
+    [id]
   )
 
   return {

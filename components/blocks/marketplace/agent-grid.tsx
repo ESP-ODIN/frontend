@@ -37,8 +37,8 @@ export function AgentGrid({ agents, className, pageSize = 9 }: AgentGridProps) {
     <div className={cn(className, "flex flex-col gap-8")}>
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {pageAgents.map((agent, i) => (
-          <ScrollReveal key={agent.slug} delay={(i % pageSize) * 40}>
-            <AgentCard agent={agent} featured={agent.featured} />
+          <ScrollReveal key={agent.id} delay={(i % pageSize) * 40}>
+            <AgentCard agent={agent} />
           </ScrollReveal>
         ))}
       </div>

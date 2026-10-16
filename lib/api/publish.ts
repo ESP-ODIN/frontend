@@ -73,14 +73,14 @@ export async function scanManifestFromRepo(
 }
 
 export type PublishResult =
-  { ok: true; slug: string } | { ok: false; error: string }
+  { ok: true; name: string } | { ok: false; error: string }
 
 export async function publishAgent(
   payload: PublishAgentPayload
 ): Promise<PublishResult> {
   try {
     return await mockRequest(
-      { ok: true as const, slug: payload.manifest.package.name },
+      { ok: true as const, name: payload.manifest.package.name },
       {
         delayMs: 1400,
         shouldFail: payload.manifest.package.name

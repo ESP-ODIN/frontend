@@ -9,6 +9,7 @@ type AgentDependenciesPanelProps = {
 export function AgentDependenciesPanel({ detail }: AgentDependenciesPanelProps) {
   return (
     <AgentSidebarPanel title={`Dependencies (${detail.dependencies.length})`}>
+      {detail.dependencies.length === 0 && <p className="font-mono text-sm text-muted-foreground">—</p>}
       <ul className="flex flex-col gap-2">
         {detail.dependencies.map((dependency) => (
           <li key={dependency} className="font-mono text-sm text-foreground/80">

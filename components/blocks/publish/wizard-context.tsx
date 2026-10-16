@@ -35,7 +35,7 @@ import type {
 type SubmissionState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "success"; slug: string }
+  | { status: "success"; name: string }
   | { status: "error"; message: string }
 
 type WizardContextValue = {

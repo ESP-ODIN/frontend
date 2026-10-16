@@ -11,21 +11,23 @@ import { useAgentInteractions } from "@/lib/hooks/use-agent-interactions"
 import { useExplosion } from "@/components/motion/explosion-burst"
 
 type AgentInstallBarProps = {
-  agentSlug: string
+  agentId: string
   agentName: string
   detail: AgentDetail
 }
 
 const FOLLOW_COLORS = ["#60a5fa", "#93c5fd", "#bfdbfe", "#e85d04", "#ffb35c"]
 
-export function AgentInstallBar({ agentSlug, agentName, detail }: AgentInstallBarProps) {
-  const { starred, forked, following, toggleStar, toggleFork, toggleFollow } = useAgentInteractions(agentSlug)
+export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarProps) {
+  const { starred, forked, following, toggleStar, toggleFork, toggleFollow } = useAgentInteractions(agentId)
   const star = useExplosion<HTMLSpanElement>()
   const fork = useExplosion<HTMLSpanElement>()
   const follow = useExplosion<HTMLSpanElement>()
 
-  const starsCount = formatCount(parseCount(detail.starsLabel) + (starred ? 1 : 0), detail.starsLabel)
-  const forksCount = formatCount(parseCount(detail.forksLabel) + (forked ? 1 : 0), detail.forksLabel)
+  const starsLabel = detail.starsLabel ?? "—"
+  const forksLabel = detail.forksLabel ?? "—"
+  const starsCount = formatCount(parseCount(starsLabel) + (starred ? 1 : 0), starsLabel)
+  const forksCount = formatCount(parseCount(forksLabel) + (forked ? 1 : 0), forksLabel)
 
   function handleStar() {
     star.explode(starred ? { mode: "implode" } : {})
