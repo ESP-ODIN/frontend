@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ChevronRight, Star } from "lucide-react"
+import { ChevronRight, ThumbsUp } from "lucide-react"
 
 import type { AgentDetail } from "@/lib/api/agents"
 import { getSimilarAgents } from "@/lib/api/agents"
@@ -28,8 +28,8 @@ export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
               <div className="flex-1">
                 <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="size-3" />
-                  {agent.stars ?? "—"}
+                  <ThumbsUp className="size-3" />
+                  {agent.likes ?? "0"}
                 </p>
               </div>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />

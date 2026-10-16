@@ -1,7 +1,7 @@
-import { Check, type LucideIcon } from "lucide-react"
+import { Check } from "lucide-react"
 
 import type { Agent } from "@/components/blocks/agent-icon"
-import { categories, updates } from "@/lib/data/categories"
+import { updates } from "@/lib/data/categories"
 import { AGENT_TYPE_OPTIONS, getRuntimeLabel } from "@/lib/publish/constants"
 import { emptyFilters, getRecency, hasActiveFilters, type MarketplaceFilters } from "@/lib/marketplace-filters"
 import { cn } from "@/lib/utils"
@@ -27,13 +27,11 @@ function FilterCheckbox({
   count,
   checked,
   onChange,
-  icon: Icon,
 }: {
   name: string
   count: number
   checked: boolean
   onChange: () => void
-  icon?: LucideIcon
 }) {
   return (
     <label className="group -mx-2 flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-foreground/80 transition-colors hover:bg-primary/5 hover:text-foreground">
@@ -55,7 +53,6 @@ function FilterCheckbox({
           <Check className="size-3" strokeWidth={3} />
         </span>
       </span>
-      {Icon && <Icon className="size-3.5 shrink-0 text-muted-foreground" />}
       <span className="flex-1">{name}</span>
       <span className="rounded-full bg-muted/15 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
         {count.toLocaleString("en-US")}
@@ -80,7 +77,6 @@ function FilterSection({
 }
 
 export function FilterBar({ agents, className, filters, onChange }: FilterBarProps) {
-  const categoryCounts = countBy(agents, (agent) => agent.category)
   const agentTypeCounts = countBy(agents, (agent) => agent.agent_type)
   const runtimeCounts = countBy(agents, (agent) => agent.runtime)
   const runtimeOptions = [...runtimeCounts.keys()].sort().map((runtime) => ({
@@ -111,19 +107,6 @@ export function FilterBar({ agents, className, filters, onChange }: FilterBarPro
           </button>
         )}
       </div>
-
-      <FilterSection title="Categories">
-        {categories.map((item) => (
-          <FilterCheckbox
-            key={item.slug}
-            name={item.label}
-            icon={item.icon}
-            count={categoryCounts.get(item.slug) ?? 0}
-            checked={filters.categories.includes(item.slug)}
-            onChange={() => toggle("categories", item.slug)}
-          />
-        ))}
-      </FilterSection>
 
       <FilterSection title="Type">
         {AGENT_TYPE_OPTIONS.map((item) => (

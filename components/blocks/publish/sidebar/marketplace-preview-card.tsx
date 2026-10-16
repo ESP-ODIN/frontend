@@ -1,6 +1,6 @@
 "use client"
 
-import { Download, Star } from "lucide-react"
+import { Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
 
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
@@ -43,7 +43,13 @@ export function MarketplacePreviewCard() {
 
       <div className="flex items-center gap-3 border-t border-muted/40 pt-3 font-mono text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
-          <Star className="size-3" />0
+          <ThumbsUp className="size-3" />0
+        </span>
+        <span className="flex items-center gap-1">
+          <Bookmark className="size-3" />0
+        </span>
+        <span className="flex items-center gap-1">
+          <Eye className="size-3" />0
         </span>
         <span className="flex items-center gap-1">
           <Download className="size-3" />0
