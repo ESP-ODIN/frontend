@@ -14,7 +14,6 @@ export function AgentInfoPanel({ agent, detail }: AgentInfoPanelProps) {
   const rows = [
     { label: "Version", value: agent.version ?? "—" },
     { label: "Runtime", value: getRuntimeLabel(detail.runtime) },
-    { label: "License", value: detail.license ?? "—" },
     { label: "Updated", value: formatTimeAgo(detail.updated_at) },
     {
       label: "Published",

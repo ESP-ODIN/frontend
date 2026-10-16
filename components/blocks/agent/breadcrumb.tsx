@@ -1,23 +1,38 @@
+import { Fragment } from "react"
 import Link from "next/link"
 
-import { getCategoryLabel, type CategoryId } from "@/lib/data/categories"
+import { limitTags, tagHref } from "@/lib/agent-tags"
 
 type AgentBreadcrumbProps = {
-  category: CategoryId
+  tags?: string[]
   name: string
 }
 
-export function AgentBreadcrumb({ category, name }: AgentBreadcrumbProps) {
+export function AgentBreadcrumb({ tags, name }: AgentBreadcrumbProps) {
+  const visibleTags = limitTags(tags)
+
   return (
-    <p className="font-mono text-sm text-muted-foreground">
+    <p className="flex flex-wrap items-center gap-x-1.5 font-mono text-sm text-muted-foreground">
       <Link href="/marketplace" className="hover:text-foreground">
         Marketplace
-      </Link>{" "}
-      /{" "}
-      <Link href={`/marketplace?category=${category}`} className="hover:text-foreground">
-        {getCategoryLabel(category)}
-      </Link>{" "}
-      / <span className="text-foreground">{name}</span>
+      </Link>
+      <span>/</span>
+      {visibleTags.length > 0 && (
+        <>
+          <span className="flex flex-wrap items-center gap-x-1.5">
+            {visibleTags.map((tag, i) => (
+              <Fragment key={tag}>
+                {i > 0 && <span className="text-muted-foreground/50">·</span>}
+                <Link href={tagHref(tag)} className="transition-colors hover:text-primary">
+                  #{tag}
+                </Link>
+              </Fragment>
+            ))}
+          </span>
+          <span>/</span>
+        </>
+      )}
+      <span className="text-foreground">{name}</span>
     </p>
   )
 }

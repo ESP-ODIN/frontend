@@ -11,7 +11,7 @@ const stats = [
   },
   {
     value: "99.98%",
-    label: "Signed packages",
+    label: "Security tests passed",
   },
 ]
 

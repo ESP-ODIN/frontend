@@ -1,14 +1,16 @@
 export type AgentInteractionState = {
-  starred: boolean
-  forked: boolean
+  liked: boolean
+  disliked: boolean
+  saved: boolean
   following: boolean
 }
 
-const STORAGE_KEY = "odin:agent-interactions"
+const STORAGE_KEY = "odin:agent-interactions:v2"
 
 const defaultState: AgentInteractionState = {
-  starred: false,
-  forked: false,
+  liked: false,
+  disliked: false,
+  saved: false,
   following: false,
 }
 
@@ -36,27 +38,38 @@ async function persist(id: string, next: AgentInteractionState): Promise<AgentIn
 }
 
 export async function getAgentInteractions(id: string): Promise<AgentInteractionState> {
-  return readStore()[id] ?? defaultState
+  return { ...defaultState, ...readStore()[id] }
 }
 
-export async function starAgent(id: string): Promise<AgentInteractionState> {
+// Like and dislike are mutually exclusive: setting one clears the other
+export async function likeAgent(id: string): Promise<AgentInteractionState> {
   const current = await getAgentInteractions(id)
-  return persist(id, { ...current, starred: true })
+  return persist(id, { ...current, liked: true, disliked: false })
 }
 
-export async function unstarAgent(id: string): Promise<AgentInteractionState> {
+export async function unlikeAgent(id: string): Promise<AgentInteractionState> {
   const current = await getAgentInteractions(id)
-  return persist(id, { ...current, starred: false })
+  return persist(id, { ...current, liked: false })
 }
 
-export async function forkAgent(id: string): Promise<AgentInteractionState> {
+export async function dislikeAgent(id: string): Promise<AgentInteractionState> {
   const current = await getAgentInteractions(id)
-  return persist(id, { ...current, forked: true })
+  return persist(id, { ...current, disliked: true, liked: false })
 }
 
-export async function unforkAgent(id: string): Promise<AgentInteractionState> {
+export async function undislikeAgent(id: string): Promise<AgentInteractionState> {
   const current = await getAgentInteractions(id)
-  return persist(id, { ...current, forked: false })
+  return persist(id, { ...current, disliked: false })
+}
+
+export async function saveAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, saved: true })
+}
+
+export async function unsaveAgent(id: string): Promise<AgentInteractionState> {
+  const current = await getAgentInteractions(id)
+  return persist(id, { ...current, saved: false })
 }
 
 export async function followAgent(id: string): Promise<AgentInteractionState> {
