@@ -2,7 +2,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
 import { AuroraBackground } from "@/components/motion/aurora-background"
 
-// Mirrors the marketplace layout (hero, filters, spotlight, search, grid) so nothing jumps on load
 export default function Loading() {
   return (
     <div role="status" aria-label="Loading the marketplace" className="animate-in fade-in-0 duration-500">

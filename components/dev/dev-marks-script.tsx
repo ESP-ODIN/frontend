@@ -1,6 +1,3 @@
-// DEV ONLY — see components/dev/dev-mark.tsx
-// Applies the saved visibility before paint, so hidden markers don't flash on load
-
 import { DEV_MARKS_HIDDEN_CLASS, DEV_MARKS_STORAGE_KEY, devMarksEnabled } from "@/components/dev/dev-mark"
 
 export function DevMarksScript() {

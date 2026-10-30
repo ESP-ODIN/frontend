@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { RegisterCard } from "@/components/blocks/register/register-card"
+import { RegisterCard } from "@/components/auth/register/register-card"
 
 export const metadata: Metadata = {
   title: "Create an account — Odin",

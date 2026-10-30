@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { ResetPasswordCard } from "@/components/blocks/reset-password/reset-password-card"
+import { ResetPasswordCard } from "@/components/auth/reset-password/reset-password-card"
 
 export const metadata: Metadata = {
   title: "Reset password — Odin",

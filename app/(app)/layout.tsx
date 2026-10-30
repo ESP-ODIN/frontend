@@ -1,5 +1,5 @@
 import { FloatingNav } from "@/components/layout/floating-nav"
-import { appNavLinks } from "@/lib/nav-links"
+import { appNavLinks } from "@/lib/navigation/nav-links"
 
 export default function AppLayout({
   children,

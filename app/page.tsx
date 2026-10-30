@@ -1,12 +1,12 @@
 import { FloatingNav } from "@/components/layout/floating-nav"
-import { Hero } from "@/components/blocks/landing/hero"
-import { Stats } from "@/components/blocks/landing/stats"
-import { Terminal } from "@/components/blocks/terminal"
-import { Values } from "@/components/blocks/landing/values"
-import { HowItWorks } from "@/components/blocks/landing/how-it-works"
-import { Platform } from "@/components/blocks/landing/platform"
-import { FeaturedAgents } from "@/components/blocks/landing/featured-agents"
-import { Cta } from "@/components/blocks/landing/cta"
+import { Hero } from "@/components/landing/hero"
+import { Stats } from "@/components/landing/stats"
+import { Terminal } from "@/components/shared/terminal"
+import { Values } from "@/components/landing/values"
+import { HowItWorks } from "@/components/landing/how-it-works"
+import { Platform } from "@/components/landing/platform"
+import { FeaturedAgents } from "@/components/landing/featured-agents"
+import { Cta } from "@/components/landing/cta"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { getMarketplaceAgents } from "@/lib/api/agents"
 
@@ -18,7 +18,6 @@ const links = [
 ]
 
 export default async function Page() {
-  // The landing stays up when the marketplace API is down: sections fall back to empty states
   const agents = await getMarketplaceAgents().catch(() => [])
 
   return (

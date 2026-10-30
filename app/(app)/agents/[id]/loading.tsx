@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
 
-// Mirrors the agent page (header, install bar, stats, tabs, sidebar) so nothing jumps on load
 export default function Loading() {
   return (
     <div

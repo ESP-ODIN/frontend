@@ -392,7 +392,6 @@
   }
 }
 
-/* Agent actions: icon feedback replayed on each click */
 @keyframes fx-icon-like {
   0% { transform: scale(1) rotate(0deg); }
   30% { transform: scale(1.35) rotate(-18deg) translateY(-2px); }
@@ -408,7 +407,6 @@
   100% { transform: translateY(0) rotate(0deg); }
 }
 
-/* Bookmark drops in and squashes, like saving a post */
 @keyframes fx-icon-save {
   0% { transform: translateY(0) scale(1, 1); }
   25% { transform: translateY(-6px) scale(0.9, 1.15); }
@@ -634,7 +632,6 @@
   animation: fx-count-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Two offset copies of a text slice in and out, like a corrupted frame */
 .fx-glitch {
   animation: fx-glitch 4.5s steps(1) infinite;
 }

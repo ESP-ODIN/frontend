@@ -1,4 +1,4 @@
-import { NotFoundScreen } from "@/components/blocks/status/not-found-screen"
+import { NotFoundScreen } from "@/components/status/not-found-screen"
 
 export default function AgentNotFound() {
   return (

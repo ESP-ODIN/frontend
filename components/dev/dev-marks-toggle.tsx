@@ -1,7 +1,5 @@
 "use client"
 
-// DEV ONLY — see components/dev/dev-mark.tsx
-
 import { useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"

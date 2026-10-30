@@ -41,7 +41,6 @@ export async function getAgentInteractions(id: string): Promise<AgentInteraction
   return { ...defaultState, ...readStore()[id] }
 }
 
-// Like and dislike are mutually exclusive: setting one clears the other
 export async function likeAgent(id: string): Promise<AgentInteractionState> {
   const current = await getAgentInteractions(id)
   return persist(id, { ...current, liked: true, disliked: false })

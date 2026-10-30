@@ -8,13 +8,12 @@ import { ArrowRight, Menu, Search, Upload, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Logo } from "@/components/blocks/logo"
-import { CommandMenu, commandMenuHandle } from "@/components/blocks/command-menu"
+import { Logo } from "@/components/layout/logo"
+import { CommandMenu, commandMenuHandle } from "@/components/layout/command-menu"
 import { Magnetic } from "@/components/motion/magnetic"
 
 export type NavLink = { label: string; href: string }
 
-// Pages that belong to a nav section without living under its URL
 const sectionAliases: Record<string, string[]> = {
   "/marketplace": ["/agents"],
 }
@@ -23,7 +22,6 @@ function matches(pathname: string, base: string) {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
-// The most specific match wins, so /docs/cli highlights "CLI" rather than "Docs"
 function getActiveHref(links: NavLink[], pathname: string): string | undefined {
   return links
     .filter((link) => link.href.startsWith("/"))

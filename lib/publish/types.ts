@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 
-import type { AgentType } from "@/components/blocks/agent-icon"
+import type { AgentType } from "@/lib/agents/types"
 import type { CategoryId } from "@/lib/data/categories"
 
 export type AgentTypeOption = {
