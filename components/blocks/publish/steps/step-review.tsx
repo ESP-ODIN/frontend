@@ -11,6 +11,7 @@ import { PublishResult } from "@/components/blocks/publish/steps/publish-result"
 import { SecurityReviewDialog } from "@/components/blocks/publish/steps/security-review-dialog"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
 import { publishAgent } from "@/lib/api/publish"
+import { DevMark } from "@/components/dev/dev-mark"
 import { buildPublishPayload } from "@/lib/publish/build-payload"
 import { MANIFEST_SOURCE_OPTIONS, WIZARD_STEPS } from "@/lib/publish/constants"
 import { stringifyManifestToml } from "@/lib/publish/manifest-toml"
@@ -47,15 +48,18 @@ export function StepReview() {
       description="The manifest generated from the form. This is what will be stored on publication."
       footer={
         submission.status === "success" ? null : (
-          <Button
-            type="button"
-            icon={Rocket}
-            disabled={!canPublish || submission.status === "loading"}
-            onClick={handlePublish}
-            className="rounded-lg"
-          >
-            Publish the agent
-          </Button>
+          <span className="flex items-center gap-3">
+            <DevMark kind="mock" note="publishAgent is faked (lib/api/publish.ts), POST /catalog/agents isn't called" />
+            <Button
+              type="button"
+              icon={Rocket}
+              disabled={!canPublish || submission.status === "loading"}
+              onClick={handlePublish}
+              className="rounded-lg"
+            >
+              Publish the agent
+            </Button>
+          </span>
         )
       }
     >

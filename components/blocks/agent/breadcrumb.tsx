@@ -2,6 +2,7 @@ import { Fragment } from "react"
 import Link from "next/link"
 
 import { limitTags, tagHref } from "@/lib/agent-tags"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentBreadcrumbProps = {
   tags?: string[]
@@ -33,6 +34,7 @@ export function AgentBreadcrumb({ tags, name }: AgentBreadcrumbProps) {
         </>
       )}
       <span className="text-foreground">{name}</span>
+      <DevMark kind="missing" note="tags: no tags column in the DB" />
     </p>
   )
 }

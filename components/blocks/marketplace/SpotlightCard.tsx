@@ -15,6 +15,7 @@ import { AuroraBackground } from "@/components/motion/aurora-background"
 import { CopyCommand } from "@/components/motion/copy-command"
 import { Magnetic } from "@/components/motion/magnetic"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 const ROTATION_INTERVAL_MS = 6000
 
@@ -47,7 +48,10 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
         <div key={agent.id} className="flex animate-in flex-col gap-5 duration-500 fade-in-0 sm:gap-8 lg:flex-row lg:gap-0">
           <div className="flex flex-2 flex-col gap-3 sm:gap-4">
             <div>
-              <p className="font-mono text-xs text-primary uppercase sm:text-sm">Spotlight · Odin&apos;s pick</p>
+              <p className="font-mono text-xs text-primary uppercase sm:text-sm">
+                Spotlight · Odin&apos;s pick{" "}
+                <DevMark kind="missing" note="featured: not in the API, every agent is shown as featured" />
+              </p>
               <h2 className="mt-2 font-mono text-xl font-bold sm:text-2xl lg:text-3xl">{agent.name}</h2>
               {agent.version && (
                 <h2 className="mt-1 font-mono text-xl font-semibold sm:text-2xl lg:text-3xl">
@@ -74,7 +78,8 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
               <ThumbsUp className="size-4" /> {agent.likes ?? "0"} • <Bookmark className="size-4" />{" "}
               {agent.saves ?? "0"} • <Eye className="size-4" /> {agent.followers ?? "0"} • <MoveDown className="size-4" />{" "}
               {formatCompactCount(agent.downloads_count)} installs by {agent.creator_id} • Updated{" "}
-              {formatTimeAgo(agent.updated_at)}
+              {formatTimeAgo(agent.updated_at)}{" "}
+              <DevMark kind="missing" note="likes, saves, followers and creator name are not in the API" />
             </p>
 
             <CopyCommand className="w-fit max-w-full overflow-x-auto text-xs lg:hidden" command={`odin install ${agent.name}`} />
@@ -86,7 +91,9 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
               <dd>{agent.name}</dd>
 
               <dt className="text-[#F6F1E6]/40">Version</dt>
-              <dd>{agent.version ?? "—"}</dd>
+              <dd>
+                {agent.version ?? "—"} <DevMark kind="missing" note="version: agent_version exists in the DB but no endpoint exposes it" />
+              </dd>
 
               <dt className="text-[#F6F1E6]/40">Type</dt>
               <dd>{agent.agent_type}</dd>

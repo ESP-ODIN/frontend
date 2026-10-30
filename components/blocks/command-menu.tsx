@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
 import type { AppPage } from "@/lib/app-pages"
 import { ThemeToggle } from "@/components/blocks/theme-toggle"
+import { DevMark } from "@/components/dev/dev-mark"
+import { DevMarksToggle } from "@/components/dev/dev-marks-toggle"
 
 export const commandMenuHandle = DialogPrimitive.createHandle()
 
@@ -33,7 +35,9 @@ function toAgentItem(agent: Agent): ResultItem {
           <span className="truncate font-mono text-sm font-bold text-foreground">
             {agent.name}
           </span>
-          <span className="truncate text-xs text-muted-foreground">by {agent.creator_id}</span>
+          <span className="truncate text-xs text-muted-foreground">
+            by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
+          </span>
         </div>
       </>
     ),
@@ -211,7 +215,10 @@ export function CommandMenu() {
           </div>
 
           <div className="flex items-center justify-between gap-4 border-t border-muted/40 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <DevMarksToggle />
+            </div>
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5">
                 <CornerDownLeft className="size-3" /> select

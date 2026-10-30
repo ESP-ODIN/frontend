@@ -10,6 +10,7 @@ import {
   PACKAGE_NAME_REGEX,
 } from "@/lib/publish/validation"
 import type { NameCheckStatus } from "@/lib/publish/types"
+import { DevMark } from "@/components/dev/dev-mark"
 
 function NameCheckIndicator({
   status,
@@ -53,10 +54,13 @@ export function PackageNameField() {
       error={formatError ?? statusError}
       hint="Lowercase letters, digits and hyphens only (kebab-case)."
       trailing={
-        <NameCheckIndicator
-          status={nameCheckStatus}
-          hasValue={packageName.length > 0}
-        />
+        <span className="flex items-center gap-2">
+          <NameCheckIndicator
+            status={nameCheckStatus}
+            hasValue={packageName.length > 0}
+          />
+          <DevMark kind="mock" note="name availability checked against lib/data/agents.ts, no API endpoint" />
+        </span>
       }
     >
       <Input

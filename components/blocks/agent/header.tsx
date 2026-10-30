@@ -4,6 +4,7 @@ import { AgentIcon } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
 import { getCategoryLabel } from "@/lib/data/categories"
 import { formatTimeAgo } from "@/lib/format-time-ago"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentHeaderProps = {
   agent: Agent
@@ -18,9 +19,11 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-mono text-2xl font-bold text-foreground break-words sm:text-3xl">{agent.name}</h1>
           <Badge variant="outline">{agent.version ?? "—"}</Badge>
+          <DevMark kind="missing" note="version: agent_version exists in the DB but no endpoint exposes it" />
         </div>
         <p className="text-sm text-muted-foreground">
-          by <span className="text-primary">{agent.creator_id}</span> · updated{" "}
+          by <span className="text-primary">{agent.creator_id}</span>{" "}
+          <DevMark kind="missing" note="creator name: API only returns creator_id" /> · updated{" "}
           {formatTimeAgo(detail.updated_at)}
         </p>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>

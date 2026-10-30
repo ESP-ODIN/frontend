@@ -52,6 +52,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     category: apiAgent.category,
     agent_type: apiAgent.agent_type,
     runtime: apiAgent.runtime,
+    created_at: apiAgent.created_at,
     updated_at: apiAgent.updated_at,
   }
 }

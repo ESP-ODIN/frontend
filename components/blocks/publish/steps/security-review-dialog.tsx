@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { SECURITY_REVIEW } from "@/lib/publish/constants"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type SecurityReviewDialogProps = {
   open: boolean
@@ -34,7 +35,8 @@ export function SecurityReviewDialog({
             <ShieldCheck className="size-7" />
           </div>
           <DialogTitle className="font-heading text-xl font-bold">
-            Your agent is going through review
+            Your agent is going through review{" "}
+            <DevMark kind="mock" note="review steps and duration hardcoded in SECURITY_REVIEW" />
           </DialogTitle>
           <DialogDescription>
             Before appearing on the marketplace,{" "}

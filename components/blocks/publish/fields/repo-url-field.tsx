@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FieldShell } from "@/components/blocks/publish/fields/field-shell"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
+import { DevMark } from "@/components/dev/dev-mark"
 import { scanManifestFromRepo } from "@/lib/api/publish"
 import { DEFAULT_FORM_DATA } from "@/lib/publish/constants"
 import { isGithubRepoUrlValid } from "@/lib/publish/validation"
@@ -103,6 +104,7 @@ export function RepoUrlField() {
         id="repo-url"
         label="GitHub repo link"
         required
+        trailing={<DevMark kind="mock" note="manifest scan is faked, no API endpoint" />}
         error={formatError ?? scanError}
         hint={
           isImport

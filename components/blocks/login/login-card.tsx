@@ -6,6 +6,7 @@ import { OAuthButtons } from "@/components/blocks/login/oauth-buttons"
 import { LoginForm } from "@/components/blocks/login/login-form"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 export function LoginCard() {
   return (
@@ -18,7 +19,9 @@ export function LoginCard() {
               <Lock className="size-3" />
               SECURE ACCESS
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Log in</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Log in <DevMark kind="mock" note="login and OAuth are faked (lib/api/auth.ts), auth API has no login route yet" />
+            </h1>
             <p className="text-sm text-muted-foreground">
               Log in to Odin to get back to your agents.
             </p>

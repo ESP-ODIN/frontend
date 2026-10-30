@@ -5,6 +5,7 @@ import { Logo } from "@/components/blocks/logo"
 import { ForgotPasswordForm } from "@/components/blocks/forgot-password/forgot-password-form"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 export function ForgotPasswordCard() {
   return (
@@ -17,7 +18,10 @@ export function ForgotPasswordCard() {
               <Mail className="size-3" />
               ACCOUNT RECOVERY
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Forgot password</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Forgot password{" "}
+              <DevMark kind="mock" note="password reset request is faked (lib/api/auth.ts), no auth API route" />
+            </h1>
             <p className="text-sm text-muted-foreground">
               Enter your email and we&apos;ll send you a reset link.
             </p>

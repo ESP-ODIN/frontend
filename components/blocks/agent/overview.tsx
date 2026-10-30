@@ -1,5 +1,6 @@
 import type { AgentDetail } from "@/lib/api/agents"
 import { CodeBlock } from "@/components/blocks/code-block"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentOverviewProps = {
   detail: AgentDetail
@@ -21,7 +22,7 @@ export function AgentOverview({ detail }: AgentOverviewProps) {
 
       <section className="flex flex-col gap-4">
         <h2 className="border-b border-border/60 pb-3 text-2xl font-bold text-foreground">
-          Quick install
+          Quick install <DevMark kind="mock" note="install steps generated from the agent name" />
         </h2>
         <CodeBlock
           lines={detail.installSteps.flatMap((step, i) => [
@@ -34,7 +35,7 @@ export function AgentOverview({ detail }: AgentOverviewProps) {
 
       <section className="flex flex-col gap-4">
         <h2 className="border-b border-border/60 pb-3 text-2xl font-bold text-foreground">
-          Configuration
+          Configuration <DevMark kind="mock" note="hardcoded config, manifest_toml isn't exposed by the API" />
         </h2>
         <p className="text-foreground/80">
           Create a{" "}
@@ -48,7 +49,7 @@ export function AgentOverview({ detail }: AgentOverviewProps) {
 
       <section className="flex flex-col gap-4">
         <h2 className="border-b border-border/60 pb-3 text-2xl font-bold text-foreground">
-          What the agent checks
+          What the agent checks <DevMark kind="missing" note="checks are not in the API, list is always empty" />
         </h2>
         <ul className="flex flex-col gap-2">
           {detail.checks.map((check) => (

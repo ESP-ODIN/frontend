@@ -5,6 +5,7 @@ import type { AgentDetail } from "@/lib/api/agents"
 import { getSimilarAgents } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
+import { DevMark, devMarksEnabled } from "@/components/dev/dev-mark"
 
 type AgentSimilarPanelProps = {
   detail: AgentDetail
@@ -13,7 +14,16 @@ type AgentSimilarPanelProps = {
 export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
   const similar = await getSimilarAgents(detail.similar)
 
-  if (similar.length === 0) return null
+  if (similar.length === 0) {
+    if (!devMarksEnabled) return null
+    return (
+      <AgentSidebarPanel title="Similar agents">
+        <p className="font-mono text-sm text-muted-foreground">
+          — <DevMark kind="missing" note="similar agents are not in the API (panel hidden outside dev)" />
+        </p>
+      </AgentSidebarPanel>
+    )
+  }
 
   return (
     <AgentSidebarPanel title="Similar agents">

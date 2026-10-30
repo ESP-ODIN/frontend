@@ -6,6 +6,7 @@ import { OAuthButtons } from "@/components/blocks/register/oauth-buttons"
 import { RegisterForm } from "@/components/blocks/register/register-form"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 export function RegisterCard() {
   return (
@@ -18,7 +19,10 @@ export function RegisterCard() {
               <Sparkles className="size-3" />
               JOIN ODIN
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Create an account</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Create an account{" "}
+              <DevMark kind="mock" note="register is faked (lib/api/auth.ts) although POST /api/v1/auth/register exists; OAuth faked too" />
+            </h1>
             <p className="text-sm text-muted-foreground">
               Join Odin to publish and install agents.
             </p>

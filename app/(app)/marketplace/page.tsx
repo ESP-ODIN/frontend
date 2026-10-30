@@ -21,7 +21,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <>
-      <Hero />
+      <Hero agents={agents} />
       <Separator />
       <MarketplaceBrowser agents={agents} initialQuery={initialQuery} initialTags={initialTags} />
     </>

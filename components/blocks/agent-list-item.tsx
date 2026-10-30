@@ -3,6 +3,7 @@ import Link from "next/link"
 import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentListItemProps = {
   agent: Agent
@@ -15,7 +16,9 @@ export function AgentListItem({ agent, className }: AgentListItemProps) {
       <AgentIcon icon={agent.icon} name={agent.name} />
       <div className="flex flex-1 flex-col">
         <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
-        <p className="text-xs text-muted-foreground">by {agent.creator_id}</p>
+        <p className="text-xs text-muted-foreground">
+          by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
+        </p>
       </div>
       <Button
         variant="outline"
