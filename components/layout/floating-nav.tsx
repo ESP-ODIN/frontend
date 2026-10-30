@@ -24,7 +24,7 @@ type FloatingNavProps = {
 export function FloatingNav({
   links = [],
   smoothScroll = false,
-  ctaHref = "/sign-in",
+  ctaHref = "/register",
   showCta = true,
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)

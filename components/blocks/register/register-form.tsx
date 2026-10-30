@@ -35,7 +35,7 @@ export function RegisterForm() {
       return
     }
 
-    router.push("/log-in")
+    router.push("/login")
   }
 
   return (

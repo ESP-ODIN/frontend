@@ -42,7 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       return
     }
 
-    router.push("/log-in")
+    router.push("/login")
   }
 
   return (

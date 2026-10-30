@@ -30,7 +30,7 @@ export function ForgotPasswordCard() {
           <ForgotPasswordForm />
 
           <p className="text-center text-sm text-muted-foreground">
-            <Link href="/log-in" className="font-medium text-primary hover:underline">
+            <Link href="/login" className="font-medium text-primary hover:underline">
               Back to login
             </Link>
           </p>
