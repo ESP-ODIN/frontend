@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { Logo } from "@/components/blocks/logo"
+import { Logo } from "@/components/layout/logo"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"

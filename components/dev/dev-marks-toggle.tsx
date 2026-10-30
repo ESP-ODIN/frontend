@@ -1,7 +1,5 @@
 "use client"
 
-// DEV ONLY — see components/dev/dev-mark.tsx
-
 import { useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
@@ -12,6 +10,7 @@ import {
   devMarksEnabled,
 } from "@/components/dev/dev-mark"
 
+/** Bouton du Cmd+K qui affiche ou masque les pastilles de dev, et retient le choix. */
 export function DevMarksToggle() {
   const [hidden, setHidden] = useState(false)
 

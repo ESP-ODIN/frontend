@@ -1,0 +1,25 @@
+"use client"
+
+import { FieldShell } from "@/components/publish/fields/field-shell"
+import { SelectInput } from "@/components/publish/fields/select-input"
+import { usePublishWizard } from "@/components/publish/wizard-context"
+import { categories, type CategoryId } from "@/lib/data/categories"
+
+export function CategorySelect() {
+  const { data, updateSection } = usePublishWizard()
+
+  return (
+    <FieldShell id="category" label="Category" required>
+      <SelectInput
+        id="category"
+        value={data.package.category}
+        onChange={(value) => updateSection("package", { category: value as CategoryId })}
+        options={categories.map((category) => ({
+          value: category.slug,
+          label: category.label,
+        }))}
+        placeholder="Select a category"
+      />
+    </FieldShell>
+  )
+}

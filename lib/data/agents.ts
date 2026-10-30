@@ -25,7 +25,7 @@ import {
   Ticket,
 } from "lucide-react"
 
-import type { Agent } from "@/components/blocks/agent-icon"
+import type { Agent } from "@/lib/agents/types"
 
 const HOUR_MS = 60 * 60 * 1000
 const hoursAgo = (hours: number) => new Date(Date.now() - hours * HOUR_MS).toISOString()
