@@ -1,3 +1,5 @@
+import { cache } from "react"
+
 import type { Agent, AgentType } from "@/components/blocks/agent-icon"
 import type { CategoryId } from "@/lib/data/categories"
 import { limitTags } from "@/lib/agent-tags"
@@ -34,7 +36,6 @@ export type AgentDetail = {
   configLines: string[]
   checks: { title: string; description: string }[]
   permissions: { label: string; granted: boolean }[]
-  similar: string[]
 }
 
 const MARKETPLACE_API_URL = process.env.MARKETPLACE_API_URL
@@ -52,6 +53,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     category: apiAgent.category,
     agent_type: apiAgent.agent_type,
     runtime: apiAgent.runtime,
+    created_at: apiAgent.created_at,
     updated_at: apiAgent.updated_at,
   }
 }
@@ -72,20 +74,21 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
     checks: [],
     permissions: [],
-    similar: [],
   }
 }
 
-export async function getMarketplaceAgents(): Promise<Agent[]> {
+// cache() dedupes calls within a single server render (metadata + page + sidebar)
+export const getMarketplaceAgents = cache(async (): Promise<Agent[]> => {
   const res = await fetch(`${MARKETPLACE_API_URL}/catalog/agents`, { cache: "no-store" })
   if (!res.ok) throw new Error(`Marketplace API responded with ${res.status}`)
 
   const { data } = (await res.json()) as { data: ApiAgent[] }
   return data.map(toAgent)
-}
+})
 
-// 400 = id is not a UUID, 404 = no agent with this id: both mean "not found" for the page
-async function fetchApiAgent(id: string): Promise<ApiAgent | null> {
+// 400 = id is not a UUID, 404 = no agent with this id: both mean "not found" for the page.
+// cache() makes getAgent + getAgentDetail + generateMetadata share a single request.
+const fetchApiAgent = cache(async (id: string): Promise<ApiAgent | null> => {
   const res = await fetch(`${MARKETPLACE_API_URL}/catalog/agents/${encodeURIComponent(id)}`, {
     cache: "no-store",
   })
@@ -94,7 +97,7 @@ async function fetchApiAgent(id: string): Promise<ApiAgent | null> {
 
   const { data } = (await res.json()) as { data: ApiAgent }
   return data
-}
+})
 
 export async function getAgent(id: string): Promise<Agent | null> {
   const apiAgent = await fetchApiAgent(id)
@@ -106,9 +109,28 @@ export async function getAgentDetail(id: string): Promise<AgentDetail | null> {
   return apiAgent ? toAgentDetail(apiAgent) : null
 }
 
-export async function getSimilarAgents(ids: string[]): Promise<Agent[]> {
-  if (ids.length === 0) return []
+const SIMILAR_AGENTS_LIMIT = 3
 
+// Computed client-side until the API exposes similar agents: one point per shared
+// trait (category, type, runtime, tag), ties broken by downloads
+function similarityScore(agent: Agent, other: Agent): number {
+  const sharedTags = (other.tags ?? []).filter((tag) => agent.tags?.includes(tag)).length
+  return (
+    Number(other.category === agent.category) +
+    Number(other.agent_type === agent.agent_type) +
+    Number(other.runtime === agent.runtime) +
+    sharedTags
+  )
+}
+
+export async function getSimilarAgents(agent: Agent): Promise<Agent[]> {
   const agents = await getMarketplaceAgents()
-  return agents.filter((agent) => ids.includes(agent.id))
+
+  return agents
+    .filter((other) => other.id !== agent.id)
+    .map((other) => ({ other, score: similarityScore(agent, other) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || b.other.downloads_count - a.other.downloads_count)
+    .slice(0, SIMILAR_AGENTS_LIMIT)
+    .map(({ other }) => other)
 }

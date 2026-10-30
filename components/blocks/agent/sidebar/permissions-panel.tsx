@@ -4,6 +4,7 @@ import type { AgentDetail } from "@/lib/api/agents"
 import { cn } from "@/lib/utils"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
 import { Separator } from "@/components/ui/separator"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentPermissionsPanelProps = {
   detail: AgentDetail
@@ -12,7 +13,11 @@ type AgentPermissionsPanelProps = {
 export function AgentPermissionsPanel({ detail }: AgentPermissionsPanelProps) {
   return (
     <AgentSidebarPanel title="Permissions">
-      {detail.permissions.length === 0 && <p className="font-mono text-sm text-muted-foreground">—</p>}
+      {detail.permissions.length === 0 && (
+        <p className="font-mono text-sm text-muted-foreground">
+          — <DevMark kind="missing" note="permissions: manifest_toml isn't exposed by the API" />
+        </p>
+      )}
       <ul className="flex flex-col gap-2.5">
         {detail.permissions.map((permission) => (
           <li key={permission.label} className="flex flex-col gap-2 text-sm">

@@ -8,6 +8,7 @@ import { ActionButton } from "@/components/blocks/agent/action-button"
 import { formatCount, parseCount } from "@/lib/format-count"
 import { useAgentInteractions } from "@/lib/hooks/use-agent-interactions"
 import { useExplosion } from "@/components/motion/explosion-burst"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentInstallBarProps = {
   agentId: string
@@ -121,6 +122,8 @@ export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarP
           className={PILL}
         />
       </span>
+
+      <DevMark kind="mock" note="like / dislike / save / follow are stored in localStorage, counts are not in the API" />
     </div>
   )
 }

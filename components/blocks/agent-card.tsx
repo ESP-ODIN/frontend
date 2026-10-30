@@ -7,6 +7,10 @@ import { limitTags } from "@/lib/agent-tags"
 import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
+import { DevMark } from "@/components/dev/dev-mark"
+
+const CREATOR_NOTE = "creator name: API only returns creator_id"
+const COUNTERS_NOTE = "likes, saves, followers and version are not in the API"
 
 type AgentCardProps = {
   agent: Agent
@@ -31,7 +35,9 @@ export function AgentCard({ agent, className }: AgentCardProps) {
               <BadgeCheck role="img" aria-label="Verified" className="size-4 shrink-0 text-primary" />
             )}
           </div>
-          <p className="truncate text-xs text-muted-foreground">by {agent.creator_id}</p>
+          <p className="truncate text-xs text-muted-foreground">
+            by {agent.creator_id} <DevMark kind="missing" note={CREATOR_NOTE} />
+          </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-2">
@@ -48,7 +54,10 @@ export function AgentCard({ agent, className }: AgentCardProps) {
               {agent.followers ?? "0"}
             </span>
           </span>
-          <span className="font-mono">{agent.version ?? "—"}</span>
+          <span className="flex items-center gap-1.5 font-mono">
+            <DevMark kind="missing" note={COUNTERS_NOTE} />
+            {agent.version ?? "—"}
+          </span>
         </div>
         <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
       </Link>
@@ -68,7 +77,9 @@ export function AgentCard({ agent, className }: AgentCardProps) {
                     <BadgeCheck role="img" aria-label="Verified" className="size-4 shrink-0 text-primary" />
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground">by {agent.creator_id}</p>
+                <p className="text-sm text-muted-foreground">
+                  by {agent.creator_id} <DevMark kind="missing" note={CREATOR_NOTE} />
+                </p>
               </div>
             </div>
           </div>
@@ -81,6 +92,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
             ) : (
               <span className="text-sm text-muted-foreground">—</span>
             )}
+            <DevMark kind="missing" note="tags: no tags column in the DB" className="self-center" />
           </div>
 
           <div className="mt-auto flex items-center justify-between border-t border-muted/40 pt-4">
@@ -102,6 +114,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
                 {formatCompactCount(agent.downloads_count)}
               </span>
               <span>{agent.version ?? "—"}</span>
+              <DevMark kind="missing" note={COUNTERS_NOTE} />
             </div>
             <span className="flex items-center gap-1 font-mono text-sm font-bold text-primary group-hover:underline">
               install

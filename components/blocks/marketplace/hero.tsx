@@ -1,21 +1,42 @@
+import type { Agent } from "@/components/blocks/agent-icon"
+import { countAuthors } from "@/lib/agent-stats"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
-const stats = [
-  {
-    value: "+184",
-    label: "This week",
-  },
-  {
-    value: "14.2M",
-    label: "Installs / Month",
-  },
-  {
-    value: "99.98%",
-    label: "Security tests passed",
-  },
-]
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 
-export function Hero() {
+type HeroProps = {
+  agents: Agent[]
+}
+
+function plural(count: number, word: string) {
+  return `${count.toLocaleString("en-US")} ${word}${count === 1 ? "" : "s"}`
+}
+
+export function Hero({ agents }: HeroProps) {
+  const authorsCount = countAuthors(agents)
+  const weekAgo = Date.now() - WEEK_MS
+  const newThisWeek = agents.filter(
+    (agent) => agent.created_at && new Date(agent.created_at).getTime() >= weekAgo
+  ).length
+
+  const stats = [
+    {
+      value: `+${newThisWeek.toLocaleString("en-US")}`,
+      label: "This week",
+    },
+    {
+      value: "14.2M",
+      label: "Installs / Month",
+      mock: "no monthly installs endpoint in the API",
+    },
+    {
+      value: "99.98%",
+      label: "Security tests passed",
+      mock: "no security results in the API",
+    },
+  ]
+
   return (
     <div className="flex flex-col gap-8 mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-4">
         <ScrollReveal className="flex flex-col gap-5">
@@ -26,13 +47,15 @@ export function Hero() {
             <h1 className="text-4xl font-bold sm:text-5xl">
               Find your <span className="fx-gradient-text">next agent</span>.
             </h1>
-            <p className="max-w-md text-foreground/60">2,481 agents from over 38,000 authors. Read field reports, check permissions, install with a single command.</p>
+            <p className="max-w-md text-foreground/60">{plural(agents.length, "agent")} from {plural(authorsCount, "author")}. Read field reports, check permissions, install with a single command.</p>
         </ScrollReveal>
         <ScrollReveal delay={120} className="flex flex-wrap items-end justify-center gap-6 sm:gap-8 lg:justify-start">
             {stats.map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center gap-2 lg:items-start">
                     <p className="text-xl font-bold whitespace-nowrap">{stat.value}</p>
-                    <p className="text-sm text-foreground/60 whitespace-nowrap">{stat.label}</p>
+                    <p className="text-sm text-foreground/60 whitespace-nowrap">
+                      {stat.label} {stat.mock && <DevMark kind="mock" note={stat.mock} />}
+                    </p>
                 </div>
             ))}
         </ScrollReveal>

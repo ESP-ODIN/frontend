@@ -23,6 +23,7 @@ export type Agent = {
   category: CategoryId
   agent_type: AgentType
   runtime: string
+  created_at?: string
   updated_at: string
 }
 

@@ -3,10 +3,12 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { AgentListItem } from "@/components/blocks/agent-list-item"
 import { Badge } from "@/components/blocks/badge"
-import { agents } from "@/lib/data/agents"
+import type { Agent } from "@/components/blocks/agent-icon"
+import { pickRandomAgents } from "@/lib/agent-stats"
 import { SectionHeader } from "@/components/blocks/landing/section-header"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type CliLine = {
   kind: "command" | "output"
@@ -83,7 +85,13 @@ function SurfaceCard({ eyebrow, title, description, href, cta, children }: Surfa
   )
 }
 
-export function Platform() {
+type PlatformProps = {
+  agents: Agent[]
+}
+
+export function Platform({ agents }: PlatformProps) {
+  const storeAgents = pickRandomAgents(agents, 3)
+
   return (
     <div id="platform" className="flex scroll-mt-28 flex-col items-center gap-10">
       <SectionHeader
@@ -123,7 +131,10 @@ export function Platform() {
             cta="Browse the store"
           >
             <div className="flex flex-col gap-2 rounded-xl border border-muted/40 p-2">
-              {agents.slice(0, 3).map((agent) => (
+              {storeAgents.length === 0 && (
+                <p className="p-2 text-sm text-muted-foreground">No agents published yet.</p>
+              )}
+              {storeAgents.map((agent) => (
                 <AgentListItem key={agent.id} agent={agent} />
               ))}
             </div>
@@ -138,7 +149,8 @@ export function Platform() {
             href="/community"
             cta="Join the community"
           >
-            <div className="flex flex-col divide-y divide-muted/40 rounded-xl border border-muted/40">
+            <div className="relative flex flex-col divide-y divide-muted/40 rounded-xl border border-muted/40">
+              <DevMark kind="mock" note="hardcoded feed posts, not the social API" className="absolute -top-1 -right-1" />
               {feed.map((post) => (
                 <div key={post.handle} className="flex flex-col gap-2 p-3 transition-colors hover:bg-muted/10">
                   <div className="flex items-center gap-2">

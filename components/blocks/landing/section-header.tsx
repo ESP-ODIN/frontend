@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type SectionHeaderProps = {
-  eyebrow: string
+  eyebrow: React.ReactNode
   title?: string
   description?: string
   className?: string

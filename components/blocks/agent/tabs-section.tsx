@@ -5,6 +5,7 @@ import { useState } from "react"
 import type { AgentDetail } from "@/lib/api/agents"
 import { cn } from "@/lib/utils"
 import { AgentOverview } from "@/components/blocks/agent/overview"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentTabsSectionProps = {
   detail: AgentDetail
@@ -16,6 +17,12 @@ const tabs = [
   { id: "community", label: "Community reports" },
   { id: "security", label: "Security" },
 ] as const
+
+const missingTabNotes: Record<string, string> = {
+  changelog: "changelog: agent_version exists in the DB but no endpoint exposes it",
+  community: "community reports: not wired to the social API",
+  security: "security results are not in the API",
+}
 
 export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
   const [active, setActive] = useState<(typeof tabs)[number]["id"]>("overview")
@@ -45,7 +52,10 @@ export function AgentTabsSection({ detail }: AgentTabsSectionProps) {
       {active === "overview" ? (
         <AgentOverview detail={detail} />
       ) : (
-        <p className="text-muted-foreground">Coming soon.</p>
+        <p className="text-muted-foreground">
+          Coming soon.{" "}
+          <DevMark kind="missing" note={missingTabNotes[active]} />
+        </p>
       )}
     </div>
   )

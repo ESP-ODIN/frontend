@@ -20,7 +20,7 @@ export function AgentSidebar({ agent, detail }: AgentSidebarProps) {
         <AgentPermissionsPanel detail={detail} />
       </ScrollReveal>
       <ScrollReveal delay={120}>
-        <AgentSimilarPanel detail={detail} />
+        <AgentSimilarPanel agent={agent} />
       </ScrollReveal>
     </div>
   )

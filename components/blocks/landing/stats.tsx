@@ -2,8 +2,11 @@ import type { LucideIcon } from "lucide-react"
 import { Boxes, Download, ShieldCheck, Users } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { countAuthors } from "@/lib/agent-stats"
+import type { Agent } from "@/components/blocks/agent-icon"
 import { StatCounter } from "@/components/motion/stat-counter"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type StatItem = {
   icon: LucideIcon
@@ -11,16 +14,35 @@ type StatItem = {
   decimals?: number
   suffix?: string
   label: string
+  mock?: string
 }
 
-const stats: StatItem[] = [
-  { icon: Boxes, target: 2481, label: "PUBLISHED AGENTS" },
-  { icon: Download, target: 14.2, decimals: 1, suffix: "M", label: "INSTALLS / MONTH" },
-  { icon: Users, target: 38, suffix: "K", label: "AUTHORS" },
-  { icon: ShieldCheck, target: 99.98, decimals: 2, suffix: "%", label: "SECURITY TESTS PASSED" },
-]
+type StatsProps = {
+  agents: Agent[]
+}
 
-export function Stats() {
+export function Stats({ agents }: StatsProps) {
+  const stats: StatItem[] = [
+    { icon: Boxes, target: agents.length, label: "PUBLISHED AGENTS" },
+    {
+      icon: Download,
+      target: 14.2,
+      decimals: 1,
+      suffix: "M",
+      label: "INSTALLS / MONTH",
+      mock: "no monthly installs endpoint in the API",
+    },
+    { icon: Users, target: countAuthors(agents), label: "AUTHORS" },
+    {
+      icon: ShieldCheck,
+      target: 99.98,
+      decimals: 2,
+      suffix: "%",
+      label: "SECURITY TESTS PASSED",
+      mock: "no security results in the API",
+    },
+  ]
+
   return (
     <div className="grid grid-cols-2 overflow-hidden rounded-3xl border border-muted/40 sm:grid-cols-4">
       {stats.map((stat, index) => (
@@ -39,7 +61,9 @@ export function Stats() {
           <p className="text-3xl font-bold tabular-nums text-foreground">
             <StatCounter target={stat.target} decimals={stat.decimals} suffix={stat.suffix} />
           </p>
-          <p className="font-mono text-xs tracking-wider text-muted-foreground">{stat.label}</p>
+          <p className="font-mono text-xs tracking-wider text-muted-foreground">
+            {stat.label} {stat.mock && <DevMark kind="mock" note={stat.mock} />}
+          </p>
         </ScrollReveal>
       ))}
     </div>

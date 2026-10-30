@@ -5,6 +5,7 @@ import { Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
 import { usePublishWizard } from "@/components/blocks/publish/wizard-context"
+import { DevMark } from "@/components/dev/dev-mark"
 
 export function MarketplacePreviewCard() {
   const { data } = usePublishWizard()
@@ -19,7 +20,9 @@ export function MarketplacePreviewCard() {
             <p className="truncate font-mono text-sm font-bold text-foreground">
               {pkg.name || "my-agent"}
             </p>
-            <p className="text-xs text-muted-foreground">by @you</p>
+            <p className="text-xs text-muted-foreground">
+              by @you <DevMark kind="mock" note="no logged-in user, author is hardcoded" />
+            </p>
           </div>
         </div>
         <Badge variant="outline" size="sm" className="shrink-0">

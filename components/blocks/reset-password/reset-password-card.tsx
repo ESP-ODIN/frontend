@@ -5,6 +5,7 @@ import { Logo } from "@/components/blocks/logo"
 import { ResetPasswordForm } from "@/components/blocks/reset-password/reset-password-form"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type ResetPasswordCardProps = {
   token?: string
@@ -21,7 +22,9 @@ export function ResetPasswordCard({ token }: ResetPasswordCardProps) {
               <KeyRound className="size-3" />
               NEW PASSWORD
             </span>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">New password</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              New password <DevMark kind="mock" note="password reset is faked (lib/api/auth.ts), no auth API route" />
+            </h1>
             <p className="text-sm text-muted-foreground">
               Choose a new password for your account.
             </p>

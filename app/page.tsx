@@ -8,6 +8,7 @@ import { Platform } from "@/components/blocks/landing/platform"
 import { FeaturedAgents } from "@/components/blocks/landing/featured-agents"
 import { Cta } from "@/components/blocks/landing/cta"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { getMarketplaceAgents } from "@/lib/api/agents"
 
 const links = [
   { label: "Features", href: "#values" },
@@ -16,20 +17,23 @@ const links = [
   { label: "Agents", href: "#agents" },
 ]
 
-export default function Page() {
+export default async function Page() {
+  // The landing stays up when the marketplace API is down: sections fall back to empty states
+  const agents = await getMarketplaceAgents().catch(() => [])
+
   return (
     <main className="pt-24 sm:pt-28">
       <FloatingNav links={links} smoothScroll />
       <div className="flex flex-col gap-14 sm:gap-20">
         <Hero />
-        <Stats />
+        <Stats agents={agents} />
         <ScrollReveal>
           <Terminal />
         </ScrollReveal>
         <Values />
         <HowItWorks />
-        <Platform />
-        <FeaturedAgents />
+        <Platform agents={agents} />
+        <FeaturedAgents agents={agents} />
         <Cta />
       </div>
     </main>

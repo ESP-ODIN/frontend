@@ -7,6 +7,7 @@ import { CopyCommand } from "@/components/motion/copy-command"
 import { Magnetic } from "@/components/motion/magnetic"
 import { Marquee } from "@/components/motion/marquee"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
+import { DevMark } from "@/components/dev/dev-mark"
 
 const providers = [
   "OpenAI",
@@ -67,6 +68,7 @@ export function Hero() {
         <ScrollReveal delay={340} className="mt-4 flex items-center gap-1.5 text-xs text-white/40">
           <ShieldCheck className="size-3.5 text-primary" />
           Sandboxed execution · signed manifests · 99.98% of security tests passed
+          <DevMark kind="mock" note="security tests rate: no security results in the API" />
         </ScrollReveal>
 
         <ScrollReveal delay={400} className="mt-14 w-full">
