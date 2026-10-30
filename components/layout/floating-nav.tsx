@@ -14,6 +14,23 @@ import { Magnetic } from "@/components/motion/magnetic"
 
 export type NavLink = { label: string; href: string }
 
+// Pages that belong to a nav section without living under its URL
+const sectionAliases: Record<string, string[]> = {
+  "/marketplace": ["/agents"],
+}
+
+function matches(pathname: string, base: string) {
+  return pathname === base || pathname.startsWith(`${base}/`)
+}
+
+// The most specific match wins, so /docs/cli highlights "CLI" rather than "Docs"
+function getActiveHref(links: NavLink[], pathname: string): string | undefined {
+  return links
+    .filter((link) => link.href.startsWith("/"))
+    .filter((link) => [link.href, ...(sectionAliases[link.href] ?? [])].some((base) => matches(pathname, base)))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href
+}
+
 type FloatingNavProps = {
   links?: NavLink[]
   smoothScroll?: boolean
@@ -29,7 +46,9 @@ export function FloatingNav({
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const showPublish = usePathname() === "/marketplace"
+  const pathname = usePathname()
+  const showPublish = pathname === "/marketplace"
+  const activeHref = getActiveHref(links, pathname)
 
   useEffect(() => {
     if (!smoothScroll) return
@@ -68,16 +87,31 @@ export function FloatingNav({
           </Link>
 
           <ul className="hidden items-center gap-1 lg:flex">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="rounded-full px-3 py-1.5 text-sm whitespace-nowrap text-foreground/70 transition-colors hover:bg-muted/10 hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {links.map((link) => {
+              const active = link.href === activeHref
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "relative flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap transition-colors",
+                      active
+                        ? "font-medium text-foreground"
+                        : "text-foreground/70 hover:bg-muted/10 hover:text-foreground"
+                    )}
+                  >
+                    {link.label}
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-linear-to-r from-[#e85d04] to-[#ffb35c] shadow-[0_2px_8px_rgba(232,93,4,0.45)] animate-in fade-in-0 motion-reduce:animate-none"
+                      />
+                    )}
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
 
           <div className="flex shrink-0 items-center gap-1.5">
@@ -181,16 +215,29 @@ export function FloatingNav({
               </DialogPrimitive.Description>
 
               <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
-                {links.map((link) => (
-                   <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-3 text-sm font-medium text-foreground hover:bg-muted/10"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {links.map((link) => {
+                  const active = link.href === activeHref
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "relative rounded-lg px-3 py-3 text-sm",
+                        active ? "font-semibold text-foreground" : "font-medium text-foreground/70 hover:bg-muted/10"
+                      )}
+                    >
+                      {active && (
+                        <span
+                          aria-hidden
+                          className="absolute inset-y-3 left-0 w-0.5 rounded-full bg-linear-to-b from-[#e85d04] to-[#ffb35c] shadow-[0_0_8px_rgba(232,93,4,0.45)]"
+                        />
+                      )}
+                      {link.label}
+                    </Link>
+                  )
+                })}
                 {showPublish && (
                   <div className="mt-4 border-t border-muted/40 pt-4">
                     <Button
