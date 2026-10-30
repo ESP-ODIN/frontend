@@ -1,29 +1,20 @@
 import Link from "next/link"
 import { ChevronRight, ThumbsUp } from "lucide-react"
 
-import type { AgentDetail } from "@/lib/api/agents"
+import type { Agent } from "@/components/blocks/agent-icon"
 import { getSimilarAgents } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/blocks/agent-icon"
 import { AgentSidebarPanel } from "@/components/blocks/agent/sidebar/panel"
-import { DevMark, devMarksEnabled } from "@/components/dev/dev-mark"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentSimilarPanelProps = {
-  detail: AgentDetail
+  agent: Agent
 }
 
-export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
-  const similar = await getSimilarAgents(detail.similar)
+export async function AgentSimilarPanel({ agent }: AgentSimilarPanelProps) {
+  const similar = await getSimilarAgents(agent)
 
-  if (similar.length === 0) {
-    if (!devMarksEnabled) return null
-    return (
-      <AgentSidebarPanel title="Similar agents">
-        <p className="font-mono text-sm text-muted-foreground">
-          — <DevMark kind="missing" note="similar agents are not in the API (panel hidden outside dev)" />
-        </p>
-      </AgentSidebarPanel>
-    )
-  }
+  if (similar.length === 0) return null
 
   return (
     <AgentSidebarPanel title="Similar agents">
@@ -39,7 +30,7 @@ export async function AgentSimilarPanel({ detail }: AgentSimilarPanelProps) {
                 <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
                   <ThumbsUp className="size-3" />
-                  {agent.likes ?? "0"}
+                  {agent.likes ?? "0"} <DevMark kind="missing" note="likes are not in the API" />
                 </p>
               </div>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
