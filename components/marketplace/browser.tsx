@@ -18,6 +18,10 @@ type MarketplaceBrowserProps = {
   initialTags?: string[]
 }
 
+/**
+ * Contenu de la marketplace : filtres, spotlight, recherche et grille. La recherche est gardée
+ * dans l'URL pour être partageable, sans ajouter d'entrées à l'historique.
+ */
 export function MarketplaceBrowser({ agents, initialQuery = "", initialTags = [] }: MarketplaceBrowserProps) {
   const [filters, setFilters] = useState<MarketplaceFilters>(emptyFilters)
   const [query, setQuery] = useState(initialQuery)

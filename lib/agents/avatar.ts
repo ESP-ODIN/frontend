@@ -20,6 +20,11 @@ function hash(value: string): number {
   return h >>> 0
 }
 
+/**
+ * Calcule l'avatar d'un agent à partir de son nom : couleurs, angle du dégradé, forme et halo.
+ * Toujours le même résultat pour un même nom, sans rien stocker, donc l'aperçu de Publish montre
+ * déjà l'avatar final.
+ */
 export function getAgentAvatar(name: string): AgentAvatar {
   const h = hash(name.trim().toLowerCase() || "agent")
   const from = PALETTE[h % PALETTE.length]

@@ -18,6 +18,11 @@ type DevMarkProps = {
   className?: string
 }
 
+/**
+ * Pastille de dev qui signale une donnée mockée (ambre) ou absente de l'API (rouge), avec le
+ * détail au survol. Masquable depuis le Cmd+K, jamais affichée en production. Pour tout retirer :
+ * supprimer components/dev/ et ses usages (grep "components/dev").
+ */
 export function DevMark({ kind, note, className }: DevMarkProps) {
   if (!devMarksEnabled) return null
 

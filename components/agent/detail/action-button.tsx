@@ -19,6 +19,7 @@ type ActionButtonProps = {
   "aria-label"?: string
 }
 
+/** Relance une animation CSS sur un élément, même si la classe est déjà présente. */
 function replay(node: HTMLElement | null, className: string) {
   if (!node) return
   node.classList.remove(className)

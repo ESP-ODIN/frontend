@@ -14,6 +14,10 @@ import { Magnetic } from "@/components/motion/magnetic"
 
 export type NavLink = { label: string; href: string }
 
+/**
+ * Pages rattachées à une section de la nav sans être sous son URL (une page agent fait partie de
+ * Marketplace).
+ */
 const sectionAliases: Record<string, string[]> = {
   "/marketplace": ["/agents"],
 }
@@ -22,6 +26,7 @@ function matches(pathname: string, base: string) {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
+/** Lien actif de la nav : le plus précis l'emporte, /docs/cli active « CLI » et non « Docs ». */
 function getActiveHref(links: NavLink[], pathname: string): string | undefined {
   return links
     .filter((link) => link.href.startsWith("/"))

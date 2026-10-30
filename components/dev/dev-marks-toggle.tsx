@@ -10,6 +10,7 @@ import {
   devMarksEnabled,
 } from "@/components/dev/dev-mark"
 
+/** Bouton du Cmd+K qui affiche ou masque les pastilles de dev, et retient le choix. */
 export function DevMarksToggle() {
   const [hidden, setHidden] = useState(false)
 

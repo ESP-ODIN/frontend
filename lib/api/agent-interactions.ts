@@ -1,3 +1,7 @@
+/**
+ * Like, dislike, save et follow d'un agent. Mock : stocké dans le localStorage du navigateur en
+ * attendant une API.
+ */
 export type AgentInteractionState = {
   liked: boolean
   disliked: boolean

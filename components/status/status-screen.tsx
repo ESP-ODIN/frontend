@@ -35,6 +35,10 @@ const lineStyles: Record<StatusLine["kind"], string> = {
   error: "text-rose-400",
 }
 
+/**
+ * Base commune des pages 404, erreur et autres états : code géant animé sur l'aurora, mini
+ * terminal qui affiche le problème ligne par ligne, puis les actions.
+ */
 export function StatusScreen({
   code,
   eyebrow,

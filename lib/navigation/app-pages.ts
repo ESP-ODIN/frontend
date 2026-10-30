@@ -49,6 +49,11 @@ async function collectPages(dir: string, segments: string[]): Promise<AppPage[]>
   return pages
 }
 
+/**
+ * Pages listées dans le Cmd+K, trouvées en scannant le dossier app/ : les groupes (xxx) sont
+ * ignorés dans l'URL, les routes dynamiques [id], les dossiers _privés et api/ ne sont pas
+ * listés. Le titre vient des metadata de chaque page.
+ */
 export async function getAppPages(): Promise<AppPage[]> {
   const pages = await collectPages(APP_DIR, [])
   return pages.sort((a, b) => a.href.localeCompare(b.href))

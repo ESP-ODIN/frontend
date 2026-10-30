@@ -27,6 +27,10 @@ const glyphs: React.ReactNode[] = [
   <path key="pie" d="M32 18a14 14 0 1 0 14 14H32Z" fill="#fff" fillOpacity=".9" />,
 ]
 
+/**
+ * Avatar de l'agent généré à partir de son nom (dégradé de la palette + une forme géométrique,
+ * voir lib/agents/avatar).
+ */
 export function AgentIcon({ icon: Icon, name, className }: AgentIconProps) {
   const gradientId = useId()
   const avatar = getAgentAvatar(name)

@@ -1,5 +1,9 @@
 import { DEV_MARKS_HIDDEN_CLASS, DEV_MARKS_STORAGE_KEY, devMarksEnabled } from "@/components/dev/dev-mark"
 
+/**
+ * Applique la préférence « pastilles masquées » avant l'affichage, pour éviter qu'elles
+ * clignotent au chargement.
+ */
 export function DevMarksScript() {
   if (!devMarksEnabled) return null
 

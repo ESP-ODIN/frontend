@@ -2,6 +2,7 @@ import type { Agent } from "@/lib/agents/types"
 import { getCategoryLabel } from "@/lib/data/categories"
 import { getRuntimeLabel } from "@/lib/publish/constants"
 
+/** Met en minuscules et retire les accents, pour que « Révision » trouve « revision ». */
 export function normalize(value: string): string {
   return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim()
 }
@@ -46,6 +47,10 @@ function typoBudget(token: string): number {
   return token.length <= 6 ? 1 : 2
 }
 
+/**
+ * Score de correspondance d'un mot avec un texte, de 0 (aucune) à 1 (exacte). Tolère des fautes
+ * de frappe selon la longueur du mot (aucune sous 4 lettres, 1 jusqu'à 6, puis 2).
+ */
 export function matchToken(token: string, text: string): number {
   const haystack = normalize(text)
   if (!haystack) return 0
@@ -66,6 +71,10 @@ export function matchToken(token: string, text: string): number {
   return fuzzy ? 0.35 : 0
 }
 
+/**
+ * Score global d'un agent : chaque mot doit correspondre à au moins un champ, avec plus de poids
+ * pour le nom que pour les tags puis la description. Renvoie null si l'agent ne correspond pas.
+ */
 export function scoreAgent(agent: Agent, tokens: string[]): number | null {
   if (tokens.length === 0) return 0
   const fields = searchFields(agent)
@@ -89,6 +98,10 @@ function hasTags(agent: Agent, tags: string[]): boolean {
   return tags.every((tag) => own.has(normalize(tag)))
 }
 
+/**
+ * Recherche de la marketplace : filtre par tags sélectionnés, puis garde et trie les agents qui
+ * correspondent au texte.
+ */
 export function searchAgents(agents: Agent[], query: string, tags: string[]): Agent[] {
   const withTags = tags.length > 0 ? agents.filter((agent) => hasTags(agent, tags)) : agents
   const tokens = tokenize(query)
@@ -116,6 +129,10 @@ export function collectTags(agents: Agent[]): TagCount[] {
   return [...counts.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
 }
 
+/**
+ * Tags à proposer pour le mot en cours de saisie ; les plus utilisés quand rien n'est encore
+ * tapé.
+ */
 export function suggestTags(all: TagCount[], token: string, exclude: string[], limit = 5): TagCount[] {
   const excluded = new Set(exclude.map(normalize))
   const available = all.filter((entry) => !excluded.has(normalize(entry.tag)))
