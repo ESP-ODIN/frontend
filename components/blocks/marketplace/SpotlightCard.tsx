@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MoveDown, Star } from "lucide-react"
+import { Bookmark, Eye, MoveDown, ThumbsUp } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
@@ -71,7 +71,8 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
               </Button>
             </div>
             <p className="flex flex-wrap items-center gap-1 text-xs text-[#F6F1E6]/60 sm:text-sm">
-              <Star className="size-4" /> {agent.stars ?? "—"} • <MoveDown className="size-4" />{" "}
+              <ThumbsUp className="size-4" /> {agent.likes ?? "0"} • <Bookmark className="size-4" />{" "}
+              {agent.saves ?? "0"} • <Eye className="size-4" /> {agent.followers ?? "0"} • <MoveDown className="size-4" />{" "}
               {formatCompactCount(agent.downloads_count)} installs by {agent.creator_id} • Updated{" "}
               {formatTimeAgo(agent.updated_at)}
             </p>
@@ -81,7 +82,7 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
           <Separator orientation="vertical" className="mx-8 hidden bg-white/10 lg:block" />
           <div className="hidden flex-1 flex-col justify-center gap-6 lg:flex">
             <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-4 font-mono text-sm [&>dd]:m-0">
-              <dt className="text-[#F6F1E6]/40">Manifest</dt>
+              <dt className="text-[#F6F1E6]/40">Name</dt>
               <dd>{agent.name}</dd>
 
               <dt className="text-[#F6F1E6]/40">Version</dt>
@@ -92,9 +93,6 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
 
               <dt className="text-[#F6F1E6]/40">Runtime</dt>
               <dd>{getRuntimeLabel(agent.runtime)}</dd>
-
-              <dt className="text-[#F6F1E6]/40">Sandbox</dt>
-              <dd>—</dd>
             </dl>
 
             <div>

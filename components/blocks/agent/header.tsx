@@ -21,7 +21,7 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
         </div>
         <p className="text-sm text-muted-foreground">
           by <span className="text-primary">{agent.creator_id}</span> · updated{" "}
-          {formatTimeAgo(detail.updated_at)} · {getCategoryLabel(detail.category)}
+          {formatTimeAgo(detail.updated_at)}
         </p>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>
       </div>

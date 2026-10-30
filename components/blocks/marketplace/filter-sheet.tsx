@@ -50,7 +50,7 @@ export function FilterSheet({ agents, filters, onChange, activeCount }: FilterSh
             />
           </div>
           <DialogPrimitive.Description className="sr-only">
-            Filter agents by category, type, runtime and update date
+            Filter agents by type, runtime and update date
           </DialogPrimitive.Description>
 
           <div className="flex-1 overflow-y-auto px-5 py-5">

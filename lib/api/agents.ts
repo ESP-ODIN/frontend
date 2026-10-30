@@ -1,5 +1,6 @@
 import type { Agent, AgentType } from "@/components/blocks/agent-icon"
 import type { CategoryId } from "@/lib/data/categories"
+import { limitTags } from "@/lib/agent-tags"
 
 type ApiAgent = {
   id: string
@@ -9,6 +10,7 @@ type ApiAgent = {
   agent_type: AgentType
   runtime: string
   description?: string
+  tags?: string[]
   is_official_pick: boolean
   featured?: boolean
   downloads_count: number
@@ -22,11 +24,9 @@ export type AgentDetail = {
   created_at: string
   downloads_count: number
   runtime: string
-  starsLabel?: string
-  forksLabel?: string
-  ratingLabel?: string
+  likesLabel?: string
+  savesLabel?: string
   uptimeLabel?: string
-  license?: string
   sizeLabel?: string
   overview: string[]
   installSteps: { comment: string; command: string }[]
@@ -34,7 +34,6 @@ export type AgentDetail = {
   configLines: string[]
   checks: { title: string; description: string }[]
   permissions: { label: string; granted: boolean }[]
-  dependencies: string[]
   similar: string[]
 }
 
@@ -46,6 +45,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     name: apiAgent.name,
     creator_id: apiAgent.creator_id,
     description: apiAgent.description ?? "",
+    tags: limitTags(apiAgent.tags),
     downloads_count: apiAgent.downloads_count,
     is_official_pick: apiAgent.is_official_pick,
     featured: apiAgent.featured ?? true,
@@ -72,7 +72,6 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
     checks: [],
     permissions: [],
-    dependencies: [],
     similar: [],
   }
 }

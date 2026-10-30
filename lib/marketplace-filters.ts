@@ -1,22 +1,23 @@
 import type { Agent, AgentRecency } from "@/components/blocks/agent-icon"
 
 export type MarketplaceFilters = {
-  categories: string[]
   agent_types: string[]
   runtimes: string[]
   updates: string[]
 }
 
 export const emptyFilters: MarketplaceFilters = {
-  categories: [],
   agent_types: [],
   runtimes: [],
   updates: [],
 }
 
+export function countActiveFilters(filters: MarketplaceFilters) {
+  return filters.agent_types.length + filters.runtimes.length + filters.updates.length
+}
+
 export function hasActiveFilters(filters: MarketplaceFilters) {
   return (
-    filters.categories.length > 0 ||
     filters.agent_types.length > 0 ||
     filters.runtimes.length > 0 ||
     filters.updates.length > 0
@@ -46,7 +47,6 @@ function matchesRecency(agent: Agent, selected: string[]) {
 
 export function filterAgents(agents: Agent[], filters: MarketplaceFilters) {
   return agents.filter((agent) => {
-    if (filters.categories.length > 0 && !filters.categories.includes(agent.category)) return false
     if (filters.agent_types.length > 0 && !filters.agent_types.includes(agent.agent_type)) return false
     if (filters.runtimes.length > 0 && !filters.runtimes.includes(agent.runtime)) return false
     if (!matchesRecency(agent, filters.updates)) return false

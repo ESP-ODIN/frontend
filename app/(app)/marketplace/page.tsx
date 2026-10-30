@@ -10,14 +10,20 @@ export const metadata: Metadata = {
   description: "Discover and install AI agents.",
 }
 
-export default async function Page() {
-  const agents = await getMarketplaceAgents()
+type PageProps = {
+  searchParams: Promise<{ q?: string | string[]; tag?: string | string[] }>
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const [agents, { q, tag }] = await Promise.all([getMarketplaceAgents(), searchParams])
+  const initialQuery = Array.isArray(q) ? (q[0] ?? "") : (q ?? "")
+  const initialTags = tag === undefined ? [] : Array.isArray(tag) ? tag : [tag]
 
   return (
     <>
       <Hero />
       <Separator />
-      <MarketplaceBrowser agents={agents} />
+      <MarketplaceBrowser agents={agents} initialQuery={initialQuery} initialTags={initialTags} />
     </>
   )
 }

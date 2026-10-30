@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { ArrowRight, BadgeCheck, Download, Star } from "lucide-react"
+import { ArrowRight, BadgeCheck, Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { formatCompactCount } from "@/lib/format-count"
+import { limitTags } from "@/lib/agent-tags"
 import { AgentIcon, type Agent } from "@/components/blocks/agent-icon"
 import { Badge } from "@/components/blocks/badge"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
@@ -33,9 +34,19 @@ export function AgentCard({ agent, className }: AgentCardProps) {
           <p className="truncate text-xs text-muted-foreground">by {agent.creator_id}</p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Star className="size-3" />
-            {agent.stars ?? "—"}
+          <span className="flex items-center gap-2">
+            <span className="flex items-center gap-1" title="Likes">
+              <ThumbsUp className="size-3" />
+              {agent.likes ?? "0"}
+            </span>
+            <span className="flex items-center gap-1" title="Saves">
+              <Bookmark className="size-3" />
+              {agent.saves ?? "0"}
+            </span>
+            <span className="flex items-center gap-1" title="Followers">
+              <Eye className="size-3" />
+              {agent.followers ?? "0"}
+            </span>
           </span>
           <span className="font-mono">{agent.version ?? "—"}</span>
         </div>
@@ -66,7 +77,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
 
           <div className="flex flex-wrap gap-2">
             {agent.tags?.length ? (
-              agent.tags.map((tag) => <Badge key={tag}>{tag}</Badge>)
+              limitTags(agent.tags).map((tag) => <Badge key={tag}>{tag}</Badge>)
             ) : (
               <span className="text-sm text-muted-foreground">—</span>
             )}
@@ -74,9 +85,17 @@ export function AgentCard({ agent, className }: AgentCardProps) {
 
           <div className="mt-auto flex items-center justify-between border-t border-muted/40 pt-4">
             <div className="flex items-center gap-3 font-mono text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Star className="size-3.5" />
-                {agent.stars ?? "—"}
+              <span className="flex items-center gap-1" title="Likes">
+                <ThumbsUp className="size-3.5" />
+                {agent.likes ?? "0"}
+              </span>
+              <span className="flex items-center gap-1" title="Saves">
+                <Bookmark className="size-3.5" />
+                {agent.saves ?? "0"}
+              </span>
+              <span className="flex items-center gap-1" title="Followers">
+                <Eye className="size-3.5" />
+                {agent.followers ?? "0"}
               </span>
               <span className="flex items-center gap-1">
                 <Download className="size-3.5" />

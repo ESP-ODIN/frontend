@@ -4,18 +4,21 @@ import { useCallback, useEffect, useState } from "react"
 
 import {
   type AgentInteractionState,
+  dislikeAgent,
   followAgent,
-  forkAgent,
   getAgentInteractions,
-  starAgent,
+  likeAgent,
+  saveAgent,
+  undislikeAgent,
   unfollowAgent,
-  unforkAgent,
-  unstarAgent,
+  unlikeAgent,
+  unsaveAgent,
 } from "@/lib/api/agent-interactions"
 
 const defaultState: AgentInteractionState = {
-  starred: false,
-  forked: false,
+  liked: false,
+  disliked: false,
+  saved: false,
   following: false,
 }
 
@@ -54,13 +57,22 @@ export function useAgentInteractions(id: string) {
   )
 
   return {
-    starred: state.starred,
-    forked: state.forked,
+    liked: state.liked,
+    disliked: state.disliked,
+    saved: state.saved,
     following: state.following,
-    toggleStar: () =>
-      mutate((prev) => ({ ...prev, starred: !prev.starred }), state.starred ? unstarAgent : starAgent),
-    toggleFork: () =>
-      mutate((prev) => ({ ...prev, forked: !prev.forked }), state.forked ? unforkAgent : forkAgent),
+    toggleLike: () =>
+      mutate(
+        (prev) => ({ ...prev, liked: !prev.liked, disliked: false }),
+        state.liked ? unlikeAgent : likeAgent
+      ),
+    toggleDislike: () =>
+      mutate(
+        (prev) => ({ ...prev, disliked: !prev.disliked, liked: false }),
+        state.disliked ? undislikeAgent : dislikeAgent
+      ),
+    toggleSave: () =>
+      mutate((prev) => ({ ...prev, saved: !prev.saved }), state.saved ? unsaveAgent : saveAgent),
     toggleFollow: () =>
       mutate((prev) => ({ ...prev, following: !prev.following }), state.following ? unfollowAgent : followAgent),
   }

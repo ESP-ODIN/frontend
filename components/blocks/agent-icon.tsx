@@ -12,7 +12,9 @@ export type Agent = {
   creator_id: string
   description: string
   tags?: string[]
-  stars?: string
+  likes?: string
+  saves?: string
+  followers?: string
   downloads_count: number
   version?: string
   icon?: LucideIcon

@@ -9,9 +9,8 @@ type AgentStatsBarProps = {
 export function AgentStatsBar({ detail }: AgentStatsBarProps) {
   const stats = [
     { label: "Installs", value: formatCompactCount(detail.downloads_count) },
-    { label: "Stars", value: detail.starsLabel ?? "—" },
-    { label: "Forks", value: detail.forksLabel ?? "—" },
-    { label: "Community rating", value: detail.ratingLabel ?? "—" },
+    { label: "Likes", value: detail.likesLabel ?? "—" },
+    { label: "Saves", value: detail.savesLabel ?? "—" },
     { label: "Runtime", value: getRuntimeLabel(detail.runtime) },
     { label: "Security tests passed", value: detail.uptimeLabel ?? "—" },
   ]
