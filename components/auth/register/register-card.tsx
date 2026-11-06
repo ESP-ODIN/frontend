@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react"
 
 import { Logo } from "@/components/layout/logo"
 import { OAuthButtons } from "@/components/auth/oauth-buttons"
-import { RegisterForm } from "@/components/auth/register/register-form"
+import { RegisterFlow } from "@/components/auth/register/register-flow"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
@@ -34,7 +34,7 @@ export function RegisterCard() {
             <span className="h-px flex-1 bg-muted/30" />
           </div>
 
-          <RegisterForm />
+          <RegisterFlow />
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
