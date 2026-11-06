@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="flex min-h-[70vh] items-center justify-center py-12">
+    <div className="flex items-center justify-center">
       <RegisterCard />
     </div>
   )

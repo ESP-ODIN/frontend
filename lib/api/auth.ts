@@ -7,7 +7,15 @@ export type AuthResult = { ok: true } | { ok: false; error: string }
 export type ApiAuthResult = { ok: true; token: string } | { ok: false; error: string }
 
 export type LoginPayload = { email: string; password: string }
-export type RegisterPayload = { email: string; password: string }
+
+export type RegisterPayload = {
+  username: string
+  name: string
+  first_name: string
+  birth_date: string 
+  email: string
+  password: string
+}
 
 const ERROR_MESSAGES: Record<number, string> = {
   400: "Invalid email or password format.",
