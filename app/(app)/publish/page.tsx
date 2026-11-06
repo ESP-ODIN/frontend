@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { PublishWizard } from "@/components/blocks/publish/publish-wizard"
+import { PublishWizard } from "@/components/publish/publish-wizard"
 import { DRAFT_PARAM, parseDraft } from "@/lib/publish/url-state"
 
 export const metadata: Metadata = {

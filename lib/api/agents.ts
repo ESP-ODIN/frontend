@@ -1,8 +1,8 @@
 import { cache } from "react"
 
-import type { Agent, AgentType } from "@/components/blocks/agent-icon"
+import type { Agent, AgentType } from "@/lib/agents/types"
 import type { CategoryId } from "@/lib/data/categories"
-import { limitTags } from "@/lib/agent-tags"
+import { limitTags } from "@/lib/agents/tags"
 
 type ApiAgent = {
   id: string
@@ -77,7 +77,10 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
   }
 }
 
-// cache() dedupes calls within a single server render (metadata + page + sidebar)
+/**
+ * Liste du catalogue. cache() évite de refaire l'appel plusieurs fois pendant le rendu d'une même
+ * page.
+ */
 export const getMarketplaceAgents = cache(async (): Promise<Agent[]> => {
   const res = await fetch(`${MARKETPLACE_API_URL}/catalog/agents`, { cache: "no-store" })
   if (!res.ok) throw new Error(`Marketplace API responded with ${res.status}`)
@@ -86,8 +89,11 @@ export const getMarketplaceAgents = cache(async (): Promise<Agent[]> => {
   return data.map(toAgent)
 })
 
-// 400 = id is not a UUID, 404 = no agent with this id: both mean "not found" for the page.
-// cache() makes getAgent + getAgentDetail + generateMetadata share a single request.
+/**
+ * Récupère un agent par id. cache() fait partager un seul appel à generateMetadata, getAgent et
+ * getAgentDetail. Un 400 (id qui n'est pas un UUID) ou un 404 renvoient null : la page affiche
+ * alors « agent introuvable ».
+ */
 const fetchApiAgent = cache(async (id: string): Promise<ApiAgent | null> => {
   const res = await fetch(`${MARKETPLACE_API_URL}/catalog/agents/${encodeURIComponent(id)}`, {
     cache: "no-store",
@@ -111,8 +117,10 @@ export async function getAgentDetail(id: string): Promise<AgentDetail | null> {
 
 const SIMILAR_AGENTS_LIMIT = 3
 
-// Computed client-side until the API exposes similar agents: one point per shared
-// trait (category, type, runtime, tag), ties broken by downloads
+/**
+ * Calculé côté front tant que l'API ne fournit pas d'agents similaires : un point par
+ * caractéristique commune (catégorie, type, runtime, chaque tag).
+ */
 function similarityScore(agent: Agent, other: Agent): number {
   const sharedTags = (other.tags ?? []).filter((tag) => agent.tags?.includes(tag)).length
   return (
@@ -123,6 +131,9 @@ function similarityScore(agent: Agent, other: Agent): number {
   )
 }
 
+/**
+ * Jusqu'à 3 agents qui ressemblent le plus à celui-ci, départagés par nombre de téléchargements.
+ */
 export async function getSimilarAgents(agent: Agent): Promise<Agent[]> {
   const agents = await getMarketplaceAgents()
 

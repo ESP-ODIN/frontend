@@ -1,12 +1,5 @@
 import { FloatingNav } from "@/components/layout/floating-nav"
-
-const links = [
-  { label: "Marketplace", href: "/marketplace" },
-  { label: "Community", href: "/community" },
-  { label: "CLI", href: "/docs/cli" },
-  { label: "Docs", href: "/docs" },
-  { label: "About", href: "/about" },
-]
+import { appNavLinks } from "@/lib/navigation/nav-links"
 
 export default function AppLayout({
   children,
@@ -15,7 +8,7 @@ export default function AppLayout({
 }>) {
   return (
     <main className="pt-24 sm:pt-28">
-      <FloatingNav links={links} showCta={false} />
+      <FloatingNav links={appNavLinks} showCta={false} />
       {children}
     </main>
   )

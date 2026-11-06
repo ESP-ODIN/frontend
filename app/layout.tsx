@@ -1,7 +1,7 @@
 import { Fira_Code, Inter, Roboto, Space_Grotesk } from "next/font/google"
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/layout/theme-provider"
 import { ConditionalFooter } from "@/components/layout/conditional-footer"
 import { cn } from "@/lib/utils";
 import { DevMarksScript } from "@/components/dev/dev-marks-script"

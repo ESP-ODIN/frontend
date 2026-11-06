@@ -3,12 +3,12 @@ import type { Metadata } from "next"
 
 import { getAgent, getAgentDetail } from "@/lib/api/agents"
 import { Separator } from "@/components/ui/separator"
-import { AgentBreadcrumb } from "@/components/blocks/agent/breadcrumb"
-import { AgentHeader } from "@/components/blocks/agent/header"
-import { AgentInstallBar } from "@/components/blocks/agent/install-bar"
-import { AgentStatsBar } from "@/components/blocks/agent/stats-bar"
-import { AgentTabsSection } from "@/components/blocks/agent/tabs-section"
-import { AgentSidebar } from "@/components/blocks/agent/sidebar"
+import { AgentBreadcrumb } from "@/components/agent/detail/breadcrumb"
+import { AgentHeader } from "@/components/agent/detail/header"
+import { AgentInstallBar } from "@/components/agent/detail/install-bar"
+import { AgentStatsBar } from "@/components/agent/detail/stats-bar"
+import { AgentTabsSection } from "@/components/agent/detail/tabs-section"
+import { AgentSidebar } from "@/components/agent/detail/sidebar"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 
 type PageProps = {

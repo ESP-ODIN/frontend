@@ -1,4 +1,4 @@
-import { getAppPages } from "@/lib/app-pages"
+import { getAppPages } from "@/lib/navigation/app-pages"
 
 export async function GET() {
   const pages = await getAppPages()
