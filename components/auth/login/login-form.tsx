@@ -6,7 +6,7 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { loginWithEmail } from "@/lib/api/auth"
+import { loginAction } from "@/lib/auth/actions"
 
 export function LoginForm() {
   const router = useRouter()
@@ -20,7 +20,7 @@ export function LoginForm() {
     setError(null)
 
     setIsSubmitting(true)
-    const result = await loginWithEmail({ email, password })
+    const result = await loginAction({ email, password })
     setIsSubmitting(false)
 
     if (!result.ok) {

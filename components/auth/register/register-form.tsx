@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordStrength } from "@/components/auth/password-strength"
-import { registerWithEmail } from "@/lib/api/auth"
+import { registerAction } from "@/lib/auth/actions"
 
 export function RegisterForm() {
   const router = useRouter()
@@ -27,7 +27,7 @@ export function RegisterForm() {
     }
 
     setIsSubmitting(true)
-    const result = await registerWithEmail({ name, email, password })
+    const result = await registerAction({ email, password })
     setIsSubmitting(false)
 
     if (!result.ok) {
@@ -35,7 +35,7 @@ export function RegisterForm() {
       return
     }
 
-    router.push("/login")
+    router.push("/marketplace")
   }
 
   return (
@@ -82,6 +82,7 @@ export function RegisterForm() {
           autoComplete="new-password"
           required
           minLength={8}
+          maxLength={72}
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="••••••••"
@@ -100,6 +101,7 @@ export function RegisterForm() {
           autoComplete="new-password"
           required
           minLength={8}
+          maxLength={72}
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
           placeholder="••••••••"
