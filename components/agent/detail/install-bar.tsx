@@ -14,6 +14,7 @@ type AgentInstallBarProps = {
   agentId: string
   agentName: string
   detail: AgentDetail
+  isLoggedIn: boolean
 }
 
 const SAVE_COLORS = ["#e85d04", "#ffb35c", "#ffd8a8", "#fbbf24"]
@@ -21,9 +22,9 @@ const FOLLOW_COLORS = ["#60a5fa", "#93c5fd", "#bfdbfe", "#e85d04", "#ffb35c"]
 
 const PILL = "rounded-full border border-border bg-input/30 transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-md hover:shadow-black/5"
 
-export function AgentInstallBar({ agentId, agentName, detail }: AgentInstallBarProps) {
+export function AgentInstallBar({ agentId, agentName, detail, isLoggedIn }: AgentInstallBarProps) {
   const { liked, disliked, saved, following, toggleLike, toggleDislike, toggleSave, toggleFollow } =
-    useAgentInteractions(agentId)
+    useAgentInteractions(agentId, isLoggedIn)
   const like = useExplosion<HTMLSpanElement>()
   const dislike = useExplosion<HTMLSpanElement>()
   const save = useExplosion<HTMLSpanElement>()

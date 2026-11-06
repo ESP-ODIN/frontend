@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 
 import {
   type AgentInteractionState,
@@ -22,10 +23,17 @@ const defaultState: AgentInteractionState = {
   following: false,
 }
 
-export function useAgentInteractions(id: string) {
+/**
+ * Sans session, les interactions ne sont pas chargées et tout clic renvoie vers /login, avec
+ * retour sur la page courante après connexion.
+ */
+export function useAgentInteractions(id: string, isLoggedIn: boolean) {
+  const router = useRouter()
+  const pathname = usePathname()
   const [state, setState] = useState<AgentInteractionState>(defaultState)
 
   useEffect(() => {
+    if (!isLoggedIn) return
     let cancelled = false
 
     getAgentInteractions(id).then((next) => {
@@ -35,13 +43,18 @@ export function useAgentInteractions(id: string) {
     return () => {
       cancelled = true
     }
-  }, [id])
+  }, [id, isLoggedIn])
 
   const mutate = useCallback(
     (
       optimistic: (prev: AgentInteractionState) => AgentInteractionState,
       call: (id: string) => Promise<AgentInteractionState>
     ) => {
+      if (!isLoggedIn) {
+        router.push(`/login?next=${encodeURIComponent(pathname)}`)
+        return
+      }
+
       let rollbackTo = defaultState
       setState((prev) => {
         rollbackTo = prev
@@ -53,7 +66,7 @@ export function useAgentInteractions(id: string) {
           setState(rollbackTo)
         })
     },
-    [id]
+    [id, isLoggedIn, router, pathname]
   )
 
   return {

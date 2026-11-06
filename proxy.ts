@@ -1,19 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server"
 
 import { SESSION_COOKIE } from "@/lib/auth/constants"
+import { safeRedirectPath } from "@/lib/auth/redirect"
 
 const PROTECTED_ROUTES = ["/publish"]
 const AUTH_ROUTES = ["/login", "/register"]
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
   const isLoggedIn = request.cookies.has(SESSION_COOKIE)
 
   if (!isLoggedIn && PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
-    return NextResponse.redirect(new URL("/login", request.url))
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("next", pathname)
+    return NextResponse.redirect(loginUrl)
   }
   if (isLoggedIn && AUTH_ROUTES.includes(pathname)) {
-    return NextResponse.redirect(new URL("/marketplace", request.url))
+    return NextResponse.redirect(new URL(safeRedirectPath(searchParams.get("next")), request.url))
   }
   return NextResponse.next()
 }

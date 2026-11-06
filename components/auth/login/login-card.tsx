@@ -8,7 +8,7 @@ import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { DevMark } from "@/components/dev/dev-mark"
 
-export function LoginCard() {
+export function LoginCard({ redirectTo }: { redirectTo: string }) {
   return (
     <ScrollReveal className="mx-auto w-full max-w-lg">
       <SpotlightPanel className="rounded-3xl">
@@ -35,7 +35,7 @@ export function LoginCard() {
             <span className="h-px flex-1 bg-muted/30" />
           </div>
 
-          <LoginForm />
+          <LoginForm redirectTo={redirectTo} />
 
           <p className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
