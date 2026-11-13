@@ -1,8 +1,16 @@
 import type { Agent } from "@/lib/agents/types"
 
+export const SECURE_MISSING_NOTE = "secure: not in the API yet, published agents default to true"
+
 /** Nombre d'auteurs ayant au moins un agent dans la liste (et non tous les profils de la base). */
 export function countAuthors(agents: Agent[]): number {
   return new Set(agents.map((agent) => agent.creator_id)).size
+}
+
+/** Part des agents qui ont passé les tests de sécurité, en pourcentage (100 si la liste est vide). */
+export function secureRate(agents: Agent[]): number {
+  if (agents.length === 0) return 100
+  return (agents.filter((agent) => agent.secure).length / agents.length) * 100
 }
 
 export function shuffle<T>(items: T[]): T[] {

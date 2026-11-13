@@ -1,4 +1,5 @@
 import type { AgentDetail } from "@/lib/api/agents"
+import { SECURE_MISSING_NOTE } from "@/lib/agents/stats"
 import { formatCompactCount } from "@/lib/format/count"
 import { getRuntimeLabel } from "@/lib/publish/constants"
 import { DevMark } from "@/components/dev/dev-mark"
@@ -18,9 +19,9 @@ export function AgentStatsBar({ detail }: AgentStatsBarProps) {
     { label: "Saves", value: detail.savesLabel ?? "—", missing: "saves are not in the API" },
     { label: "Runtime", value: getRuntimeLabel(detail.runtime) },
     {
-      label: "Security tests passed",
-      value: detail.uptimeLabel ?? "—",
-      missing: "no security results in the API",
+      label: "Security",
+      value: detail.secure ? "Verified" : "Not verified",
+      missing: SECURE_MISSING_NOTE,
     },
   ]
 

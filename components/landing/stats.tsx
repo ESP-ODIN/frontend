@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react"
 import { Boxes, Download, ShieldCheck, Users } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { countAuthors } from "@/lib/agents/stats"
+import { countAuthors, secureRate, SECURE_MISSING_NOTE } from "@/lib/agents/stats"
 import type { Agent } from "@/lib/agents/types"
 import { StatCounter } from "@/components/motion/stat-counter"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
@@ -15,6 +15,7 @@ type StatItem = {
   suffix?: string
   label: string
   mock?: string
+  missing?: string
 }
 
 type StatsProps = {
@@ -35,11 +36,10 @@ export function Stats({ agents }: StatsProps) {
     { icon: Users, target: countAuthors(agents), label: "AUTHORS" },
     {
       icon: ShieldCheck,
-      target: 99.98,
-      decimals: 2,
+      target: secureRate(agents),
       suffix: "%",
-      label: "SECURITY TESTS PASSED",
-      mock: "no security results in the API",
+      label: "SECURITY VERIFIED",
+      missing: SECURE_MISSING_NOTE,
     },
   ]
 
@@ -63,6 +63,7 @@ export function Stats({ agents }: StatsProps) {
           </p>
           <p className="font-mono text-xs tracking-wider text-muted-foreground">
             {stat.label} {stat.mock && <DevMark kind="mock" note={stat.mock} />}
+            {stat.missing && <DevMark kind="missing" note={stat.missing} />}
           </p>
         </ScrollReveal>
       ))}
