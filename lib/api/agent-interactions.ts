@@ -9,6 +9,11 @@ export type AgentInteractionState = {
   following: boolean
 }
 
+/** Date (ms) à laquelle chaque relation a été activée, pour trier la bibliothèque du profil. */
+export type AgentInteractionDates = { likedAt?: number; savedAt?: number; followingAt?: number }
+
+type StoredInteraction = AgentInteractionState & AgentInteractionDates
+
 const STORAGE_KEY = "odin:agent-interactions:v2"
 
 const defaultState: AgentInteractionState = {
@@ -18,7 +23,7 @@ const defaultState: AgentInteractionState = {
   following: false,
 }
 
-function readStore(): Record<string, AgentInteractionState> {
+function readStore(): Record<string, StoredInteraction> {
   if (typeof window === "undefined") return {}
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
@@ -28,27 +33,40 @@ function readStore(): Record<string, AgentInteractionState> {
   }
 }
 
-function writeStore(store: Record<string, AgentInteractionState>) {
+function writeStore(store: Record<string, StoredInteraction>) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store))
   } catch {}
 }
 
+const DATE_KEYS = [
+  ["liked", "likedAt"],
+  ["saved", "savedAt"],
+  ["following", "followingAt"],
+] as const
+
 async function persist(id: string, next: AgentInteractionState): Promise<AgentInteractionState> {
   const store = readStore()
-  store[id] = next
+  const previous = store[id]
+  const stored: StoredInteraction = { ...previous, ...next }
+  for (const [flag, dateKey] of DATE_KEYS) {
+    if (!next[flag]) delete stored[dateKey]
+    else if (!previous?.[flag]) stored[dateKey] = Date.now()
+  }
+  store[id] = stored
   writeStore(store)
   return next
 }
 
 /** Toutes les interactions enregistrées, par id d'agent (page profil). */
-export async function getAllAgentInteractions(): Promise<Record<string, AgentInteractionState>> {
+export async function getAllAgentInteractions(): Promise<Record<string, AgentInteractionState & AgentInteractionDates>> {
   const store = readStore()
   return Object.fromEntries(Object.entries(store).map(([id, state]) => [id, { ...defaultState, ...state }]))
 }
 
 export async function getAgentInteractions(id: string): Promise<AgentInteractionState> {
-  return { ...defaultState, ...readStore()[id] }
+  const { liked, disliked, saved, following } = { ...defaultState, ...readStore()[id] }
+  return { liked, disliked, saved, following }
 }
 
 export async function likeAgent(id: string): Promise<AgentInteractionState> {

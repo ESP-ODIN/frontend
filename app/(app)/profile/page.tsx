@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import type { Metadata } from "next"
-import { Plus, Rocket, User } from "lucide-react"
+import { ExternalLink, Plus, Rocket, User } from "lucide-react"
 
 import { getCreatorAgents, getMarketplaceAgents } from "@/lib/api/agents"
 import { getSessionAccount } from "@/lib/auth/session"
+import { creatorHref } from "@/lib/agents/creator"
 import { buildMockDashboard } from "@/lib/dashboard/mock"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -12,19 +13,26 @@ import { IconTile } from "@/components/shared/icon-tile"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { DashboardView } from "@/components/dashboard/dashboard-view"
 import { Library } from "@/components/profile/library"
+import { SettingsPanel } from "@/components/profile/settings-panel"
+import { SubmissionsPanel } from "@/components/profile/submissions-panel"
 import { DevMark } from "@/components/dev/dev-mark"
 
 export const metadata: Metadata = {
   title: "Profile — Odin",
-  description: "The agents you follow, like and save, and the analytics of the ones you published.",
+  description: "The agents you follow, like and save, the analytics of the ones you published, and your account settings.",
 }
 
 const TABS = [
   { id: "library", label: "Library" },
   { id: "creator", label: "Creator dashboard" },
+  { id: "settings", label: "Settings" },
 ] as const
 
 type TabId = (typeof TABS)[number]["id"]
+
+function parseTab(value: string | string[] | undefined): TabId {
+  return TABS.find((tab) => tab.id === value)?.id ?? "library"
+}
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -35,9 +43,7 @@ export default async function Page({ searchParams }: PageProps) {
   // Le proxy redirige déjà sans cookie ; ici on couvre un cookie présent mais illisible.
   if (!account) redirect("/login?next=/profile")
 
-  const tabParam = (await searchParams).tab
-  const tab: TabId = tabParam === "creator" ? "creator" : "library"
-
+  const tab = parseTab((await searchParams).tab)
   const [published, catalog] = await Promise.all([getCreatorAgents(account.id), getMarketplaceAgents()])
 
   return (
@@ -59,12 +65,17 @@ export default async function Page({ searchParams }: PageProps) {
             </p>
           </div>
         </div>
-        <Button render={<Link href="/publish" />}>
-          <Plus /> Publish an agent
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" render={<Link href={creatorHref(account.id)} />}>
+            <ExternalLink /> Public profile
+          </Button>
+          <Button render={<Link href="/publish" />}>
+            <Plus /> Publish an agent
+          </Button>
+        </div>
       </ScrollReveal>
 
-      <nav aria-label="Profile sections" className="flex gap-6 border-b border-border/60">
+      <nav aria-label="Profile sections" className="flex gap-6 overflow-x-auto border-b border-border/60 [scrollbar-width:none]">
         {TABS.map((item) => (
           <Link
             key={item.id}
@@ -72,7 +83,7 @@ export default async function Page({ searchParams }: PageProps) {
             aria-current={tab === item.id ? "page" : undefined}
             scroll={false}
             className={cn(
-              "-mb-px flex items-center gap-2 border-b-2 pb-3 text-sm font-medium transition-colors",
+              "-mb-px flex shrink-0 items-center gap-2 border-b-2 pb-3 text-sm font-medium whitespace-nowrap transition-colors",
               tab === item.id ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
@@ -86,22 +97,29 @@ export default async function Page({ searchParams }: PageProps) {
         ))}
       </nav>
 
-      {tab === "library" ? (
-        <Library catalog={catalog} />
-      ) : published.length === 0 ? (
-        <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-muted/50 px-6 py-16 text-center">
-          <IconTile icon={Rocket} />
-          <h2 className="text-xl font-bold text-foreground">No agent published yet</h2>
-          <p className="max-w-md text-muted-foreground">
-            Once your first agent passes the security review and lands on the marketplace, its installs, ratings and
-            errors show up here.
-          </p>
-          <Button render={<Link href="/publish" />}>Publish your first agent</Button>
+      {tab === "library" && <Library catalog={catalog} />}
+
+      {tab === "creator" && (
+        <div className="flex flex-col gap-8">
+          <SubmissionsPanel />
+          {published.length === 0 ? (
+            <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-muted/50 px-6 py-16 text-center">
+              <IconTile icon={Rocket} />
+              <h2 className="text-xl font-bold text-foreground">No agent published yet</h2>
+              <p className="max-w-md text-muted-foreground">
+                Once your first agent passes the security review and lands on the marketplace, its installs, ratings and
+                errors show up here.
+              </p>
+              <Button render={<Link href="/publish" />}>Publish your first agent</Button>
+            </div>
+          ) : (
+            // Pas de ScrollReveal ici : sur mobile, un bloc aussi haut n'atteint jamais son seuil de visibilité.
+            <DashboardView data={buildMockDashboard(published)} />
+          )}
         </div>
-      ) : (
-        // Pas de ScrollReveal ici : sur mobile, un bloc aussi haut n'atteint jamais son seuil de visibilité.
-        <DashboardView data={buildMockDashboard(published)} />
       )}
+
+      {tab === "settings" && <SettingsPanel userId={account.id} email={account.email} />}
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { formatCompactCount } from "@/lib/format/count"
 import { formatTimeAgo } from "@/lib/format/time-ago"
 import { getRuntimeLabel } from "@/lib/publish/constants"
 import type { Agent } from "@/lib/agents/types"
+import { creatorHref } from "@/lib/agents/creator"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -81,7 +82,11 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
             <p className="flex flex-wrap items-center gap-1 text-xs text-[#F6F1E6]/60 sm:text-sm">
               <ThumbsUp className="size-4" /> {agent.likes ?? "0"} • <Bookmark className="size-4" />{" "}
               {agent.saves ?? "0"} • <Eye className="size-4" /> {agent.followers ?? "0"} • <MoveDown className="size-4" />{" "}
-              {formatCompactCount(agent.downloads_count)} installs by {agent.creator_id} • Updated{" "}
+              {formatCompactCount(agent.downloads_count)} installs by{" "}
+              <Link href={creatorHref(agent.creator_id)} className="hover:text-[#F6F1E6] hover:underline">
+                {agent.creator_id}
+              </Link>{" "}
+              • Updated{" "}
               {formatTimeAgo(agent.updated_at)}{" "}
               <DevMark kind="missing" note="likes, saves, followers and creator name are not in the API" />
             </p>

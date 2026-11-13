@@ -28,6 +28,8 @@ import { StepTransition } from "@/components/publish/step-transition"
 import { checkAvailabilityAction, registerAction } from "@/lib/auth/actions"
 import type { AvailabilityField } from "@/lib/api/auth"
 import { cn } from "@/lib/utils"
+import { validateNewPassword } from "@/lib/auth/password"
+import { PasswordStrength } from "@/components/auth/password-strength"
 
 type Values = {
   firstName: string
@@ -52,88 +54,6 @@ type Step = {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-type PasswordRule = { label: string; error: string; test: (value: string) => boolean }
-
-const PASSWORD_RULES: PasswordRule[] = [
-  { label: "8+ characters", error: "at least 8 characters", test: (v) => v.length >= 8 },
-  { label: "Uppercase", error: "an uppercase letter", test: (v) => /[A-Z]/.test(v) },
-  { label: "Lowercase", error: "a lowercase letter", test: (v) => /[a-z]/.test(v) },
-  { label: "Number", error: "a number", test: (v) => /\d/.test(v) },
-  { label: "Symbol", error: "a special character", test: (v) => /[^A-Za-z0-9]/.test(v) },
-]
-
-const STRENGTH_LEVELS = [
-  { label: "Too weak", bar: "bg-destructive", text: "text-destructive" },
-  { label: "Weak", bar: "bg-orange-500", text: "text-orange-500" },
-  { label: "Fair", bar: "bg-amber-400", text: "text-amber-500" },
-  { label: "Good", bar: "bg-lime-500", text: "text-lime-600" },
-  { label: "Strong", bar: "bg-emerald-500", text: "text-emerald-600" },
-] as const
-
-/**
- * Score de 0 à 4 : les règles respectées, plus un bonus pour 12 caractères ou plus. Tant qu'une
- * règle manque, le mot de passe ne dépasse pas « Fair ».
- */
-function passwordStrength(value: string) {
-  const passed = PASSWORD_RULES.filter((rule) => rule.test(value)).length
-  const allPassed = passed === PASSWORD_RULES.length
-  const score = allPassed ? (value.length >= 12 ? 4 : 3) : Math.min(2, Math.floor(passed / 2))
-  return { score, passed }
-}
-
-/** Jauge de force et liste des règles, mise à jour à chaque frappe. */
-function PasswordStrength({ value }: { value: string }) {
-  const { score } = passwordStrength(value)
-  const level = STRENGTH_LEVELS[score]
-  const empty = value.length === 0
-
-  return (
-    <div className="flex flex-col gap-2.5" aria-live="polite">
-      <div className="flex items-center gap-3">
-        <div className="flex flex-1 gap-1">
-          {STRENGTH_LEVELS.slice(1).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1.5 flex-1 rounded-full transition-colors duration-300",
-                !empty && i < Math.max(score, 1) ? level.bar : "bg-muted/30"
-              )}
-            />
-          ))}
-        </div>
-        <span
-          className={cn(
-            "w-16 text-right text-xs font-medium transition-colors",
-            empty ? "text-muted-foreground" : level.text
-          )}
-        >
-          {empty ? "Strength" : level.label}
-        </span>
-      </div>
-
-      <ul className="flex flex-wrap gap-1.5">
-        {PASSWORD_RULES.map((rule) => {
-          const ok = rule.test(value)
-          return (
-            <li
-              key={rule.label}
-              className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors duration-300",
-                ok
-                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
-                  : "border-muted/40 text-muted-foreground"
-              )}
-            >
-              {ok ? <Check className="size-3" /> : <X className="size-3" />}
-              {rule.label}
-            </li>
-          )
-        })}
-      </ul>
-    </div>
-  )
-}
 
 function today() {
   return new Date().toISOString().slice(0, 10)
@@ -204,9 +124,7 @@ const STEPS: Step[] = [
     autoComplete: "new-password",
     placeholder: "••••••••",
     validate: (value) => {
-      if (value.length > 72) return "Use 72 characters at most."
-      const missing = PASSWORD_RULES.find((rule) => !rule.test(value))
-      return missing ? `Your password needs ${missing.error}.` : null
+      return validateNewPassword(value)
     },
   },
   {

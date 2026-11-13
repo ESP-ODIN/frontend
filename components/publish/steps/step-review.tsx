@@ -11,6 +11,7 @@ import { PublishResult } from "@/components/publish/steps/publish-result"
 import { SecurityReviewDialog } from "@/components/publish/steps/security-review-dialog"
 import { usePublishWizard } from "@/components/publish/wizard-context"
 import { publishAgent } from "@/lib/api/publish"
+import { addSubmission } from "@/lib/publish/submissions"
 import { DevMark } from "@/components/dev/dev-mark"
 import { buildPublishPayload } from "@/lib/publish/build-payload"
 import { MANIFEST_SOURCE_OPTIONS, WIZARD_STEPS } from "@/lib/publish/constants"
@@ -34,7 +35,12 @@ export function StepReview() {
   async function handlePublish() {
     setSubmission({ status: "loading" })
     const result = await publishAgent(payload)
-    if (result.ok) setIsReviewDialogOpen(true)
+    if (result.ok) {
+      const { name, version, type, category } = payload.manifest.package
+      // Suivi de la revue dans /profile?tab=creator, en attendant un statut côté API.
+      addSubmission({ name, version, type, category, runtime: payload.manifest.run.runtime })
+      setIsReviewDialogOpen(true)
+    }
     setSubmission(
       result.ok
         ? { status: "success", name: result.name }

@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { creatorHref } from "@/lib/agents/creator"
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import type { Agent } from "@/lib/agents/types"
@@ -22,7 +23,11 @@ export function AgentListItem({ agent, className, staticType = false }: AgentLis
         <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <p>
-            by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
+            by{" "}
+            <Link href={creatorHref(agent.creator_id)} className="hover:text-foreground hover:underline">
+              {agent.creator_id}
+            </Link>{" "}
+            <DevMark kind="missing" note="creator name: API only returns creator_id" />
           </p>
           <AgentTypeBadge interactive={!staticType} type={agent.agent_type} />
         </div>

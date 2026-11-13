@@ -97,7 +97,6 @@ export function ProfileMenu({ isLoggedIn, loginHref, accountEmail }: ProfileMenu
                     <span className="truncate">{accountEmail ?? "My account"}</span>
                     <DevMark kind="missing" note={NAME_MISSING_NOTE} />
                   </span>
-                  <span className="text-xs text-muted-foreground">Profile</span>
                 </span>
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-data-highlighted/item:translate-x-0.5 group-data-highlighted/item:text-primary" />
               </NavLinkItem>
