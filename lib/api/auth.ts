@@ -10,9 +10,9 @@ export type LoginPayload = { email: string; password: string }
 
 export type RegisterPayload = {
   username: string
-  name: string
   first_name: string
-  birth_date: string 
+  last_name: string
+  date_of_birth: string // YYYY-MM-DD
   email: string
   password: string
 }
@@ -56,6 +56,28 @@ export async function register(payload: RegisterPayload): Promise<ApiAuthResult>
   return postAuth("register", payload)
 }
 
+
+export type AvailabilityField = "email" | "username"
+
+type ApiAvailabilityResponse = {
+  data?: { email_available?: boolean; username_available?: boolean }
+}
+
+/** Indique si l'email ou le username est encore libre ; `null` si la vérification a échoué. */
+export async function checkAvailability(field: AvailabilityField, value: string): Promise<boolean | null> {
+  try {
+    const response = await fetch(`${AUTH_API_URL}/availability?${new URLSearchParams({ [field]: value })}`, {
+      cache: "no-store",
+    })
+    if (!response.ok) return null
+
+    const { data }: ApiAvailabilityResponse = await response.json()
+    const available = field === "email" ? data?.email_available : data?.username_available
+    return available ?? null
+  } catch {
+    return null
+  }
+}
 
 export async function requestPasswordReset(email: string): Promise<AuthResult> {
   console.info("[auth] request password reset", email)

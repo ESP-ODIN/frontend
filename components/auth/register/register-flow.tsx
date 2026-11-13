@@ -5,7 +5,7 @@
  * en direct et permet de revenir corriger une réponse.
  */
 
-import { useState, type FormEvent, type ReactNode } from "react"
+import { useEffect, useState, type FormEvent, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -15,15 +15,18 @@ import {
   CornerDownLeft,
   Eye,
   EyeOff,
+  Loader2,
   Lock,
   Mail,
   Sparkles,
+  X,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { StepTransition } from "@/components/publish/step-transition"
-import { registerAction } from "@/lib/auth/actions"
+import { checkAvailabilityAction, registerAction } from "@/lib/auth/actions"
+import type { AvailabilityField } from "@/lib/api/auth"
 import { cn } from "@/lib/utils"
 
 type Values = {
@@ -49,6 +52,88 @@ type Step = {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+type PasswordRule = { label: string; error: string; test: (value: string) => boolean }
+
+const PASSWORD_RULES: PasswordRule[] = [
+  { label: "8+ characters", error: "at least 8 characters", test: (v) => v.length >= 8 },
+  { label: "Uppercase", error: "an uppercase letter", test: (v) => /[A-Z]/.test(v) },
+  { label: "Lowercase", error: "a lowercase letter", test: (v) => /[a-z]/.test(v) },
+  { label: "Number", error: "a number", test: (v) => /\d/.test(v) },
+  { label: "Symbol", error: "a special character", test: (v) => /[^A-Za-z0-9]/.test(v) },
+]
+
+const STRENGTH_LEVELS = [
+  { label: "Too weak", bar: "bg-destructive", text: "text-destructive" },
+  { label: "Weak", bar: "bg-orange-500", text: "text-orange-500" },
+  { label: "Fair", bar: "bg-amber-400", text: "text-amber-500" },
+  { label: "Good", bar: "bg-lime-500", text: "text-lime-600" },
+  { label: "Strong", bar: "bg-emerald-500", text: "text-emerald-600" },
+] as const
+
+/**
+ * Score de 0 à 4 : les règles respectées, plus un bonus pour 12 caractères ou plus. Tant qu'une
+ * règle manque, le mot de passe ne dépasse pas « Fair ».
+ */
+function passwordStrength(value: string) {
+  const passed = PASSWORD_RULES.filter((rule) => rule.test(value)).length
+  const allPassed = passed === PASSWORD_RULES.length
+  const score = allPassed ? (value.length >= 12 ? 4 : 3) : Math.min(2, Math.floor(passed / 2))
+  return { score, passed }
+}
+
+/** Jauge de force et liste des règles, mise à jour à chaque frappe. */
+function PasswordStrength({ value }: { value: string }) {
+  const { score } = passwordStrength(value)
+  const level = STRENGTH_LEVELS[score]
+  const empty = value.length === 0
+
+  return (
+    <div className="flex flex-col gap-2.5" aria-live="polite">
+      <div className="flex items-center gap-3">
+        <div className="flex flex-1 gap-1">
+          {STRENGTH_LEVELS.slice(1).map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-1.5 flex-1 rounded-full transition-colors duration-300",
+                !empty && i < Math.max(score, 1) ? level.bar : "bg-muted/30"
+              )}
+            />
+          ))}
+        </div>
+        <span
+          className={cn(
+            "w-16 text-right text-xs font-medium transition-colors",
+            empty ? "text-muted-foreground" : level.text
+          )}
+        >
+          {empty ? "Strength" : level.label}
+        </span>
+      </div>
+
+      <ul className="flex flex-wrap gap-1.5">
+        {PASSWORD_RULES.map((rule) => {
+          const ok = rule.test(value)
+          return (
+            <li
+              key={rule.label}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors duration-300",
+                ok
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
+                  : "border-muted/40 text-muted-foreground"
+              )}
+            >
+              {ok ? <Check className="size-3" /> : <X className="size-3" />}
+              {rule.label}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 function today() {
   return new Date().toISOString().slice(0, 10)
@@ -84,7 +169,12 @@ const STEPS: Step[] = [
     hint: "This is how other creators will see you.",
     autoComplete: "username",
     placeholder: "jabruzzi",
-    validate: (value) => (value.trim() ? null : "Choose a username."),
+    validate: (value) => {
+      const length = value.trim().length
+      if (!length) return "Choose a username."
+      if (length < 3 || length > 50) return "Use between 3 and 50 characters."
+      return null
+    },
   },
   {
     id: "birthDate",
@@ -109,14 +199,15 @@ const STEPS: Step[] = [
   {
     id: "password",
     question: () => "Now, secure your account with a password.",
-    hint: "Between 8 and 72 characters.",
+    hint: "At least 8 characters, with upper and lowercase letters, a number and a symbol.",
     type: "password",
     autoComplete: "new-password",
     placeholder: "••••••••",
-    validate: (value) =>
-      value.length < 8 || value.length > 72
-        ? "Use between 8 and 72 characters."
-        : null,
+    validate: (value) => {
+      if (value.length > 72) return "Use 72 characters at most."
+      const missing = PASSWORD_RULES.find((rule) => !rule.test(value))
+      return missing ? `Your password needs ${missing.error}.` : null
+    },
   },
   {
     id: "confirm",
@@ -141,6 +232,95 @@ function formatBirthDate(value: string) {
 }
 
 const stepIndex = (id: StepId) => STEPS.findIndex((s) => s.id === id)
+
+/** Étapes dont la valeur doit être libre côté API. */
+const AVAILABILITY_FIELDS: Partial<Record<StepId, AvailabilityField>> = {
+  email: "email",
+  username: "username",
+}
+
+const TAKEN_MESSAGES: Record<AvailabilityField, string> = {
+  email: "An account already exists with this email.",
+  username: "This username is already taken.",
+}
+
+type Availability = "idle" | "checking" | "available" | "taken" | "unknown"
+
+const availabilityKey = (field: AvailabilityField, value: string) =>
+  `${field}:${value.trim().toLowerCase()}`
+
+/**
+ * Vérifie en direct (avec un délai après la frappe) si l'email / le username est libre. Les réponses
+ * sont gardées en cache : revenir sur une valeur déjà vérifiée ne relance pas d'appel.
+ */
+function useAvailability(field: AvailabilityField | undefined, value: string, formatOk: boolean) {
+  const [results, setResults] = useState<Record<string, boolean | null>>({})
+  const key = field ? availabilityKey(field, value) : ""
+  const shouldCheck = Boolean(field) && formatOk && !(key in results)
+
+  useEffect(() => {
+    if (!field || !shouldCheck) return
+    const timer = setTimeout(async () => {
+      const available = await checkAvailabilityAction(field, value.trim())
+      setResults((prev) => ({ ...prev, [key]: available }))
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [field, key, shouldCheck, value])
+
+  let status: Availability = "idle"
+  if (field && formatOk) {
+    const result = results[key]
+    status =
+      result === undefined ? "checking" : result === null ? "unknown" : result ? "available" : "taken"
+  }
+
+  /** Vérification immédiate, pour la validation de l'étape. */
+  async function checkNow(): Promise<boolean | null> {
+    if (!field) return true
+    if (key in results) return results[key]
+    const available = await checkAvailabilityAction(field, value.trim())
+    setResults((prev) => ({ ...prev, [key]: available }))
+    return available
+  }
+
+  return { status, checkNow }
+}
+
+function AvailabilityStatus({ status, field }: { status: Availability; field: AvailabilityField }) {
+  if (status === "idle" || status === "unknown") return null
+  const label = field === "email" ? "email" : "username"
+
+  return (
+    <p
+      aria-live="polite"
+      className={cn(
+        "flex items-center gap-1.5 text-sm",
+        status === "checking" && "text-muted-foreground",
+        status === "available" && "text-emerald-600",
+        status === "taken" && "text-destructive"
+      )}
+    >
+      {status === "checking" && (
+        <>
+          <Loader2 className="size-3.5 animate-spin" />
+          Checking availability…
+        </>
+      )}
+      {status === "available" && (
+        <>
+          <Check className="fx-pop size-3.5" />
+          This {label} is available.
+        </>
+      )}
+      {status === "taken" && (
+        <>
+          <X className="size-3.5" />
+          {TAKEN_MESSAGES[field]}
+        </>
+      )}
+    </p>
+  )
+}
 
 type ProfilePreviewProps = {
   values: Values
@@ -288,6 +468,12 @@ export function RegisterFlow() {
   const isLast = index === STEPS.length - 1
   const value = values[step.id]
   const suggestion = step.id === "username" ? suggestUsername(values) : ""
+  const availabilityField = AVAILABILITY_FIELDS[step.id]
+  const availability = useAvailability(
+    availabilityField,
+    value,
+    availabilityField ? step.validate(value, values) === null : false
+  )
 
   function goTo(next: number) {
     setError(null)
@@ -308,6 +494,16 @@ export function RegisterFlow() {
       setError(validationError)
       return
     }
+    if (availabilityField) {
+      // Si l'API ne répond pas (null), on laisse passer : le register tranchera.
+      setIsSubmitting(true)
+      const available = await availability.checkNow()
+      setIsSubmitting(false)
+      if (available === false) {
+        setError(TAKEN_MESSAGES[availabilityField])
+        return
+      }
+    }
     if (!isLast) {
       goTo(index + 1)
       return
@@ -316,9 +512,9 @@ export function RegisterFlow() {
     setIsSubmitting(true)
     const result = await registerAction({
       username: values.username.trim(),
-      name: values.name.trim(),
       first_name: values.firstName.trim(),
-      birth_date: values.birthDate,
+      last_name: values.name.trim(),
+      date_of_birth: values.birthDate,
       email: values.email.trim(),
       password: values.password,
     })
@@ -444,6 +640,12 @@ export function RegisterFlow() {
               </button>
             )}
           </div>
+
+          {step.id === "password" && <PasswordStrength value={value} />}
+
+          {availabilityField && !error && (
+            <AvailabilityStatus status={availability.status} field={availabilityField} />
+          )}
 
           {suggestion && value !== suggestion && (
             <button

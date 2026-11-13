@@ -160,7 +160,25 @@
   body {
     @apply bg-background text-foreground;
     }
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  /* Tout élément cliquable affiche la main, sauf s'il est désactivé. */
+  :is(
+      a[href],
+      button,
+      summary,
+      select,
+      label[for],
+      input:is([type="checkbox"], [type="radio"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="color"], [type="range"]),
+      [role="button"],
+      [role="link"],
+      [role="menuitem"],
+      [role="menuitemcheckbox"],
+      [role="menuitemradio"],
+      [role="option"],
+      [role="radio"],
+      [role="checkbox"],
+      [role="switch"],
+      [role="tab"]
+    ):not(:disabled, [aria-disabled="true"], [data-disabled]) {
     cursor: pointer;
     }
   html {

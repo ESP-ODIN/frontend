@@ -21,3 +21,8 @@ export async function isAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies()
   return cookieStore.has(SESSION_COOKIE)
 }
+
+export async function clearSession() {
+  const cookieStore = await cookies()
+  cookieStore.delete(SESSION_COOKIE)
+}

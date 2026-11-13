@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/layout/logo"
 import { CommandMenu, commandMenuHandle } from "@/components/layout/command-menu"
 import { Magnetic } from "@/components/motion/magnetic"
+import { ProfileMenu } from "@/components/layout/profile-menu"
 
 export type NavLink = { label: string; href: string }
 
@@ -39,6 +40,8 @@ type FloatingNavProps = {
   smoothScroll?: boolean
   ctaHref?: string
   showCta?: boolean
+  /** Contenu du menu profil : déconnexion si connecté, sinon connexion / inscription. */
+  isLoggedIn?: boolean
 }
 
 export function FloatingNav({
@@ -46,12 +49,15 @@ export function FloatingNav({
   smoothScroll = false,
   ctaHref = "/marketplace",
   showCta = true,
+  isLoggedIn = false,
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const showPublish = pathname === "/marketplace"
   const activeHref = getActiveHref(links, pathname)
+  // Après connexion, on revient sur la page courante.
+  const loginHref = `/login?next=${encodeURIComponent(pathname)}`
 
   useEffect(() => {
     if (!smoothScroll) return
@@ -177,6 +183,8 @@ export function FloatingNav({
                 )}
               </Magnetic>
             )}
+
+            <ProfileMenu isLoggedIn={isLoggedIn} loginHref={loginHref} />
 
             {links.length > 0 && (
               <Button
