@@ -17,7 +17,6 @@ export type Agent = {
   tags?: string[]
   likes?: string
   saves?: string
-  followers?: string
   downloads_count: number
   version?: string
   icon?: LucideIcon

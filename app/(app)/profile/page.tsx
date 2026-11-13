@@ -19,7 +19,7 @@ import { DevMark } from "@/components/dev/dev-mark"
 
 export const metadata: Metadata = {
   title: "Profile — Odin",
-  description: "The agents you follow, like and save, the analytics of the ones you published, and your account settings.",
+  description: "The creators you follow, the agents you like and save, the analytics of the ones you published, and your account settings.",
 }
 
 const TABS = [

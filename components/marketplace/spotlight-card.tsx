@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Bookmark, Eye, MoveDown, ThumbsUp } from "lucide-react"
+import { Bookmark, MoveDown, ThumbsUp } from "lucide-react"
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
@@ -81,14 +81,14 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
             </div>
             <p className="flex flex-wrap items-center gap-1 text-xs text-[#F6F1E6]/60 sm:text-sm">
               <ThumbsUp className="size-4" /> {agent.likes ?? "0"} • <Bookmark className="size-4" />{" "}
-              {agent.saves ?? "0"} • <Eye className="size-4" /> {agent.followers ?? "0"} • <MoveDown className="size-4" />{" "}
+              {agent.saves ?? "0"} • <MoveDown className="size-4" />{" "}
               {formatCompactCount(agent.downloads_count)} installs by{" "}
               <Link href={creatorHref(agent.creator_id)} className="hover:text-[#F6F1E6] hover:underline">
                 {creatorLabel(agent)}
               </Link>{" "}
               • Updated{" "}
               {formatTimeAgo(agent.updated_at)}{" "}
-              <DevMark kind="missing" note="likes, saves, followers and creator name are not in the API" />
+              <DevMark kind="missing" note="likes, saves and creator name are not in the API" />
             </p>
 
             <CopyCommand className="w-fit max-w-full overflow-x-auto text-xs lg:hidden" command={`odin install ${agent.name}`} />

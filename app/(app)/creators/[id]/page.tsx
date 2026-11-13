@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { AgentCard } from "@/components/agent/agent-card"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { DevMark } from "@/components/dev/dev-mark"
+import { FollowCreatorButton } from "@/components/creator/follow-creator-button"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -65,7 +66,7 @@ export default async function Page({ params }: PageProps) {
       )}
 
       <ScrollReveal className="flex flex-col gap-5">
-        <div className="flex min-w-0 items-center gap-4">
+        <div className="flex min-w-0 flex-wrap items-center gap-4">
           <span className="inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary to-orange-400 text-primary-foreground shadow-lg shadow-primary/20">
             <User className="size-7" />
           </span>
@@ -77,6 +78,7 @@ export default async function Page({ params }: PageProps) {
             </h1>
             {fullName && <p className="text-muted-foreground">{fullName}</p>}
           </div>
+          {!isMe && <FollowCreatorButton creatorId={id} isLoggedIn={!!account} className="ml-auto" />}
         </div>
 
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">

@@ -6,12 +6,10 @@ import { usePathname, useRouter } from "next/navigation"
 import {
   type AgentInteractionState,
   dislikeAgent,
-  followAgent,
   getAgentInteractions,
   likeAgent,
   saveAgent,
   undislikeAgent,
-  unfollowAgent,
   unlikeAgent,
   unsaveAgent,
 } from "@/lib/api/agent-interactions"
@@ -20,7 +18,6 @@ const defaultState: AgentInteractionState = {
   liked: false,
   disliked: false,
   saved: false,
-  following: false,
 }
 
 /**
@@ -73,7 +70,6 @@ export function useAgentInteractions(id: string, isLoggedIn: boolean) {
     liked: state.liked,
     disliked: state.disliked,
     saved: state.saved,
-    following: state.following,
     toggleLike: () =>
       mutate(
         (prev) => ({ ...prev, liked: !prev.liked, disliked: false }),
@@ -86,7 +82,5 @@ export function useAgentInteractions(id: string, isLoggedIn: boolean) {
       ),
     toggleSave: () =>
       mutate((prev) => ({ ...prev, saved: !prev.saved }), state.saved ? unsaveAgent : saveAgent),
-    toggleFollow: () =>
-      mutate((prev) => ({ ...prev, following: !prev.following }), state.following ? unfollowAgent : followAgent),
   }
 }

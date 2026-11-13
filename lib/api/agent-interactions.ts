@@ -1,18 +1,18 @@
 /**
- * Like, dislike, save et follow d'un agent. Mock : stocké dans le localStorage du navigateur en
+ * Like, dislike et save d'un agent (le follow concerne les créateurs : lib/api/creator-follows.ts). Mock : stocké dans le localStorage du navigateur en
  * attendant une API.
  */
 export type AgentInteractionState = {
   liked: boolean
   disliked: boolean
   saved: boolean
-  following: boolean
 }
 
 /** Date (ms) à laquelle chaque relation a été activée, pour trier la bibliothèque du profil. */
-export type AgentInteractionDates = { likedAt?: number; savedAt?: number; followingAt?: number }
+export type AgentInteractionDates = { likedAt?: number; savedAt?: number }
 
-type StoredInteraction = AgentInteractionState & AgentInteractionDates
+/** Les anciennes entrées peuvent encore contenir `following` / `followingAt` : ignorés. */
+type StoredInteraction = AgentInteractionState & AgentInteractionDates & { following?: boolean; followingAt?: number }
 
 const STORAGE_KEY = "odin:agent-interactions:v2"
 
@@ -20,7 +20,6 @@ const defaultState: AgentInteractionState = {
   liked: false,
   disliked: false,
   saved: false,
-  following: false,
 }
 
 function readStore(): Record<string, StoredInteraction> {
@@ -42,7 +41,6 @@ function writeStore(store: Record<string, StoredInteraction>) {
 const DATE_KEYS = [
   ["liked", "likedAt"],
   ["saved", "savedAt"],
-  ["following", "followingAt"],
 ] as const
 
 async function persist(id: string, next: AgentInteractionState): Promise<AgentInteractionState> {
@@ -61,12 +59,17 @@ async function persist(id: string, next: AgentInteractionState): Promise<AgentIn
 /** Toutes les interactions enregistrées, par id d'agent (page profil). */
 export async function getAllAgentInteractions(): Promise<Record<string, AgentInteractionState & AgentInteractionDates>> {
   const store = readStore()
-  return Object.fromEntries(Object.entries(store).map(([id, state]) => [id, { ...defaultState, ...state }]))
+  return Object.fromEntries(
+    Object.entries(store).map(([id, { liked, disliked, saved, likedAt, savedAt }]) => [
+      id,
+      { ...defaultState, liked, disliked, saved, likedAt, savedAt },
+    ])
+  )
 }
 
 export async function getAgentInteractions(id: string): Promise<AgentInteractionState> {
-  const { liked, disliked, saved, following } = { ...defaultState, ...readStore()[id] }
-  return { liked, disliked, saved, following }
+  const { liked, disliked, saved } = { ...defaultState, ...readStore()[id] }
+  return { liked, disliked, saved }
 }
 
 export async function likeAgent(id: string): Promise<AgentInteractionState> {
@@ -99,12 +102,4 @@ export async function unsaveAgent(id: string): Promise<AgentInteractionState> {
   return persist(id, { ...current, saved: false })
 }
 
-export async function followAgent(id: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(id)
-  return persist(id, { ...current, following: true })
-}
 
-export async function unfollowAgent(id: string): Promise<AgentInteractionState> {
-  const current = await getAgentInteractions(id)
-  return persist(id, { ...current, following: false })
-}

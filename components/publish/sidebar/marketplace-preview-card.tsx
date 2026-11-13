@@ -1,6 +1,6 @@
 "use client"
 
-import { Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
+import { Bookmark, Download, ThumbsUp } from "lucide-react"
 
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
@@ -54,9 +54,6 @@ export function MarketplacePreviewCard() {
         </span>
         <span className="flex items-center gap-1">
           <Bookmark className="size-3" />0
-        </span>
-        <span className="flex items-center gap-1">
-          <Eye className="size-3" />0
         </span>
         <span className="flex items-center gap-1">
           <Download className="size-3" />0

@@ -1,6 +1,6 @@
 "use client"
 
-import { Bookmark, Check, Eye, ThumbsDown, ThumbsUp } from "lucide-react"
+import { Bookmark, ThumbsDown, ThumbsUp } from "lucide-react"
 
 import type { AgentDetail } from "@/lib/api/agents"
 import { CopyCommand } from "@/components/motion/copy-command"
@@ -18,17 +18,14 @@ type AgentInstallBarProps = {
 }
 
 const SAVE_COLORS = ["#e85d04", "#ffb35c", "#ffd8a8", "#fbbf24"]
-const FOLLOW_COLORS = ["#60a5fa", "#93c5fd", "#bfdbfe", "#e85d04", "#ffb35c"]
 
 const PILL = "rounded-full border border-border bg-input/30 transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-md hover:shadow-black/5"
 
 export function AgentInstallBar({ agentId, agentName, detail, isLoggedIn }: AgentInstallBarProps) {
-  const { liked, disliked, saved, following, toggleLike, toggleDislike, toggleSave, toggleFollow } =
-    useAgentInteractions(agentId, isLoggedIn)
+  const { liked, disliked, saved, toggleLike, toggleDislike, toggleSave } = useAgentInteractions(agentId, isLoggedIn)
   const like = useExplosion<HTMLSpanElement>()
   const dislike = useExplosion<HTMLSpanElement>()
   const save = useExplosion<HTMLSpanElement>()
-  const follow = useExplosion<HTMLSpanElement>()
 
   const likesLabel = detail.likesLabel ?? "0"
   const savesLabel = detail.savesLabel ?? "0"
@@ -48,11 +45,6 @@ export function AgentInstallBar({ agentId, agentName, detail, isLoggedIn }: Agen
   function handleSave() {
     save.explode(saved ? { mode: "implode" } : { colors: SAVE_COLORS, count: 12 })
     toggleSave()
-  }
-
-  function handleFollow() {
-    follow.explode(following ? { mode: "implode" } : { colors: FOLLOW_COLORS })
-    toggleFollow()
   }
 
   return (
@@ -109,21 +101,7 @@ export function AgentInstallBar({ agentId, agentName, detail, isLoggedIn }: Agen
         />
       </span>
 
-      <span ref={follow.containerRef} className="relative inline-flex">
-        <ActionButton
-          icon={following ? Check : Eye}
-          label={following ? "Following" : "Follow"}
-          pressed={following}
-          onClick={handleFollow}
-          iconAnimation="fx-icon-follow"
-          iconHover="group-hover/action:scale-110"
-          pressedClassName="border-blue-400/50 bg-blue-400/10 text-blue-500 hover:bg-blue-400/15 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-400"
-          fillOnPress={false}
-          className={PILL}
-        />
-      </span>
-
-      <DevMark kind="mock" note="like / dislike / save / follow are stored in localStorage, counts are not in the API" />
+      <DevMark kind="mock" note="like / dislike / save are stored in localStorage, counts are not in the API" />
     </div>
   )
 }

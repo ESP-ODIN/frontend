@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BadgeCheck, Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
+import { ArrowRight, BadgeCheck, Bookmark, Download, ThumbsUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { formatCompactCount } from "@/lib/format/count"
@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { DevMark } from "@/components/dev/dev-mark"
 
-const COUNTERS_NOTE = "likes, saves, followers and version are not in the API"
+const COUNTERS_NOTE = "likes, saves and version are not in the API"
 
 /**
  * Lien principal étiré sur toute la carte (pseudo-élément ::after en inset-0) : la carte entière
@@ -65,10 +65,6 @@ export function AgentCard({ agent, className, staticType = false }: AgentCardPro
             <span className="flex items-center gap-1" title="Saves">
               <Bookmark className="size-3" />
               {agent.saves ?? "0"}
-            </span>
-            <span className="flex items-center gap-1" title="Followers">
-              <Eye className="size-3" />
-              {agent.followers ?? "0"}
             </span>
           </span>
           <span className="flex items-center gap-1.5 font-mono">
@@ -124,10 +120,6 @@ export function AgentCard({ agent, className, staticType = false }: AgentCardPro
               <span className="flex items-center gap-1" title="Saves">
                 <Bookmark className="size-3.5" />
                 {agent.saves ?? "0"}
-              </span>
-              <span className="flex items-center gap-1" title="Followers">
-                <Eye className="size-3.5" />
-                {agent.followers ?? "0"}
               </span>
               <span className="flex items-center gap-1">
                 <Download className="size-3.5" />

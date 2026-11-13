@@ -1,5 +1,6 @@
 import type { Agent } from "@/lib/agents/types"
 import { CreatorLink } from "@/components/agent/creator-link"
+import { FollowCreatorButton } from "@/components/creator/follow-creator-button"
 import type { AgentDetail } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { Badge } from "@/components/ui/badge"
@@ -10,9 +11,12 @@ import { DevMark } from "@/components/dev/dev-mark"
 type AgentHeaderProps = {
   agent: Agent
   detail: AgentDetail
+  isLoggedIn: boolean
+  /** Id de l'utilisateur connecté : pas de bouton Follow sur ses propres agents. */
+  viewerId?: string
 }
 
-export function AgentHeader({ agent, detail }: AgentHeaderProps) {
+export function AgentHeader({ agent, detail, isLoggedIn, viewerId }: AgentHeaderProps) {
   return (
     <div className="flex items-start gap-4">
       <AgentIcon icon={agent.icon} name={agent.name} className="size-12 shrink-0 text-lg sm:size-14 sm:text-xl" />
@@ -22,10 +26,13 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
           <Badge variant="outline">{agent.version ?? "—"}</Badge>
           <DevMark kind="missing" note="version: agent_version exists in the DB but no endpoint exposes it" />
         </div>
-        <p className="flex flex-wrap items-center gap-x-1 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm text-muted-foreground">
           <CreatorLink agent={agent} />
+          {viewerId !== agent.creator_id && (
+            <FollowCreatorButton creatorId={agent.creator_id} isLoggedIn={isLoggedIn} size="compact" />
+          )}
           <span>· updated {formatTimeAgo(detail.updated_at)}</span>
-        </p>
+        </div>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>
       </div>
     </div>
