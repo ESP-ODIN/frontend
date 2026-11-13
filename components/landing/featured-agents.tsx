@@ -36,7 +36,7 @@ export function FeaturedAgents({ agents }: FeaturedAgentsProps) {
           {picked.map((agent, index) => (
             <ScrollReveal key={agent.id} delay={index * 100}>
               <TiltCard className="rounded-xl">
-                <AgentCard agent={agent} />
+                <AgentCard agent={agent} staticType />
               </TiltCard>
             </ScrollReveal>
           ))}

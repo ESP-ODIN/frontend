@@ -37,10 +37,9 @@ export function isEnvVarNameValid(name: string): boolean {
   return ENV_VAR_NAME_REGEX.test(name)
 }
 
+/** Le repo a été importé (scanné) avec le lien actuel : on sait s'il a un manifest ou non. */
 export function isManifestSourceReady(source: SourceSection): boolean {
-  if (source.kind === "repository")
-    return source.scannedRepoUrl === source.repoUrl
-  return source.kind === "form"
+  return source.kind !== "" && source.scannedRepoUrl === source.repoUrl
 }
 
 export function isSourceStepValid(source: SourceSection): boolean {

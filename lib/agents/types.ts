@@ -18,6 +18,8 @@ export type Agent = {
   version?: string
   icon?: LucideIcon
   is_official_pick: boolean
+  /** A passé les tests de sécurité. Un agent non sécurisé n'est jamais publié. */
+  secure: boolean
   featured?: boolean
   category: CategoryId
   agent_type: AgentType

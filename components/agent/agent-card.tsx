@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { formatCompactCount } from "@/lib/format/count"
 import { limitTags } from "@/lib/agents/tags"
 import { AgentIcon } from "@/components/agent/agent-icon"
+import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import type { Agent } from "@/lib/agents/types"
 import { Badge } from "@/components/ui/badge"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
@@ -16,15 +17,17 @@ const COUNTERS_NOTE = "likes, saves, followers and version are not in the API"
 type AgentCardProps = {
   agent: Agent
   className?: string
+  /** Désactive le dépliage du type au survol (landing). */
+  staticType?: boolean
 }
 
-export function AgentCard({ agent, className }: AgentCardProps) {
+export function AgentCard({ agent, className, staticType = false }: AgentCardProps) {
   return (
     <>
       <Link
         href={`/agents/${agent.id}`}
         className={cn(
-          "group flex items-center gap-3 rounded-xl border border-muted/40 bg-background-100 p-3 transition-colors active:bg-muted/10 sm:hidden",
+          "group group/agent flex items-center gap-3 rounded-xl border border-muted/40 bg-background-100 p-3 transition-colors active:bg-muted/10 sm:hidden",
           className
         )}
       >
@@ -36,9 +39,12 @@ export function AgentCard({ agent, className }: AgentCardProps) {
               <BadgeCheck role="img" aria-label="Verified" className="size-4 shrink-0 text-primary" />
             )}
           </div>
-          <p className="truncate text-xs text-muted-foreground">
-            by {agent.creator_id} <DevMark kind="missing" note={CREATOR_NOTE} />
-          </p>
+          <div className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+            <p className="truncate">
+              by {agent.creator_id} <DevMark kind="missing" note={CREATOR_NOTE} />
+            </p>
+            <AgentTypeBadge interactive={!staticType} type={agent.agent_type} />
+          </div>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-2">
@@ -66,7 +72,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
       <SpotlightPanel className={cn("hidden rounded-xl sm:block", className)}>
         <Link
           href={`/agents/${agent.id}`}
-          className="group flex flex-col gap-4 rounded-xl border border-muted/40 bg-background-100 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
+          className="group group/agent flex flex-col gap-4 rounded-xl border border-muted/40 bg-background-100 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -94,6 +100,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
               <span className="text-sm text-muted-foreground">—</span>
             )}
             <DevMark kind="missing" note="tags: no tags column in the DB" className="self-center" />
+            <AgentTypeBadge interactive={!staticType} type={agent.agent_type} className="ml-auto self-center" />
           </div>
 
           <div className="mt-auto flex items-center justify-between border-t border-muted/40 pt-4">

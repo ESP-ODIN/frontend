@@ -15,6 +15,7 @@ type ApiAgent = {
   tags?: string[]
   is_official_pick: boolean
   featured?: boolean
+  secure?: boolean
   downloads_count: number
   created_at: string
   updated_at: string
@@ -28,7 +29,7 @@ export type AgentDetail = {
   runtime: string
   likesLabel?: string
   savesLabel?: string
-  uptimeLabel?: string
+  secure: boolean
   sizeLabel?: string
   overview: string[]
   installSteps: { comment: string; command: string }[]
@@ -40,6 +41,11 @@ export type AgentDetail = {
 
 const MARKETPLACE_API_URL = process.env.MARKETPLACE_API_URL
 
+// `secure` n'est pas encore dans l'API : un agent publié a forcément passé les tests.
+function isSecure(apiAgent: ApiAgent): boolean {
+  return apiAgent.secure ?? true
+}
+
 function toAgent(apiAgent: ApiAgent): Agent {
   return {
     id: apiAgent.id,
@@ -50,6 +56,7 @@ function toAgent(apiAgent: ApiAgent): Agent {
     downloads_count: apiAgent.downloads_count,
     is_official_pick: apiAgent.is_official_pick,
     featured: apiAgent.featured ?? true,
+    secure: isSecure(apiAgent),
     category: apiAgent.category,
     agent_type: apiAgent.agent_type,
     runtime: apiAgent.runtime,
@@ -65,6 +72,7 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     created_at: apiAgent.created_at,
     downloads_count: apiAgent.downloads_count,
     runtime: apiAgent.runtime,
+    secure: isSecure(apiAgent),
     overview: [apiAgent.description ?? ""],
     installSteps: [
       { comment: "1. Installer l'agent", command: `odin install ${apiAgent.name}` },

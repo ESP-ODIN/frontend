@@ -1,5 +1,5 @@
 import type { Agent } from "@/lib/agents/types"
-import { countAuthors } from "@/lib/agents/stats"
+import { countAuthors, secureRate, SECURE_MISSING_NOTE } from "@/lib/agents/stats"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { DevMark } from "@/components/dev/dev-mark"
 
@@ -31,9 +31,9 @@ export function Hero({ agents }: HeroProps) {
       mock: "no monthly installs endpoint in the API",
     },
     {
-      value: "99.98%",
-      label: "Security tests passed",
-      mock: "no security results in the API",
+      value: `${Math.round(secureRate(agents))}%`,
+      label: "Security verified",
+      missing: SECURE_MISSING_NOTE,
     },
   ]
 
@@ -54,7 +54,8 @@ export function Hero({ agents }: HeroProps) {
                 <div key={stat.label} className="flex flex-col items-center gap-2 lg:items-start">
                     <p className="text-xl font-bold whitespace-nowrap">{stat.value}</p>
                     <p className="text-sm text-foreground/60 whitespace-nowrap">
-                      {stat.label} {stat.mock && <DevMark kind="mock" note={stat.mock} />}
+                      {stat.label} {"mock" in stat && stat.mock && <DevMark kind="mock" note={stat.mock} />}
+                      {"missing" in stat && stat.missing && <DevMark kind="missing" note={stat.missing} />}
                     </p>
                 </div>
             ))}
