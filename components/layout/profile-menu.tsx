@@ -7,17 +7,16 @@ import { ChevronRight, LogIn, LogOut, User, UserPlus } from "lucide-react"
 
 import { logoutAction } from "@/lib/auth/actions"
 import { cn } from "@/lib/utils"
+import { PROFILE_NOTES, type AccountDisplay } from "@/lib/api/profile"
 import { DevMark } from "../dev/dev-mark"
 
 type ProfileMenuProps = {
   isLoggedIn: boolean
   /** Lien de connexion, avec le ?next= de la page courante. */
   loginHref: string
-  /** Email du compte connecté (seule info d'identité dans le JWT). */
-  accountEmail?: string | null
+  /** Identité du compte connecté (nom et pseudo dès que GET /me existe, sinon l'email du JWT). */
+  account?: AccountDisplay | null
 }
-
-const NAME_MISSING_NOTE = "first name, last name and username: not in the JWT and no /me endpoint"
 
 const itemClass =
   "group/item flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm outline-none select-none transition-colors data-disabled:pointer-events-none data-disabled:opacity-50"
@@ -56,7 +55,7 @@ function NavLinkItem({ href, ...props }: ComponentProps<typeof Menu.LinkItem> & 
 }
 
 /** Bouton profil de la nav, toujours présent : connexion / inscription, ou déconnexion. */
-export function ProfileMenu({ isLoggedIn, loginHref, accountEmail }: ProfileMenuProps) {
+export function ProfileMenu({ isLoggedIn, loginHref, account }: ProfileMenuProps) {
   const [isPending, startTransition] = useTransition()
 
   function handleLogout() {
@@ -94,9 +93,10 @@ export function ProfileMenu({ isLoggedIn, loginHref, accountEmail }: ProfileMenu
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
-                    <span className="truncate">{accountEmail ?? "My account"}</span>
-                    <DevMark kind="missing" note={NAME_MISSING_NOTE} />
+                    <span className="truncate">{account?.title ?? "My account"}</span>
+                    {!account?.complete && <DevMark kind="missing" note={PROFILE_NOTES.identity} />}
                   </span>
+                  {account?.handle && <span className="truncate text-xs text-muted-foreground">{account.handle}</span>}
                 </span>
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-data-highlighted/item:translate-x-0.5 group-data-highlighted/item:text-primary" />
               </NavLinkItem>

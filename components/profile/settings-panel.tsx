@@ -5,6 +5,15 @@ import Link from "next/link"
 import { Check, ExternalLink, Loader2, TriangleAlert, X } from "lucide-react"
 
 import { checkAvailabilityAction } from "@/lib/auth/actions"
+import {
+  changePassword,
+  deleteAccount,
+  getProfileValues,
+  PROFILE_NOTES,
+  updateProfile,
+  type CurrentUser,
+  type ProfileValues,
+} from "@/lib/api/profile"
 import { validateNewPassword } from "@/lib/auth/password"
 import { creatorHref } from "@/lib/agents/creator"
 import { cn } from "@/lib/utils"
@@ -15,31 +24,12 @@ import { PasswordStrength } from "@/components/auth/password-strength"
 import { DevMark } from "@/components/dev/dev-mark"
 
 type SettingsPanelProps = {
-  userId: string
-  email: string | null
+  user: CurrentUser
 }
 
-type ProfileValues = { firstName: string; lastName: string; username: string; bio: string }
-
-const PROFILE_STORAGE_KEY = "odin:profile-settings:v1"
 const BIO_MAX = 280
 const EMPTY_PROFILE: ProfileValues = { firstName: "", lastName: "", username: "", bio: "" }
-
-const NOTES = {
-  profile: "profile update: no PATCH /me route in the auth API, values are kept in this browser's localStorage",
-  email: "email change: no route in the auth API",
-  password: "password change: no route in the auth API, the form only validates locally",
-  delete: "account deletion: no route in the auth API, nothing is deleted",
-}
-
-function readProfile(): ProfileValues {
-  try {
-    const raw = window.localStorage.getItem(PROFILE_STORAGE_KEY)
-    return raw ? { ...EMPTY_PROFILE, ...JSON.parse(raw) } : EMPTY_PROFILE
-  } catch {
-    return EMPTY_PROFILE
-  }
-}
+const NOTES = PROFILE_NOTES
 
 function Card({ title, description, note, tone = "default", children }: {
   title: string
@@ -94,18 +84,21 @@ function Feedback({ message }: { message: string | null }) {
 const textareaClass =
   "min-h-24 w-full rounded-2xl border border-input bg-input/30 px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
-function ProfileForm({ userId }: { userId: string }) {
+function ProfileForm({ user }: { user: CurrentUser }) {
   const [saved, setSaved] = useState<ProfileValues>(EMPTY_PROFILE)
   const [values, setValues] = useState<ProfileValues>(EMPTY_PROFILE)
   const [errors, setErrors] = useState<Partial<Record<keyof ProfileValues, string>>>({})
   const [feedback, setFeedback] = useState<string | null>(null)
   const [availability, setAvailability] = useState<"idle" | "checking" | "available" | "taken" | "unknown">("idle")
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
 
   useEffect(() => {
-    const stored = readProfile()
-    setSaved(stored)
-    setValues(stored)
-  }, [])
+    getProfileValues(user).then((stored) => {
+      setSaved(stored)
+      setValues(stored)
+    })
+  }, [user])
 
   const username = values.username.trim()
   const debouncedUsername = useDebouncedValue(username, 400)
@@ -130,9 +123,10 @@ function ProfileForm({ userId }: { userId: string }) {
     setValues((current) => ({ ...current, [field]: value }))
     setErrors((current) => ({ ...current, [field]: undefined }))
     setFeedback(null)
+    setFormError(null)
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     const next: typeof errors = {}
     if (!values.firstName.trim()) next.firstName = "Your first name is required."
@@ -144,9 +138,14 @@ function ProfileForm({ userId }: { userId: string }) {
     if (Object.keys(next).length > 0) return
 
     const clean = { ...values, firstName: values.firstName.trim(), lastName: values.lastName.trim(), username }
-    try {
-      window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(clean))
-    } catch {}
+    setSaving(true)
+    const result = await updateProfile(clean)
+    setSaving(false)
+    if (!result.ok) {
+      if (result.field && result.field in clean) setErrors({ [result.field]: result.error })
+      else setFormError(result.error)
+      return
+    }
     setSaved(clean)
     setValues(clean)
     setFeedback("Profile saved.")
@@ -196,13 +195,14 @@ function ProfileForm({ userId }: { userId: string }) {
         />
       </Field>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link href={creatorHref(userId)} className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+        <Link href={creatorHref(user.id)} className="flex items-center gap-1.5 text-sm text-primary hover:underline">
           View your public profile <ExternalLink aria-hidden className="size-3.5" />
         </Link>
         <div className="flex items-center gap-3">
+          {formError && <p className="text-sm text-destructive">{formError}</p>}
           <Feedback message={feedback} />
-          <Button type="submit" disabled={!dirty || availability === "checking"}>
-            Save profile
+          <Button type="submit" disabled={!dirty || availability === "checking" || saving}>
+            {saving ? "Saving…" : "Save profile"}
           </Button>
         </div>
       </div>
@@ -217,7 +217,9 @@ function PasswordForm() {
   const [errors, setErrors] = useState<{ current?: string; next?: string; confirm?: string }>({})
   const [feedback, setFeedback] = useState<string | null>(null)
 
-  function handleSubmit(event: FormEvent) {
+  const [saving, setSaving] = useState(false)
+
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     const found: typeof errors = {}
     if (!current) found.current = "Enter your current password."
@@ -228,6 +230,13 @@ function PasswordForm() {
     setErrors(found)
     if (Object.keys(found).length > 0) return
 
+    setSaving(true)
+    const result = await changePassword(current, next)
+    setSaving(false)
+    if (!result.ok) {
+      setErrors(result.field === "next" ? { next: result.error } : { current: result.error })
+      return
+    }
     setCurrent("")
     setNext("")
     setConfirm("")
@@ -252,8 +261,8 @@ function PasswordForm() {
       {next && <PasswordStrength value={next} />}
       <div className="flex items-center justify-end gap-3">
         <Feedback message={feedback} />
-        <Button type="submit" disabled={!current || !next || !confirm}>
-          Update password
+        <Button type="submit" disabled={!current || !next || !confirm || saving}>
+          {saving ? "Updating…" : "Update password"}
         </Button>
       </div>
     </form>
@@ -263,6 +272,7 @@ function PasswordForm() {
 function DeleteAccountForm({ email }: { email: string | null }) {
   const [typed, setTyped] = useState("")
   const [requested, setRequested] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const expected = email ?? "delete my account"
   const matches = typed.trim().toLowerCase() === expected.toLowerCase()
 
@@ -277,9 +287,12 @@ function DeleteAccountForm({ email }: { email: string | null }) {
 
   return (
     <form
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault()
-        if (matches) setRequested(true)
+        if (!matches) return
+        const result = await deleteAccount()
+        if (result.ok) setRequested(true)
+        else setError(result.error)
       }}
       className="flex flex-col gap-4"
     >
@@ -291,6 +304,7 @@ function DeleteAccountForm({ email }: { email: string | null }) {
       <Field id="settings-delete-confirm" label={`Type ${email ? "your email" : "“delete my account”"} to confirm`} hint={<span className="font-mono">{expected}</span>}>
         <Input id="settings-delete-confirm" value={typed} autoComplete="off" onChange={(e) => setTyped(e.target.value)} />
       </Field>
+      {error && <p className="text-sm text-destructive">{error}</p>}
       <div className="flex justify-end">
         <Button type="submit" variant="destructive" disabled={!matches}>
           <X /> Delete my account
@@ -301,11 +315,12 @@ function DeleteAccountForm({ email }: { email: string | null }) {
 }
 
 /** Réglages du compte. Rien n'est relié à l'API auth pour l'instant (voir les DevMark). */
-export function SettingsPanel({ userId, email }: SettingsPanelProps) {
+export function SettingsPanel({ user }: SettingsPanelProps) {
+  const email = user.email ?? null
   return (
     <div className="flex flex-col gap-6">
       <Card title="Public profile" description="Your name, username and bio, shown on your creator page and on your agents." note={NOTES.profile}>
-        <ProfileForm userId={userId} />
+        <ProfileForm user={user} />
       </Card>
       <Card title="Email" description="Used to sign in and to receive review results." note={NOTES.email}>
         <Field id="settings-email" label="Email address" hint="Changing your email isn't available yet.">

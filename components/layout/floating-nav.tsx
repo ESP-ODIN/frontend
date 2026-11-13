@@ -12,6 +12,7 @@ import { Logo } from "@/components/layout/logo"
 import { CommandMenu, commandMenuHandle } from "@/components/layout/command-menu"
 import { Magnetic } from "@/components/motion/magnetic"
 import { ProfileMenu } from "@/components/layout/profile-menu"
+import type { AccountDisplay } from "@/lib/api/profile"
 
 export type NavLink = { label: string; href: string }
 
@@ -42,8 +43,8 @@ type FloatingNavProps = {
   showCta?: boolean
   /** Contenu du menu profil : déconnexion si connecté, sinon connexion / inscription. */
   isLoggedIn?: boolean
-  /** Email du compte connecté, affiché en tête du menu profil. */
-  accountEmail?: string | null
+  /** Identité du compte connecté, affichée en tête du menu profil. */
+  account?: AccountDisplay | null
 }
 
 export function FloatingNav({
@@ -52,7 +53,7 @@ export function FloatingNav({
   ctaHref = "/marketplace",
   showCta = true,
   isLoggedIn = false,
-  accountEmail = null,
+  account = null,
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -187,7 +188,7 @@ export function FloatingNav({
               </Magnetic>
             )}
 
-            <ProfileMenu isLoggedIn={isLoggedIn} loginHref={loginHref} accountEmail={accountEmail} />
+            <ProfileMenu isLoggedIn={isLoggedIn} loginHref={loginHref} account={account} />
 
             {links.length > 0 && (
               <Button

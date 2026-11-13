@@ -4,7 +4,8 @@ import type { Metadata } from "next"
 import { ExternalLink, Plus, Rocket, User } from "lucide-react"
 
 import { getCreatorAgents, getMarketplaceAgents } from "@/lib/api/agents"
-import { getSessionAccount } from "@/lib/auth/session"
+import { getCurrentUser } from "@/lib/auth/current-user"
+import { accountDisplay, PROFILE_NOTES } from "@/lib/api/profile"
 import { creatorHref } from "@/lib/agents/creator"
 import { buildMockDashboard } from "@/lib/dashboard/mock"
 import { cn } from "@/lib/utils"
@@ -39,9 +40,10 @@ type PageProps = {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const account = await getSessionAccount()
+  const account = await getCurrentUser()
   // Le proxy redirige déjà sans cookie ; ici on couvre un cookie présent mais illisible.
   if (!account) redirect("/login?next=/profile")
+  const display = accountDisplay(account)
 
   const tab = parseTab((await searchParams).tab)
   const [published, catalog] = await Promise.all([getCreatorAgents(account.id), getMarketplaceAgents()])
@@ -55,14 +57,16 @@ export default async function Page({ searchParams }: PageProps) {
           </span>
           <div className="min-w-0">
             <h1 className="flex items-center gap-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
-              <span className="truncate">{account.email ?? "My profile"}</span>
-              <DevMark kind="missing" note="first name, last name and username: not in the JWT and no /me endpoint" />
+              <span className="truncate">{display.title}</span>
+              {!display.complete && <DevMark kind="missing" note={PROFILE_NOTES.identity} />}
             </h1>
             <p className="mt-1 text-muted-foreground">
+              {display.handle && <span className="font-mono text-foreground/80">{display.handle} · </span>}
               {published.length === 0
                 ? "No agent published yet"
                 : `Creator of ${published.length} agent${published.length === 1 ? "" : "s"}`}
             </p>
+            {account.bio && <p className="mt-2 max-w-xl text-sm text-foreground/80">{account.bio}</p>}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -119,7 +123,7 @@ export default async function Page({ searchParams }: PageProps) {
         </div>
       )}
 
-      {tab === "settings" && <SettingsPanel userId={account.id} email={account.email} />}
+      {tab === "settings" && <SettingsPanel user={account} />}
     </div>
   )
 }

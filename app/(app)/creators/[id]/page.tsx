@@ -1,11 +1,12 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import { ArrowLeft, Boxes, CalendarDays, Download, User } from "lucide-react"
+import { ArrowLeft, Boxes, CalendarDays, Download, User, Users } from "lucide-react"
 
 import { getCreatorAgents } from "@/lib/api/agents"
+import { CREATOR_PROFILE_NOTE, getCreatorProfile } from "@/lib/api/creators"
 import { getSessionAccount } from "@/lib/auth/session"
-import { CREATOR_NAME_NOTE, shortCreatorId, UUID_RE } from "@/lib/agents/creator"
+import { shortCreatorId, UUID_RE } from "@/lib/agents/creator"
 import { AGENT_TYPE_OPTIONS } from "@/lib/publish/constants"
 import { formatCompactCount } from "@/lib/format/count"
 import { Button } from "@/components/ui/button"
@@ -20,9 +21,10 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
+  const profile = UUID_RE.test(id) ? await getCreatorProfile(id) : null
   return {
-    title: `Creator ${shortCreatorId(id)} — Odin`,
-    description: "Agents published by this creator on the Odin marketplace.",
+    title: `${profile?.username ? `@${profile.username}` : `Creator ${shortCreatorId(id)}`} — Odin`,
+    description: profile?.bio ?? "Agents published by this creator on the Odin marketplace.",
   }
 }
 
@@ -33,10 +35,13 @@ export default async function Page({ params }: PageProps) {
   const { id } = await params
   if (!UUID_RE.test(id)) notFound()
 
-  const [agents, account] = await Promise.all([getCreatorAgents(id), getSessionAccount()])
+  const [agents, account, profile] = await Promise.all([getCreatorAgents(id), getSessionAccount(), getCreatorProfile(id)])
   const isMe = account?.id === id
-  const username = agents.find((agent) => agent.creator_username)?.creator_username
-  const fullName = agents.find((agent) => agent.creator_name)?.creator_name
+  // Le profil (GET /catalog/creators/:id) prime ; à défaut, ce que les agents renvoient.
+  const username = profile?.username ?? agents.find((agent) => agent.creator_username)?.creator_username
+  const fullName =
+    [profile?.firstName, profile?.lastName].filter(Boolean).join(" ") ||
+    agents.find((agent) => agent.creator_name)?.creator_name
 
   const installs = agents.reduce((sum, agent) => sum + agent.downloads_count, 0)
   const firstPublished = agents
@@ -51,7 +56,14 @@ export default async function Page({ params }: PageProps) {
   const facts = [
     { icon: Boxes, label: `${agents.length} agent${agents.length === 1 ? "" : "s"} published` },
     { icon: Download, label: `${formatCompactCount(installs)} installs` },
-    ...(firstPublished ? [{ icon: CalendarDays, label: `Publishing since ${monthFormatter.format(new Date(firstPublished))}` }] : []),
+    ...(profile?.followersCount !== undefined
+      ? [{ icon: Users, label: `${formatCompactCount(profile.followersCount)} follower${profile.followersCount === 1 ? "" : "s"}` }]
+      : []),
+    ...(profile?.createdAt
+      ? [{ icon: CalendarDays, label: `Joined ${monthFormatter.format(new Date(profile.createdAt))}` }]
+      : firstPublished
+        ? [{ icon: CalendarDays, label: `Publishing since ${monthFormatter.format(new Date(firstPublished))}` }]
+        : []),
   ]
 
   return (
@@ -74,12 +86,14 @@ export default async function Page({ params }: PageProps) {
             <p className="font-mono text-xs tracking-wider text-muted-foreground uppercase">Creator</p>
             <h1 className="flex items-center gap-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
               <span className="truncate font-mono">{username ? `@${username}` : shortCreatorId(id)}</span>
-              {!username && <DevMark kind="missing" note={CREATOR_NAME_NOTE} />}
+              {!profile && <DevMark kind="missing" note={CREATOR_PROFILE_NOTE} />}
             </h1>
             {fullName && <p className="text-muted-foreground">{fullName}</p>}
           </div>
           {!isMe && <FollowCreatorButton creatorId={id} isLoggedIn={!!account} className="ml-auto" />}
         </div>
+
+        {profile?.bio && <p className="max-w-2xl text-foreground/80">{profile.bio}</p>}
 
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
           {facts.map((fact) => (
