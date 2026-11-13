@@ -42,6 +42,8 @@ type FloatingNavProps = {
   showCta?: boolean
   /** Contenu du menu profil : déconnexion si connecté, sinon connexion / inscription. */
   isLoggedIn?: boolean
+  /** Email du compte connecté, affiché en tête du menu profil. */
+  accountEmail?: string | null
 }
 
 export function FloatingNav({
@@ -50,6 +52,7 @@ export function FloatingNav({
   ctaHref = "/marketplace",
   showCta = true,
   isLoggedIn = false,
+  accountEmail = null,
 }: FloatingNavProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -184,7 +187,7 @@ export function FloatingNav({
               </Magnetic>
             )}
 
-            <ProfileMenu isLoggedIn={isLoggedIn} loginHref={loginHref} />
+            <ProfileMenu isLoggedIn={isLoggedIn} loginHref={loginHref} accountEmail={accountEmail} />
 
             {links.length > 0 && (
               <Button

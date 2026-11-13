@@ -41,6 +41,12 @@ async function persist(id: string, next: AgentInteractionState): Promise<AgentIn
   return next
 }
 
+/** Toutes les interactions enregistrées, par id d'agent (page profil). */
+export async function getAllAgentInteractions(): Promise<Record<string, AgentInteractionState>> {
+  const store = readStore()
+  return Object.fromEntries(Object.entries(store).map(([id, state]) => [id, { ...defaultState, ...state }]))
+}
+
 export async function getAgentInteractions(id: string): Promise<AgentInteractionState> {
   return { ...defaultState, ...readStore()[id] }
 }

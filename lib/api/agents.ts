@@ -98,6 +98,21 @@ export const getMarketplaceAgents = cache(async (): Promise<Agent[]> => {
 })
 
 /**
+ * Agents publiés par un créateur (GET /catalog/creators/:id/agents). L'API répond 404 quand le
+ * créateur n'a encore rien publié : on le traite comme une liste vide.
+ */
+export const getCreatorAgents = cache(async (creatorId: string): Promise<Agent[]> => {
+  const res = await fetch(`${MARKETPLACE_API_URL}/catalog/creators/${encodeURIComponent(creatorId)}/agents`, {
+    cache: "no-store",
+  })
+  if (res.status === 400 || res.status === 404) return []
+  if (!res.ok) throw new Error(`Marketplace API responded with ${res.status}`)
+
+  const { data } = (await res.json()) as { data: ApiAgent[] }
+  return data.map(toAgent)
+})
+
+/**
  * Récupère un agent par id. cache() fait partager un seul appel à generateMetadata, getAgent et
  * getAgentDetail. Un 400 (id qui n'est pas un UUID) ou un 404 renvoient null : la page affiche
  * alors « agent introuvable ».
