@@ -7,6 +7,7 @@ import { LogIn, LogOut, User, UserPlus } from "lucide-react"
 
 import { logoutAction } from "@/lib/auth/actions"
 import { cn } from "@/lib/utils"
+import { DevMark } from "../dev/dev-mark"
 
 type ProfileMenuProps = {
   isLoggedIn: boolean
@@ -96,6 +97,7 @@ export function ProfileMenu({ isLoggedIn, loginHref }: ProfileMenuProps) {
               <span className="flex min-w-0 flex-col">
                 <span className="text-sm font-semibold text-foreground">
                   {isLoggedIn ? "My account" : "Welcome to Odin"}
+                <DevMark kind="missing" note="featured: not returned by the API" />
                 </span>
                 <span className="text-xs text-muted-foreground">
                   {isLoggedIn ? "You're signed in" : "Sign in to publish agents"}
