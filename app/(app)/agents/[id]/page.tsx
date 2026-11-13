@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 
 import { getAgent, getAgentDetail } from "@/lib/api/agents"
+import { isAuthenticated } from "@/lib/auth/session"
 import { Separator } from "@/components/ui/separator"
 import { AgentBreadcrumb } from "@/components/agent/detail/breadcrumb"
 import { AgentHeader } from "@/components/agent/detail/header"
@@ -27,7 +28,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params
-  const [agent, detail] = await Promise.all([getAgent(id), getAgentDetail(id)])
+  const [agent, detail, isLoggedIn] = await Promise.all([
+    getAgent(id),
+    getAgentDetail(id),
+    isAuthenticated(),
+  ])
 
   if (!agent || !detail) notFound()
 
@@ -40,7 +45,12 @@ export default async function Page({ params }: PageProps) {
         <AgentHeader agent={agent} detail={detail} />
       </ScrollReveal>
       <ScrollReveal delay={120} className="flex flex-col gap-8">
-        <AgentInstallBar agentId={agent.id} agentName={agent.name} detail={detail} />
+        <AgentInstallBar
+          agentId={agent.id}
+          agentName={agent.name}
+          detail={detail}
+          isLoggedIn={isLoggedIn}
+        />
         <AgentStatsBar detail={detail} />
       </ScrollReveal>
       <Separator className="mb-0" />

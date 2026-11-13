@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { PasswordStrength } from "@/components/auth/password-strength"
 import { resetPassword } from "@/lib/api/auth"
 
 type ResetPasswordFormProps = {
@@ -62,7 +61,6 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           onChange={(event) => setPassword(event.target.value)}
           placeholder="••••••••"
         />
-        <PasswordStrength password={password} />
       </div>
 
       <div className="flex flex-col gap-1.5">

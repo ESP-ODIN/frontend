@@ -6,9 +6,9 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { loginWithEmail } from "@/lib/api/auth"
+import { loginAction } from "@/lib/auth/actions"
 
-export function LoginForm() {
+export function LoginForm({ redirectTo }: { redirectTo: string }) {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -20,7 +20,7 @@ export function LoginForm() {
     setError(null)
 
     setIsSubmitting(true)
-    const result = await loginWithEmail({ email, password })
+    const result = await loginAction({ email, password })
     setIsSubmitting(false)
 
     if (!result.ok) {
@@ -28,7 +28,7 @@ export function LoginForm() {
       return
     }
 
-    router.push("/marketplace")
+    router.push(redirectTo)
   }
 
   return (

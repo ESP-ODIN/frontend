@@ -3,17 +3,16 @@ import { Sparkles } from "lucide-react"
 
 import { Logo } from "@/components/layout/logo"
 import { OAuthButtons } from "@/components/auth/oauth-buttons"
-import { RegisterForm } from "@/components/auth/register/register-form"
+import { RegisterFlow } from "@/components/auth/register/register-flow"
 import { SpotlightPanel } from "@/components/motion/spotlight-panel"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
-import { DevMark } from "@/components/dev/dev-mark"
 
 export function RegisterCard() {
   return (
-    <ScrollReveal className="mx-auto w-full max-w-lg">
+    <ScrollReveal className="mx-auto w-full max-w-2xl">
       <SpotlightPanel className="rounded-3xl">
-        <div className="flex flex-col gap-6 rounded-3xl border border-muted/40 bg-background-100 p-6 shadow-xl shadow-black/[0.03] sm:p-8">
-          <div className="flex flex-col items-center gap-3 text-center">
+        <div className="flex flex-col gap-5 rounded-3xl border border-muted/40 bg-background-100 p-6 shadow-xl shadow-black/[0.03] sm:p-7">
+          <div className="flex flex-col items-center gap-2 text-center">
             <Logo showName={false} />
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 font-mono text-xs tracking-wider text-primary">
               <Sparkles className="size-3" />
@@ -21,7 +20,6 @@ export function RegisterCard() {
             </span>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Create an account{" "}
-              <DevMark kind="mock" note="register is faked (lib/api/auth.ts) although POST /api/v1/auth/register exists; OAuth faked too" />
             </h1>
             <p className="text-sm text-muted-foreground">
               Join Odin to publish and install agents.
@@ -36,7 +34,7 @@ export function RegisterCard() {
             <span className="h-px flex-1 bg-muted/30" />
           </div>
 
-          <RegisterForm />
+          <RegisterFlow />
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}

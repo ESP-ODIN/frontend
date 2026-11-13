@@ -9,6 +9,7 @@ import { FeaturedAgents } from "@/components/landing/featured-agents"
 import { Cta } from "@/components/landing/cta"
 import { ScrollReveal } from "@/components/motion/scroll-reveal"
 import { getMarketplaceAgents } from "@/lib/api/agents"
+import { isAuthenticated } from "@/lib/auth/session"
 
 const links = [
   { label: "Features", href: "#values" },
@@ -22,7 +23,7 @@ export default async function Page() {
 
   return (
     <main className="pt-24 sm:pt-28">
-      <FloatingNav links={links} smoothScroll />
+      <FloatingNav links={links} smoothScroll isLoggedIn={await isAuthenticated()} />
       <div className="flex flex-col gap-14 sm:gap-20">
         <Hero />
         <Stats agents={agents} />
