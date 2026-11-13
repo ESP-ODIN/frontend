@@ -5,16 +5,17 @@ export type DailyActivity = {
   date: string
   installs: number
   errors: number
+  /** La note d'un agent, c'est ses likes (et la part de likes face aux dislikes). */
+  likes: number
+  dislikes: number
 }
 
-/** Nombre de notes reçues par nombre d'étoiles : index 0 = 1 étoile, index 4 = 5 étoiles. */
-export type RatingDistribution = [number, number, number, number, number]
+export type DailyMetric = "installs" | "errors" | "likes" | "dislikes"
 
 export type AgentAnalytics = {
   agent: Agent
   /** Du plus ancien au plus récent, sur HISTORY_DAYS jours (de quoi comparer à la période précédente). */
   daily: DailyActivity[]
-  ratings: RatingDistribution
 }
 
 export type ErrorStatus = "open" | "resolved"

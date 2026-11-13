@@ -1,20 +1,18 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Boxes, Download, Star, TriangleAlert } from "lucide-react"
+import { Boxes, Download, ThumbsUp, TriangleAlert } from "lucide-react"
 
 import {
-  averageRating,
   bucket,
+  likeShare,
   mergeDaily,
-  mergeRatings,
-  ratingCount,
   relativeChange,
   sliceRange,
   sumBy,
 } from "@/lib/dashboard/analytics"
 import { MOCK_NOTES } from "@/lib/dashboard/mock"
-import { RANGE_OPTIONS, type AgentAnalytics, type CreatorDashboardData, type RangeDays } from "@/lib/dashboard/types"
+import { RANGE_OPTIONS, type AgentAnalytics, type CreatorDashboardData, type DailyMetric, type RangeDays } from "@/lib/dashboard/types"
 import { cn } from "@/lib/utils"
 import { SelectInput } from "@/components/publish/fields/select-input"
 import { ChartCard } from "@/components/dashboard/chart-card"
@@ -22,7 +20,7 @@ import { LineChart } from "@/components/dashboard/charts/line-chart"
 import { StackedColumns } from "@/components/dashboard/charts/stacked-columns"
 import { formatNumber, type ChartSeries } from "@/components/dashboard/charts/chart-types"
 import { StatTile } from "@/components/dashboard/stat-tile"
-import { RatingsPanel } from "@/components/dashboard/ratings-panel"
+import { LikesPanel } from "@/components/dashboard/likes-panel"
 import { ErrorsTable } from "@/components/dashboard/errors-table"
 import { AgentsTable } from "@/components/dashboard/agents-table"
 
@@ -52,7 +50,7 @@ function buildSeries(
   all: AgentAnalytics[],
   colors: Record<string, string>,
   days: number,
-  key: "installs" | "errors"
+  key: DailyMetric
 ): ChartSeries[] {
   const values = (item: AgentAnalytics) => sliceRange(item.daily, days).map((day) => day[key])
   const folded = selected.length > 1 && all.length > SERIES_COLORS.length
@@ -92,8 +90,8 @@ export function DashboardView({ data }: DashboardViewProps) {
 
   const installs = sumBy(current, "installs")
   const errors = sumBy(current, "errors")
-  const ratings = mergeRatings(selected)
-  const average = averageRating(ratings)
+  const likes = sumBy(current, "likes")
+  const share = likeShare(likes, sumBy(current, "dislikes"))
   const secureCount = selected.filter(({ agent }) => agent.secure).length
   const periodLabel = `previous ${days} days`
 
@@ -147,11 +145,14 @@ export function DashboardView({ data }: DashboardViewProps) {
           devMark={{ kind: "mock", note: MOCK_NOTES.installs }}
         />
         <StatTile
-          icon={Star}
-          label="Average rating"
-          value={average === null ? "—" : `${average.toFixed(1)} / 5`}
-          hint={`${formatNumber(ratingCount(ratings))} ratings, all time`}
-          devMark={{ kind: "mock", note: MOCK_NOTES.ratings }}
+          icon={ThumbsUp}
+          label="Likes"
+          value={formatNumber(likes)}
+          change={relativeChange(likes, sumBy(previous, "likes"))}
+          periodLabel={periodLabel}
+          trend={bucket(current.map((day) => day.likes), 12)}
+          hint={share === null ? undefined : `${Math.round(share * 100)}% liked`}
+          devMark={{ kind: "mock", note: MOCK_NOTES.likes }}
         />
         <StatTile
           icon={TriangleAlert}
@@ -193,7 +194,7 @@ export function DashboardView({ data }: DashboardViewProps) {
         >
           <StackedColumns dates={dates} series={errorSeries} ariaLabel={`Errors reported each day over the last ${days} days`} />
         </ChartCard>
-        <RatingsPanel ratings={ratings} />
+        <LikesPanel analytics={selected} rangeDays={days} colors={colors} />
       </div>
 
       <ErrorsTable errors={visibleErrors} agentNames={agentNames} />

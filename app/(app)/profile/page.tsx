@@ -111,7 +111,7 @@ export default async function Page({ searchParams }: PageProps) {
               <IconTile icon={Rocket} />
               <h2 className="text-xl font-bold text-foreground">No agent published yet</h2>
               <p className="max-w-md text-muted-foreground">
-                Once your first agent passes the security review and lands on the marketplace, its installs, ratings and
+                Once your first agent passes the security review and lands on the marketplace, its installs, likes and
                 errors show up here.
               </p>
               <Button render={<Link href="/publish" />}>Publish your first agent</Button>

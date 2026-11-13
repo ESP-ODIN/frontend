@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { ShieldCheck, Star } from "lucide-react"
+import { ShieldCheck, ThumbsUp } from "lucide-react"
 
-import { averageRating, sliceRange, sumBy } from "@/lib/dashboard/analytics"
+import { likeShare, sliceRange, sumBy } from "@/lib/dashboard/analytics"
 import { MOCK_NOTES } from "@/lib/dashboard/mock"
 import type { AgentAnalytics } from "@/lib/dashboard/types"
 import { SECURE_MISSING_NOTE } from "@/lib/agents/stats"
@@ -39,7 +39,7 @@ export function AgentsTable({ analytics, rangeDays, colors }: AgentsTableProps) 
                 Installs ({rangeDays}d) <DevMark kind="mock" note={MOCK_NOTES.installs} />
               </th>
               <th scope="col" className="pb-2 text-right font-medium">
-                Rating <DevMark kind="mock" note={MOCK_NOTES.ratings} />
+                Likes ({rangeDays}d) <DevMark kind="mock" note={MOCK_NOTES.likes} />
               </th>
               <th scope="col" className="pb-2 text-right font-medium">
                 Errors ({rangeDays}d) <DevMark kind="mock" note={MOCK_NOTES.errors} />
@@ -51,9 +51,10 @@ export function AgentsTable({ analytics, rangeDays, colors }: AgentsTableProps) 
             </tr>
           </thead>
           <tbody className="tabular-nums">
-            {analytics.map(({ agent, daily, ratings }) => {
+            {analytics.map(({ agent, daily }) => {
               const period = sliceRange(daily, rangeDays)
-              const average = averageRating(ratings)
+              const likes = sumBy(period, "likes")
+              const share = likeShare(likes, sumBy(period, "dislikes"))
               return (
                 <tr key={agent.id} className="border-t border-muted/20">
                   <td className="py-3 pr-4">
@@ -71,8 +72,9 @@ export function AgentsTable({ analytics, rangeDays, colors }: AgentsTableProps) 
                   <td className="py-3 text-right text-foreground">{formatNumber(sumBy(period, "installs"))}</td>
                   <td className="py-3 text-right text-foreground">
                     <span className="inline-flex items-center gap-1">
-                      <Star aria-hidden className="size-3 fill-current text-muted-foreground" />
-                      {average === null ? "—" : average.toFixed(1)}
+                      <ThumbsUp aria-hidden className="size-3 text-muted-foreground" />
+                      {formatNumber(likes)}
+                      {share !== null && <span className="text-muted-foreground">· {Math.round(share * 100)}%</span>}
                     </span>
                   </td>
                   <td className="py-3 text-right text-foreground">{formatNumber(sumBy(period, "errors"))}</td>

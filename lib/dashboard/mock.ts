@@ -4,7 +4,6 @@ import {
   type AgentAnalytics,
   type CreatorDashboardData,
   type DailyActivity,
-  type RatingDistribution,
   type ReportedError,
 } from "@/lib/dashboard/types"
 
@@ -17,7 +16,7 @@ import {
 
 export const MOCK_NOTES = {
   installs: "installs per day: the API only exposes downloads_count (all-time total), no history",
-  ratings: "ratings: no rating system in the API/DB (likes are stored in localStorage)",
+  likes: "likes per day: the API has no likes yet (they are stored in localStorage), history is generated",
   errors: "error reports: no error reporting endpoint in the API",
 } as const
 
@@ -51,11 +50,13 @@ function buildDaily(agent: Agent, random: () => number, today: number): DailyAct
   const base = 8 + random() * 50
   const growth = 0.6 + random() * 1.4 // multiplicateur entre le début et la fin de l'historique
   const errorRate = 0.004 + random() * 0.02
+  const likeRate = 0.04 + random() * 0.08 // part des installs qui likent
+  const dislikeShare = 0.05 + random() * 0.2 // dislikes rapportés aux likes
   const publishedAt = agent.created_at ? Date.parse(agent.created_at) : 0
 
   return Array.from({ length: HISTORY_DAYS }, (_, i) => {
     const time = today - (HISTORY_DAYS - 1 - i) * DAY_MS
-    if (time < publishedAt - DAY_MS) return { date: toDateKey(time), installs: 0, errors: 0 }
+    if (time < publishedAt - DAY_MS) return { date: toDateKey(time), installs: 0, errors: 0, likes: 0, dislikes: 0 }
 
     const progress = i / (HISTORY_DAYS - 1)
     const weekday = new Date(time).getUTCDay()
@@ -64,17 +65,11 @@ function buildDaily(agent: Agent, random: () => number, today: number): DailyAct
     const spike = random() > 0.97 ? 1.8 + random() : 1
     const installs = Math.round(base * (1 + (growth - 1) * progress) * weekend * noise * spike)
     const errors = Math.round(installs * errorRate * (0.4 + random() * 1.6))
+    const likes = Math.round(installs * likeRate * (0.5 + random()))
+    const dislikes = Math.round(likes * dislikeShare * (0.3 + random() * 1.4))
 
-    return { date: toDateKey(time), installs, errors }
+    return { date: toDateKey(time), installs, errors, likes, dislikes }
   })
-}
-
-function buildRatings(random: () => number): RatingDistribution {
-  const total = 20 + Math.round(random() * 260)
-  const quality = 0.55 + random() * 0.4 // plus c'est haut, plus les notes tirent vers 5
-  const weights = [0.04, 0.06, 0.14, 0.36, 0.4].map((w, i) => w * (i >= 3 ? quality * 2 : 1 - quality + 0.3))
-  const sum = weights.reduce((a, b) => a + b, 0)
-  return weights.map((w) => Math.round((w / sum) * total)) as RatingDistribution
 }
 
 const ERROR_SAMPLES = [
@@ -116,7 +111,7 @@ export function buildMockDashboard(agents: Agent[], now: number = Date.now()): C
 
   const analytics = agents.map((agent) => {
     const random = createRandom(hashString(agent.id))
-    return { agent, daily: buildDaily(agent, random, today), ratings: buildRatings(random) }
+    return { agent, daily: buildDaily(agent, random, today) }
   })
 
   const errors = buildErrors(analytics, today).sort((a, b) => b.lastSeen.localeCompare(a.lastSeen))

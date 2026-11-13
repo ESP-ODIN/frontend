@@ -46,23 +46,6 @@ export function AgentOverview({ detail }: AgentOverviewProps) {
         </p>
         <CodeBlock lines={detail.configLines} />
       </section>
-
-      <section className="flex flex-col gap-4">
-        <h2 className="border-b border-border/60 pb-3 text-2xl font-bold text-foreground">
-          What the agent checks <DevMark kind="missing" note="checks are not in the API, list is always empty" />
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {detail.checks.map((check) => (
-            <li key={check.title} className="flex gap-2 text-foreground/80">
-              <span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-foreground/40" />
-              <p>
-                <span className="font-semibold text-foreground">{check.title}</span> —{" "}
-                {check.description}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   )
 }

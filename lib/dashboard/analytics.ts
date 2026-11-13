@@ -1,4 +1,4 @@
-import type { AgentAnalytics, DailyActivity, RatingDistribution } from "@/lib/dashboard/types"
+import type { AgentAnalytics, DailyActivity, DailyMetric } from "@/lib/dashboard/types"
 
 /** Les `days` derniers jours, ou la période juste avant si `previous` est vrai. */
 export function sliceRange(daily: DailyActivity[], days: number, previous = false): DailyActivity[] {
@@ -6,7 +6,7 @@ export function sliceRange(daily: DailyActivity[], days: number, previous = fals
   return daily.slice(Math.max(0, end - days), Math.max(0, end))
 }
 
-export function sumBy(daily: DailyActivity[], key: "installs" | "errors"): number {
+export function sumBy(daily: DailyActivity[], key: DailyMetric): number {
   return daily.reduce((sum, day) => sum + day[key], 0)
 }
 
@@ -17,25 +17,15 @@ export function mergeDaily(analytics: AgentAnalytics[]): DailyActivity[] {
     date: day.date,
     installs: analytics.reduce((sum, item) => sum + item.daily[i].installs, 0),
     errors: analytics.reduce((sum, item) => sum + item.daily[i].errors, 0),
+    likes: analytics.reduce((sum, item) => sum + item.daily[i].likes, 0),
+    dislikes: analytics.reduce((sum, item) => sum + item.daily[i].dislikes, 0),
   }))
 }
 
-export function mergeRatings(analytics: AgentAnalytics[]): RatingDistribution {
-  return analytics.reduce<RatingDistribution>(
-    (total, item) => total.map((count, i) => count + item.ratings[i]) as RatingDistribution,
-    [0, 0, 0, 0, 0]
-  )
-}
-
-export function ratingCount(ratings: RatingDistribution): number {
-  return ratings.reduce((a, b) => a + b, 0)
-}
-
-/** Note moyenne sur 5, ou null sans aucune note. */
-export function averageRating(ratings: RatingDistribution): number | null {
-  const count = ratingCount(ratings)
-  if (count === 0) return null
-  return ratings.reduce((sum, n, i) => sum + n * (i + 1), 0) / count
+/** Part des likes parmi les likes et dislikes (0 à 1), ou null sans aucun avis. */
+export function likeShare(likes: number, dislikes: number): number | null {
+  const total = likes + dislikes
+  return total === 0 ? null : likes / total
 }
 
 /** Évolution relative entre deux périodes, ou null si la précédente est vide. */

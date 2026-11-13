@@ -37,7 +37,6 @@ export type AgentDetail = {
   installSteps: { comment: string; command: string }[]
   configFilename: string
   configLines: string[]
-  checks: { title: string; description: string }[]
   permissions: { label: string; granted: boolean }[]
 }
 
@@ -84,7 +83,6 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     ],
     configFilename: `.odin/${apiAgent.name}.json`,
     configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
-    checks: [],
     permissions: [],
   }
 }
