@@ -17,9 +17,11 @@ const COUNTERS_NOTE = "likes, saves, followers and version are not in the API"
 type AgentCardProps = {
   agent: Agent
   className?: string
+  /** Désactive le dépliage du type au survol (landing). */
+  staticType?: boolean
 }
 
-export function AgentCard({ agent, className }: AgentCardProps) {
+export function AgentCard({ agent, className, staticType = false }: AgentCardProps) {
   return (
     <>
       <Link
@@ -41,7 +43,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
             <p className="truncate">
               by {agent.creator_id} <DevMark kind="missing" note={CREATOR_NOTE} />
             </p>
-            <AgentTypeBadge type={agent.agent_type} />
+            <AgentTypeBadge interactive={!staticType} type={agent.agent_type} />
           </div>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
@@ -98,7 +100,7 @@ export function AgentCard({ agent, className }: AgentCardProps) {
               <span className="text-sm text-muted-foreground">—</span>
             )}
             <DevMark kind="missing" note="tags: no tags column in the DB" className="self-center" />
-            <AgentTypeBadge type={agent.agent_type} className="ml-auto self-center" />
+            <AgentTypeBadge interactive={!staticType} type={agent.agent_type} className="ml-auto self-center" />
           </div>
 
           <div className="mt-auto flex items-center justify-between border-t border-muted/40 pt-4">

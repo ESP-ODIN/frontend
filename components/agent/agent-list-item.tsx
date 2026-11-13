@@ -10,9 +10,11 @@ import { DevMark } from "@/components/dev/dev-mark"
 type AgentListItemProps = {
   agent: Agent
   className?: string
+  /** Désactive le dépliage du type au survol (landing). */
+  staticType?: boolean
 }
 
-export function AgentListItem({ agent, className }: AgentListItemProps) {
+export function AgentListItem({ agent, className, staticType = false }: AgentListItemProps) {
   return (
     <div className={cn("group group/agent flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-primary/5", className)}>
       <AgentIcon icon={agent.icon} name={agent.name} />
@@ -22,7 +24,7 @@ export function AgentListItem({ agent, className }: AgentListItemProps) {
           <p>
             by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
           </p>
-          <AgentTypeBadge type={agent.agent_type} />
+          <AgentTypeBadge interactive={!staticType} type={agent.agent_type} />
         </div>
       </div>
       <Button

@@ -54,7 +54,7 @@ export function FloatingNav({
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const showPublish = pathname === "/marketplace"
+  const showPublish = pathname === "/marketplace" || pathname.startsWith("/agents/")
   const activeHref = getActiveHref(links, pathname)
   // Après connexion, on revient sur la page courante.
   const loginHref = `/login?next=${encodeURIComponent(pathname)}`

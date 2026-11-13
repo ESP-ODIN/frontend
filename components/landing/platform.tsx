@@ -135,7 +135,7 @@ export function Platform({ agents }: PlatformProps) {
                 <p className="p-2 text-sm text-muted-foreground">No agents published yet.</p>
               )}
               {storeAgents.map((agent) => (
-                <AgentListItem key={agent.id} agent={agent} />
+                <AgentListItem key={agent.id} agent={agent} staticType />
               ))}
             </div>
           </SurfaceCard>

@@ -12,11 +12,19 @@ type AgentTypeBadgeProps = {
   variant?: "badge" | "label"
   /** "inverted" pour les fonds sombres fixes (Spotlight). */
   tone?: "default" | "inverted"
+  /** false : pastille figée, sans dépliage ni changement de couleur au survol (landing). */
+  interactive?: boolean
   className?: string
 }
 
 /** Indication discrète du type d'agent (workflow / autonomous), reprise sur toutes les cartes. */
-export function AgentTypeBadge({ type, variant = "badge", tone = "default", className }: AgentTypeBadgeProps) {
+export function AgentTypeBadge({
+  type,
+  variant = "badge",
+  tone = "default",
+  interactive = true,
+  className,
+}: AgentTypeBadgeProps) {
   const option = AGENT_TYPE_OPTIONS.find((item) => item.id === type)
   if (!option) return null
 
@@ -24,7 +32,12 @@ export function AgentTypeBadge({ type, variant = "badge", tone = "default", clas
 
   if (variant === "label") {
     return (
-      <span className={cn("inline-flex shrink-0 items-center gap-1.5 font-mono", className)}>
+      <span
+        className={cn(
+          "inline-flex shrink-0 items-center gap-1.5 font-mono",
+          className
+        )}
+      >
         <Icon aria-hidden className="size-3.5" />
         {option.label}
       </span>
@@ -36,20 +49,27 @@ export function AgentTypeBadge({ type, variant = "badge", tone = "default", clas
       role="img"
       aria-label={`${option.label} agent`}
       className={cn(
-        "group/type inline-flex shrink-0 items-center rounded-full border p-1 font-mono text-[11px] leading-none transition-colors",
+        "inline-flex shrink-0 items-center rounded-full border p-1 font-mono text-[11px] leading-none transition-colors",
         tone === "inverted"
-          ? "border-white/15 bg-white/5 text-[#F6F1E6]/60 hover:border-primary/50 hover:text-[#F6F1E6] group-hover/agent:border-primary/50 group-hover/agent:text-[#F6F1E6]"
-          : "border-muted/40 bg-muted/10 text-muted-foreground hover:border-primary/30 hover:text-foreground group-hover/agent:border-primary/30 group-hover/agent:text-foreground group-data-active/agent:border-primary/30 group-data-active/agent:text-foreground",
+          ? "border-white/15 bg-white/5 text-[#F6F1E6]/60"
+          : "border-muted/40 bg-muted/10 text-muted-foreground",
+        interactive && "group/type",
+        interactive &&
+          (tone === "inverted"
+            ? "group-hover/agent:border-primary/50 group-hover/agent:text-[#F6F1E6] hover:border-primary/50 hover:text-[#F6F1E6]"
+            : "group-hover/agent:border-primary/30 group-hover/agent:text-foreground group-data-active/agent:border-primary/30 group-data-active/agent:text-foreground hover:border-primary/30 hover:text-foreground"),
         className
       )}
     >
       <Icon aria-hidden className="size-3 shrink-0" />
-      <span
-        aria-hidden
-        className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/type:ml-1 group-hover/type:max-w-24 group-hover/type:pr-0.5 group-hover/type:opacity-100 group-hover/agent:ml-1 group-hover/agent:max-w-24 group-hover/agent:pr-0.5 group-hover/agent:opacity-100 group-data-active/agent:ml-1 group-data-active/agent:max-w-24 group-data-active/agent:pr-0.5 group-data-active/agent:opacity-100"
-      >
-        {option.label}
-      </span>
+      {interactive && (
+        <span
+          aria-hidden
+          className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/agent:ml-1 group-hover/agent:max-w-24 group-hover/agent:pr-0.5 group-hover/agent:opacity-100 group-hover/type:ml-1 group-hover/type:max-w-24 group-hover/type:pr-0.5 group-hover/type:opacity-100 group-data-active/agent:ml-1 group-data-active/agent:max-w-24 group-data-active/agent:pr-0.5 group-data-active/agent:opacity-100"
+        >
+          {option.label}
+        </span>
+      )}
     </span>
   )
 }
