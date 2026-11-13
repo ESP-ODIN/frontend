@@ -9,6 +9,7 @@ import { formatCompactCount } from "@/lib/format/count"
 import { formatTimeAgo } from "@/lib/format/time-ago"
 import { getRuntimeLabel } from "@/lib/publish/constants"
 import type { Agent } from "@/lib/agents/types"
+import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { AuroraBackground } from "@/components/motion/aurora-background"
@@ -39,7 +40,7 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
 
   return (
     <div
-      className="relative w-full overflow-hidden rounded-2xl bg-[#14110C] p-4 text-[#F6F1E6] sm:p-6 lg:p-8"
+      className="group/agent relative w-full overflow-hidden rounded-2xl bg-[#14110C] p-4 text-[#F6F1E6] sm:p-6 lg:p-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -52,7 +53,10 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
                 Spotlight · Odin&apos;s pick{" "}
                 <DevMark kind="missing" note="featured: not in the API, every agent is shown as featured" />
               </p>
-              <h2 className="mt-2 font-mono text-xl font-bold sm:text-2xl lg:text-3xl">{agent.name}</h2>
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <h2 className="font-mono text-xl font-bold sm:text-2xl lg:text-3xl">{agent.name}</h2>
+                <AgentTypeBadge type={agent.agent_type} tone="inverted" className="lg:hidden" />
+              </div>
               {agent.version && (
                 <h2 className="mt-1 font-mono text-xl font-semibold sm:text-2xl lg:text-3xl">
                   v{agent.version} just launched.
@@ -96,7 +100,9 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
               </dd>
 
               <dt className="text-[#F6F1E6]/40">Type</dt>
-              <dd>{agent.agent_type}</dd>
+              <dd>
+                <AgentTypeBadge type={agent.agent_type} variant="label" />
+              </dd>
 
               <dt className="text-[#F6F1E6]/40">Runtime</dt>
               <dd>{getRuntimeLabel(agent.runtime)}</dd>

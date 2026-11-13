@@ -4,6 +4,7 @@ import { ChevronRight, ThumbsUp } from "lucide-react"
 import type { Agent } from "@/lib/agents/types"
 import { getSimilarAgents } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/agent/agent-icon"
+import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import { AgentSidebarPanel } from "@/components/agent/detail/sidebar/panel"
 import { DevMark } from "@/components/dev/dev-mark"
 
@@ -23,7 +24,7 @@ export async function AgentSimilarPanel({ agent }: AgentSimilarPanelProps) {
           <li key={agent.id}>
             <Link
               href={`/agents/${agent.id}`}
-              className="group flex items-center gap-3 rounded-lg -mx-1 px-1 py-1 hover:bg-accent/50"
+              className="group group/agent flex items-center gap-3 rounded-lg -mx-1 px-1 py-1 hover:bg-accent/50"
             >
               <AgentIcon icon={agent.icon} name={agent.name} className="size-8 text-xs" />
               <div className="flex-1">
@@ -31,6 +32,7 @@ export async function AgentSimilarPanel({ agent }: AgentSimilarPanelProps) {
                 <p className="flex items-center gap-1 text-xs text-muted-foreground">
                   <ThumbsUp className="size-3" />
                   {agent.likes ?? "0"} <DevMark kind="missing" note="likes are not in the API" />
+                  <AgentTypeBadge type={agent.agent_type} />
                 </p>
               </div>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />

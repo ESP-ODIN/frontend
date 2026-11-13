@@ -7,6 +7,7 @@ import { ArrowRight, CornerDownLeft, Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { AgentIcon } from "@/components/agent/agent-icon"
+import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import type { Agent } from "@/lib/agents/types"
 import type { AppPage } from "@/lib/navigation/app-pages"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
@@ -32,9 +33,10 @@ function toAgentItem(agent: Agent): ResultItem {
     render: () => (
       <>
         <AgentIcon icon={agent.icon} name={agent.name} className="size-8 rounded-md text-xs" />
-        <div className="flex flex-col overflow-hidden text-left">
-          <span className="truncate font-mono text-sm font-bold text-foreground">
-            {agent.name}
+        <div className="flex flex-1 flex-col overflow-hidden text-left">
+          <span className="flex items-center gap-2">
+            <span className="truncate font-mono text-sm font-bold text-foreground">{agent.name}</span>
+            <AgentTypeBadge type={agent.agent_type} />
           </span>
           <span className="truncate text-xs text-muted-foreground">
             by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
@@ -201,8 +203,9 @@ export function CommandMenu() {
                       type="button"
                       onMouseEnter={() => setActiveIndex(index)}
                       onClick={() => navigate(item)}
+                      data-active={isActive || undefined}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors",
+                        "group/agent flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors",
                         isActive ? "bg-muted/10" : "hover:bg-muted/10"
                       )}
                     >
