@@ -8,6 +8,8 @@ type ApiAgent = {
   id: string
   name: string
   creator_id: string
+  /** Pas encore renvoyé : forme demandée à l'API marketplace. */
+  creator?: { id: string; username?: string; first_name?: string; last_name?: string }
   category: CategoryId
   agent_type: AgentType
   runtime: string
@@ -51,6 +53,8 @@ function toAgent(apiAgent: ApiAgent): Agent {
     id: apiAgent.id,
     name: apiAgent.name,
     creator_id: apiAgent.creator_id,
+    creator_username: apiAgent.creator?.username || undefined,
+    creator_name: [apiAgent.creator?.first_name, apiAgent.creator?.last_name].filter(Boolean).join(" ") || undefined,
     description: apiAgent.description ?? "",
     tags: limitTags(apiAgent.tags),
     downloads_count: apiAgent.downloads_count,

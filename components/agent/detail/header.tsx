@@ -1,7 +1,5 @@
-import Link from "next/link"
-
 import type { Agent } from "@/lib/agents/types"
-import { creatorHref } from "@/lib/agents/creator"
+import { CreatorLink } from "@/components/agent/creator-link"
 import type { AgentDetail } from "@/lib/api/agents"
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { Badge } from "@/components/ui/badge"
@@ -24,13 +22,9 @@ export function AgentHeader({ agent, detail }: AgentHeaderProps) {
           <Badge variant="outline">{agent.version ?? "—"}</Badge>
           <DevMark kind="missing" note="version: agent_version exists in the DB but no endpoint exposes it" />
         </div>
-        <p className="text-sm text-muted-foreground">
-          by{" "}
-          <Link href={creatorHref(agent.creator_id)} className="text-primary hover:underline">
-            {agent.creator_id}
-          </Link>{" "}
-          <DevMark kind="missing" note="creator name: API only returns creator_id" /> · updated{" "}
-          {formatTimeAgo(detail.updated_at)}
+        <p className="flex flex-wrap items-center gap-x-1 text-sm text-muted-foreground">
+          <CreatorLink agent={agent} />
+          <span>· updated {formatTimeAgo(detail.updated_at)}</span>
         </p>
         <p className="max-w-2xl text-foreground/80">{agent.description}</p>
       </div>

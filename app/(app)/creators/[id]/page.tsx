@@ -5,7 +5,7 @@ import { ArrowLeft, Boxes, CalendarDays, Download, User } from "lucide-react"
 
 import { getCreatorAgents } from "@/lib/api/agents"
 import { getSessionAccount } from "@/lib/auth/session"
-import { shortCreatorId, UUID_RE } from "@/lib/agents/creator"
+import { CREATOR_NAME_NOTE, shortCreatorId, UUID_RE } from "@/lib/agents/creator"
 import { AGENT_TYPE_OPTIONS } from "@/lib/publish/constants"
 import { formatCompactCount } from "@/lib/format/count"
 import { Button } from "@/components/ui/button"
@@ -16,8 +16,6 @@ import { DevMark } from "@/components/dev/dev-mark"
 type PageProps = {
   params: Promise<{ id: string }>
 }
-
-const NAME_NOTE = "creator name and username: the API only returns creator_id"
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
@@ -36,6 +34,8 @@ export default async function Page({ params }: PageProps) {
 
   const [agents, account] = await Promise.all([getCreatorAgents(id), getSessionAccount()])
   const isMe = account?.id === id
+  const username = agents.find((agent) => agent.creator_username)?.creator_username
+  const fullName = agents.find((agent) => agent.creator_name)?.creator_name
 
   const installs = agents.reduce((sum, agent) => sum + agent.downloads_count, 0)
   const firstPublished = agents
@@ -72,9 +72,10 @@ export default async function Page({ params }: PageProps) {
           <div className="min-w-0">
             <p className="font-mono text-xs tracking-wider text-muted-foreground uppercase">Creator</p>
             <h1 className="flex items-center gap-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
-              <span className="truncate font-mono">{shortCreatorId(id)}</span>
-              <DevMark kind="missing" note={NAME_NOTE} />
+              <span className="truncate font-mono">{username ? `@${username}` : shortCreatorId(id)}</span>
+              {!username && <DevMark kind="missing" note={CREATOR_NAME_NOTE} />}
             </h1>
+            {fullName && <p className="text-muted-foreground">{fullName}</p>}
           </div>
         </div>
 

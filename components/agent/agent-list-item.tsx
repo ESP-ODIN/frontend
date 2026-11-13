@@ -1,12 +1,11 @@
 import Link from "next/link"
 
-import { creatorHref } from "@/lib/agents/creator"
 import { AgentIcon } from "@/components/agent/agent-icon"
+import { CreatorLink } from "@/components/agent/creator-link"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import type { Agent } from "@/lib/agents/types"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { DevMark } from "@/components/dev/dev-mark"
 
 type AgentListItemProps = {
   agent: Agent
@@ -22,13 +21,7 @@ export function AgentListItem({ agent, className, staticType = false }: AgentLis
       <div className="flex flex-1 flex-col">
         <p className="font-mono text-sm font-bold text-foreground">{agent.name}</p>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <p>
-            by{" "}
-            <Link href={creatorHref(agent.creator_id)} className="hover:text-foreground hover:underline">
-              {agent.creator_id}
-            </Link>{" "}
-            <DevMark kind="missing" note="creator name: API only returns creator_id" />
-          </p>
+          <CreatorLink agent={agent} />
           <AgentTypeBadge interactive={!staticType} type={agent.agent_type} />
         </div>
       </div>

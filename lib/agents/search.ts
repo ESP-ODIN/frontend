@@ -20,6 +20,8 @@ function searchFields(agent: Agent): SearchField[] {
     { text: getCategoryLabel(agent.category), weight: 4 },
     { text: agent.agent_type, weight: 3 },
     { text: getRuntimeLabel(agent.runtime), weight: 3 },
+    { text: agent.creator_username ?? "", weight: 5 },
+    { text: agent.creator_name ?? "", weight: 4 },
     { text: agent.creator_id, weight: 2 },
     { text: agent.description, weight: 1 },
   ]
@@ -102,8 +104,39 @@ function hasTags(agent: Agent, tags: string[]): boolean {
  * Recherche de la marketplace : filtre par tags sélectionnés, puis garde et trie les agents qui
  * correspondent au texte.
  */
+/**
+ * Score d'un créateur (pseudo, nom, id) pour une recherche, 0 s'il ne correspond pas. L'id ne
+ * compte qu'en préfixe : la tolérance aux fautes ferait remonter des bouts d'UUID au hasard.
+ */
+export function scoreCreator(creator: { id: string; username?: string; name?: string }, tokens: string[]): number {
+  if (tokens.length === 0) return 0
+  const fields = [creator.username ?? "", creator.name ?? ""]
+  const id = creator.id.toLowerCase()
+  const scores = tokens.map((token) =>
+    Math.max(token.length >= 3 && id.startsWith(token) ? 0.75 : 0, ...fields.map((field) => matchToken(token, field)))
+  )
+  return scores.every((score) => score > 0) ? scores.reduce((a, b) => a + b, 0) : 0
+}
+
+/** Une recherche qui commence par "@" vise les créateurs : "@abc" -> ["abc"], sinon null. */
+export function creatorQueryTokens(query: string): string[] | null {
+  const trimmed = query.trim()
+  return trimmed.startsWith("@") ? tokenize(trimmed.slice(1)) : null
+}
+
 export function searchAgents(agents: Agent[], query: string, tags: string[]): Agent[] {
   const withTags = tags.length > 0 ? agents.filter((agent) => hasTags(agent, tags)) : agents
+
+  // "@créateur" : les agents de ce(s) créateur(s).
+  const creatorTokens = creatorQueryTokens(query)
+  if (creatorTokens) {
+    if (creatorTokens.length === 0) return withTags
+    return withTags.filter(
+      (agent) =>
+        scoreCreator({ id: agent.creator_id, username: agent.creator_username, name: agent.creator_name }, creatorTokens) > 0
+    )
+  }
+
   const tokens = tokenize(query)
   if (tokens.length === 0) return withTags
 

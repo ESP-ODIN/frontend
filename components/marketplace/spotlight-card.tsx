@@ -9,7 +9,7 @@ import { formatCompactCount } from "@/lib/format/count"
 import { formatTimeAgo } from "@/lib/format/time-ago"
 import { getRuntimeLabel } from "@/lib/publish/constants"
 import type { Agent } from "@/lib/agents/types"
-import { creatorHref } from "@/lib/agents/creator"
+import { creatorHref, creatorLabel } from "@/lib/agents/creator"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -84,7 +84,7 @@ export function SpotlightCard({ agents }: SpotlightCardProps) {
               {agent.saves ?? "0"} • <Eye className="size-4" /> {agent.followers ?? "0"} • <MoveDown className="size-4" />{" "}
               {formatCompactCount(agent.downloads_count)} installs by{" "}
               <Link href={creatorHref(agent.creator_id)} className="hover:text-[#F6F1E6] hover:underline">
-                {agent.creator_id}
+                {creatorLabel(agent)}
               </Link>{" "}
               • Updated{" "}
               {formatTimeAgo(agent.updated_at)}{" "}
