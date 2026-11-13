@@ -4,7 +4,7 @@ import { useState } from "react"
 import {
   AlertTriangle,
   CircleCheck,
-  FileX2,
+  FilePen,
   Loader2,
   ScanSearch,
 } from "lucide-react"
@@ -21,8 +21,6 @@ import { isGithubRepoUrlValid } from "@/lib/publish/validation"
 type ScanState =
   | { status: "idle" }
   | { status: "scanning" }
-  | { status: "done"; warnings: string[] }
-  | { status: "not-found" }
   | { status: "error"; message: string }
 
 function withDefaults<T extends object>(defaults: T, scanned: Partial<T>): T {
@@ -34,14 +32,19 @@ function withDefaults<T extends object>(defaults: T, scanned: Partial<T>): T {
   return result
 }
 
+/**
+ * Import du repo : le scan cherche un manifest.toml à la racine. S'il existe, il préremplit les
+ * étapes suivantes ("repository") ; sinon, le manifest sera créé avec le formulaire ("form").
+ */
 export function RepoUrlField() {
   const { data, updateSection } = usePublishWizard()
   const [scan, setScan] = useState<ScanState>({ status: "idle" })
+  // Avertissements du dernier scan : purement informatifs, pas besoin de les garder dans l'URL.
+  const [warnings, setWarnings] = useState<string[]>([])
   const { repoUrl, scannedRepoUrl, kind } = data.source
-  const isImport = kind === "repository"
   const isUrlValid = isGithubRepoUrlValid(repoUrl)
-  const isScanStale =
-    isImport && scannedRepoUrl !== "" && scannedRepoUrl !== repoUrl
+  const isScanned = scannedRepoUrl !== "" && scannedRepoUrl === repoUrl
+  const isScanStale = scannedRepoUrl !== "" && scannedRepoUrl !== repoUrl
 
   async function handleScan() {
     if (!isUrlValid || scan.status === "scanning") return
@@ -50,21 +53,25 @@ export function RepoUrlField() {
     try {
       const result = await scanManifestFromRepo(repoUrl)
       if (!result.found) {
-        updateSection("source", {
-          kind: "form",
-          scannedRepoUrl: "",
-          readmeFile: DEFAULT_FORM_DATA.source.readmeFile,
-        })
-        if (scannedRepoUrl !== "") {
+        // Le formulaire repart de zéro s'il avait été prérempli par un manifest précédent.
+        if (kind === "repository") {
           updateSection("package", DEFAULT_FORM_DATA.package)
           updateSection("run", DEFAULT_FORM_DATA.run)
           updateSection("permissions", DEFAULT_FORM_DATA.permissions)
         }
-        setScan({ status: "not-found" })
+        updateSection("source", {
+          kind: "form",
+          scannedRepoUrl: repoUrl,
+          readmeFile: DEFAULT_FORM_DATA.source.readmeFile,
+        })
+        setWarnings([])
+        setScan({ status: "idle" })
         return
       }
+
       const { scanned } = result
       updateSection("source", {
+        kind: "repository",
         scannedRepoUrl: repoUrl,
         readmeFile: scanned.readmeFile,
       })
@@ -80,7 +87,8 @@ export function RepoUrlField() {
           scanned.terminal
         ),
       })
-      setScan({ status: "done", warnings: result.warnings })
+      setWarnings(result.warnings)
+      setScan({ status: "idle" })
     } catch (error) {
       setScan({
         status: "error",
@@ -106,11 +114,7 @@ export function RepoUrlField() {
         required
         trailing={<DevMark kind="mock" note="manifest scan is faked, no API endpoint" />}
         error={formatError ?? scanError}
-        hint={
-          isImport
-            ? "The manifest.toml at the root of the repository will prefill the form. If it doesn't exist, you'll switch to manual creation."
-            : "The repository containing your agent's code. Its README will be shown on the agent page."
-        }
+        hint="We look for a manifest.toml at the root of the repository. If there is one, it prefills the next steps; otherwise you'll create it with the form. The README will be shown on the agent page."
       >
         <div className="flex gap-2">
           <Input
@@ -118,10 +122,10 @@ export function RepoUrlField() {
             value={repoUrl}
             onChange={(event) => {
               updateSection("source", { repoUrl: event.target.value })
-              if (scan.status !== "scanning") setScan({ status: "idle" })
+              if (scan.status === "error") setScan({ status: "idle" })
             }}
             onKeyDown={(event) => {
-              if (isImport && event.key === "Enter") {
+              if (event.key === "Enter") {
                 event.preventDefault()
                 handleScan()
               }
@@ -130,57 +134,56 @@ export function RepoUrlField() {
             className="font-mono"
             aria-invalid={Boolean(formatError ?? scanError)}
           />
-          {isImport && (
-            <Button
-              type="button"
-              icon={scan.status === "scanning" ? undefined : ScanSearch}
-              disabled={!isUrlValid || scan.status === "scanning"}
-              onClick={handleScan}
-              className="shrink-0 rounded-lg"
-            >
-              {scan.status === "scanning" ? (
-                <>
-                  <Loader2 data-icon="inline-start" className="animate-spin" />
-                  Scanning…
-                </>
-              ) : scannedRepoUrl === repoUrl && repoUrl !== "" ? (
-                "Rescan"
-              ) : (
-                "Scan"
-              )}
-            </Button>
-          )}
+          <Button
+            type="button"
+            icon={scan.status === "scanning" ? undefined : ScanSearch}
+            disabled={!isUrlValid || scan.status === "scanning"}
+            onClick={handleScan}
+            className="shrink-0 rounded-lg"
+          >
+            {scan.status === "scanning" ? (
+              <>
+                <Loader2 data-icon="inline-start" className="animate-spin" />
+                Importing…
+              </>
+            ) : isScanned ? (
+              "Re-import"
+            ) : (
+              "Import"
+            )}
+          </Button>
         </div>
       </FieldShell>
 
-      {!isImport && scan.status === "not-found" && (
+      {isScanned && kind === "form" && (
         <div className="flex animate-in items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 duration-300 fade-in-0">
-          <FileX2 className="mt-0.5 size-4 shrink-0 text-primary" />
+          <FilePen className="mt-0.5 size-4 shrink-0 text-primary" />
           <div className="flex flex-col gap-1">
             <p className="text-sm font-medium text-foreground">
-              No <span className="font-mono">manifest.toml</span> found in this
-              repository.
+              Repository imported, but no{" "}
+              <span className="font-mono">manifest.toml</span> was found.
             </p>
             <p className="text-xs text-muted-foreground">
-              We switched to manual creation: fill in the next steps, the
-              manifest will be stored on Odin&apos;s side.
+              No problem: fill in the next steps and we&apos;ll create the
+              manifest for you. It will be stored on Odin&apos;s side.
             </p>
           </div>
         </div>
       )}
 
-      {isImport && scan.status === "done" && (
+      {isScanned && kind === "repository" && (
         <div className="flex animate-in flex-col gap-2 rounded-2xl border border-muted/40 bg-muted/5 p-4 duration-300 fade-in-0">
           <p className="flex items-center gap-2 text-sm font-medium text-foreground">
             <CircleCheck className="size-4 shrink-0 text-primary" />
             <span>
-              <span className="font-mono">manifest.toml</span> imported: the
-              Package, Run and Permissions steps are prefilled.
+              Repository imported with its{" "}
+              <span className="font-mono">manifest.toml</span>: the Package,
+              Run and Permissions steps are prefilled.
             </span>
           </p>
-          {scan.warnings.length > 0 && (
+          {warnings.length > 0 && (
             <ul className="flex flex-col gap-1 pl-6">
-              {scan.warnings.map((warning) => (
+              {warnings.map((warning) => (
                 <li
                   key={warning}
                   className="flex items-start gap-2 text-xs text-muted-foreground"
@@ -197,7 +200,7 @@ export function RepoUrlField() {
       {isScanStale && (
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <AlertTriangle className="size-3.5 shrink-0 text-primary" />
-          The link changed since the last scan: run it again to continue.
+          The link changed since the last import: import it again to continue.
         </p>
       )}
     </div>

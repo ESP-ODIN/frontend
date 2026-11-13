@@ -83,16 +83,14 @@ export const MANIFEST_SOURCE_OPTIONS: {
 }[] = [
   {
     id: "repository",
-    label: "Import from GitHub",
-    description:
-      "We scan the manifest.toml in your repository and prefill the form.",
+    label: "Imported from the repository",
+    description: "The manifest.toml found in the repository prefilled the form.",
     icon: FolderGit2,
   },
   {
     id: "form",
-    label: "Create with the form",
-    description:
-      "No manifest.toml? Fill it in here, it will be stored on Odin's side.",
+    label: "Created with the form",
+    description: "No manifest.toml in the repository: it is generated from the form and stored on Odin's side.",
     icon: FilePen,
   },
 ]
@@ -114,7 +112,7 @@ export const WIZARD_STEPS: {
   label: string
   tables: string[]
 }[] = [
-  { id: "source", label: "Source", tables: [] },
+  { id: "source", label: "Repository", tables: [] },
   { id: "package", label: "Package", tables: ["package"] },
   { id: "run", label: "Run", tables: ["run"] },
   {
