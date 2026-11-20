@@ -14,6 +14,7 @@ type ApiAgent = {
   agent_type: AgentType
   runtime: string
   description?: string
+  readme_markdown?: string | null
   tags?: string[]
   is_official_pick: boolean
   featured?: boolean
@@ -33,10 +34,8 @@ export type AgentDetail = {
   savesLabel?: string
   secure: boolean
   sizeLabel?: string
-  overview: string[]
-  installSteps: { comment: string; command: string }[]
-  configFilename: string
-  configLines: string[]
+  /** README en Markdown (readme_markdown), null si l'agent n'en a pas. */
+  readme: string | null
   permissions: { label: string; granted: boolean }[]
 }
 
@@ -76,13 +75,7 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     downloads_count: apiAgent.downloads_count,
     runtime: apiAgent.runtime,
     secure: isSecure(apiAgent),
-    overview: [apiAgent.description ?? ""],
-    installSteps: [
-      { comment: "1. Installer l'agent", command: `odin install ${apiAgent.name}` },
-      { comment: "2. Lancer l'agent", command: `odin run ${apiAgent.name}` },
-    ],
-    configFilename: `.odin/${apiAgent.name}.json`,
-    configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
+    readme: apiAgent.readme_markdown?.trim() || null,
     permissions: [],
   }
 }

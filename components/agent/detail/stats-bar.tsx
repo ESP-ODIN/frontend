@@ -10,11 +10,7 @@ type AgentStatsBarProps = {
 
 export function AgentStatsBar({ detail }: AgentStatsBarProps) {
   const stats = [
-    {
-      label: "Installs",
-      value: formatCompactCount(detail.downloads_count),
-      missing: "GET /catalog/agents/:id doesn't select downloads_count, always 0",
-    },
+    { label: "Installs", value: formatCompactCount(detail.downloads_count) },
     { label: "Likes", value: detail.likesLabel ?? "—", missing: "likes are not in the API" },
     { label: "Saves", value: detail.savesLabel ?? "—", missing: "saves are not in the API" },
     { label: "Runtime", value: getRuntimeLabel(detail.runtime) },

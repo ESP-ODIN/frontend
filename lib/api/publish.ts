@@ -25,10 +25,7 @@ async function mockRequest<T>(
 
 export type NameAvailability = { available: boolean; reason?: string }
 
-/**
- * Serveur uniquement (MARKETPLACE_API_URL). Pas de route dédiée dans l'API marketplace : on compare
- * avec les noms de GET /catalog/agents.
- */
+
 export async function checkNameAvailability(
   name: string
 ): Promise<NameAvailability> {
