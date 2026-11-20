@@ -231,7 +231,7 @@ export function AgentReadme({ markdown }: { markdown: string }) {
           README.md
         </span>
       </div>
-      <article className="min-w-0 px-5 py-6 break-words sm:px-8">
+      <article className="min-w-0 px-5 py-6 wrap-break-word sm:px-8">
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
           {markdown}
         </ReactMarkdown>
