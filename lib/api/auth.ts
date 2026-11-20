@@ -1,10 +1,14 @@
 const AUTH_API_URL = process.env.AUTH_API_URL
 
 type ApiUser = { ID: string; Email: string }
-type ApiAuthResponse = { message: string; data?: { user: ApiUser; token: string } }
+type ApiAuthResponse = {
+  message: string
+  data?: { user: ApiUser; access_token?: string; refresh_token?: string; token?: string }
+}
 
 export type AuthResult = { ok: true } | { ok: false; error: string }
-export type ApiAuthResult = { ok: true; token: string } | { ok: false; error: string }
+/** `refreshToken` n'est renvoyé que par /login (/register donne seulement `token`). */
+export type ApiAuthResult = { ok: true; token: string; refreshToken?: string } | { ok: false; error: string }
 
 export type LoginPayload = { email: string; password: string }
 
@@ -38,8 +42,9 @@ async function postAuth(path: "login" | "register", payload: LoginPayload | Regi
     }
 
     const data: ApiAuthResponse = await response.json()
-    if (data.data) {
-      return { ok: true, token: data.data.token }
+    const token = data.data?.access_token ?? data.data?.token
+    if (token) {
+      return { ok: true, token, refreshToken: data.data?.refresh_token }
     } else {
       return { ok: false, error: data.message }
     }
@@ -63,7 +68,6 @@ type ApiAvailabilityResponse = {
   data?: { email_available?: boolean; username_available?: boolean }
 }
 
-/** Indique si l'email ou le username est encore libre ; `null` si la vérification a échoué. */
 export async function checkAvailability(field: AvailabilityField, value: string): Promise<boolean | null> {
   try {
     const response = await fetch(`${AUTH_API_URL}/availability?${new URLSearchParams({ [field]: value })}`, {

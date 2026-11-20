@@ -1,16 +1,20 @@
 import { cookies } from "next/headers"
 
-import { SESSION_COOKIE } from "@/lib/auth/constants"
+import { REFRESH_COOKIE, SESSION_COOKIE } from "@/lib/auth/constants"
 
-export async function setSession(token: string) {
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24,
+} as const
+
+/** Stocke l'access token et, s'il y en a un, le refresh token (même durée que REFRESH_TOKEN_TTL côté auth : 24 h). */
+export async function setSession(token: string, refreshToken?: string) {
   const cookieStore = await cookies()
-  cookieStore.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24,
-  })
+  cookieStore.set(SESSION_COOKIE, token, COOKIE_OPTIONS)
+  if (refreshToken) cookieStore.set(REFRESH_COOKIE, refreshToken, COOKIE_OPTIONS)
 }
 
 /**
@@ -47,4 +51,5 @@ export async function getSessionAccount(): Promise<SessionAccount | null> {
 export async function clearSession() {
   const cookieStore = await cookies()
   cookieStore.delete(SESSION_COOKIE)
+  cookieStore.delete(REFRESH_COOKIE)
 }
