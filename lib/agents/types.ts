@@ -9,11 +9,14 @@ export type Agent = {
   id: string
   name: string
   creator_id: string
+  /** Pseudo du créateur, quand l'API le renvoie (objet `creator` demandé au back). */
+  creator_username?: string
+  /** Prénom + nom du créateur, idem. */
+  creator_name?: string
   description: string
   tags?: string[]
   likes?: string
   saves?: string
-  followers?: string
   downloads_count: number
   version?: string
   icon?: LucideIcon

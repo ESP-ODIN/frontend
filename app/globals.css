@@ -86,6 +86,13 @@
     --chart-3: oklch(0.646 0.222 41.116);
     --chart-4: oklch(0.553 0.195 38.402);
     --chart-5: oklch(0.47 0.157 37.304);
+    /* Dataviz du dashboard créateur : ordre fixe, validé (CVD + contraste) sur background-100. */
+    --viz-1: #e85d04;
+    --viz-2: #2a78d6;
+    --viz-3: #1baf7a;
+    --viz-4: #6250d6;
+    --viz-other: #a3a3a3;
+    --viz-grid: hsla(0, 0%, 0%, 0.08);
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0.001 106.423);
     --sidebar-foreground: oklch(0.147 0.004 49.25);
@@ -132,6 +139,12 @@
     --chart-3: oklch(0.646 0.222 41.116);
     --chart-4: oklch(0.553 0.195 38.402);
     --chart-5: oklch(0.47 0.157 37.304);
+    --viz-1: #e85d04;
+    --viz-2: #3987e5;
+    --viz-3: #199e70;
+    --viz-4: #9085e9;
+    --viz-other: #737373;
+    --viz-grid: hsla(0, 0%, 100%, 0.1);
     --sidebar: oklch(0.216 0.006 56.043);
     --sidebar-foreground: oklch(0.985 0.001 106.423);
     --sidebar-primary: oklch(0.705 0.213 47.604);

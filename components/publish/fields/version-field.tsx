@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input"
 import { FieldShell } from "@/components/publish/fields/field-shell"
 import { usePublishWizard } from "@/components/publish/wizard-context"
 import { isSemverValid } from "@/lib/publish/validation"
+import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 
 export function VersionField() {
   const { data, updateSection } = usePublishWizard()
@@ -18,6 +20,7 @@ export function VersionField() {
       id="version"
       label="Version"
       required
+      trailing={<DevMark kind="missing" note={PUBLISH_MISSING_NOTES.version} />}
       error={error}
       hint={error ? undefined : "Semver, e.g. 1.0.0."}
     >

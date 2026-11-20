@@ -6,6 +6,8 @@ import { X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { FieldShell } from "@/components/publish/fields/field-shell"
+import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 import { usePublishWizard } from "@/components/publish/wizard-context"
 import { MAX_TAGS } from "@/lib/publish/constants"
 
@@ -49,8 +51,11 @@ export function TagsField() {
           : "Separate tags with a comma."
       }
       trailing={
-        <span className="font-mono text-xs text-muted-foreground">
-          {tags.length}/{MAX_TAGS}
+        <span className="flex items-center gap-2">
+          <span className="font-mono text-xs text-muted-foreground">
+            {tags.length}/{MAX_TAGS}
+          </span>
+          <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.tags} />
         </span>
       }
     >

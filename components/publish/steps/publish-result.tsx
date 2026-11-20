@@ -32,9 +32,17 @@ export function PublishResult() {
           {SECURITY_REVIEW.estimatedDuration}). You&apos;ll get an email as soon
           as it&apos;s published, or if an issue is found.
         </p>
-        <Button render={<Link href="/marketplace" />} className="rounded-lg">
-          Back to the marketplace
-        </Button>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button render={<Link href="/profile?tab=creator" />} className="rounded-lg">
+            Track the review
+          </Button>
+          <Button variant="outline" render={<Link href={`/agents/${submission.id}`} />} className="rounded-lg">
+            View the agent page
+          </Button>
+          <Button variant="outline" render={<Link href="/marketplace" />} className="rounded-lg">
+            Back to the marketplace
+          </Button>
+        </div>
       </div>
     )
   }

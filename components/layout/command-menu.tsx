@@ -3,9 +3,18 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import { ArrowRight, CornerDownLeft, Search } from "lucide-react"
+import { ArrowRight, CornerDownLeft, Search, User } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import {
+  collectCreators,
+  CREATOR_NAME_NOTE,
+  creatorDisplayName,
+  creatorHref,
+  creatorLabel,
+  searchCreators,
+  type Creator,
+} from "@/lib/agents/creator"
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
 import type { Agent } from "@/lib/agents/types"
@@ -19,7 +28,7 @@ export const commandMenuHandle = DialogPrimitive.createHandle()
 type ResultItem = {
   id: string
   href: string
-  group: "Agents" | "Pages"
+  group: "Agents" | "Creators" | "Pages"
   keywords: string
   render: () => React.ReactNode
 }
@@ -29,7 +38,7 @@ function toAgentItem(agent: Agent): ResultItem {
     id: `agent-${agent.id}`,
     href: `/agents/${agent.id}`,
     group: "Agents",
-    keywords: `${agent.name} ${agent.creator_id} ${agent.description}`,
+    keywords: `${agent.name} ${agent.creator_username ?? ""} ${agent.creator_id} ${agent.description}`,
     render: () => (
       <>
         <AgentIcon icon={agent.icon} name={agent.name} className="size-8 rounded-md text-xs" />
@@ -39,7 +48,34 @@ function toAgentItem(agent: Agent): ResultItem {
             <AgentTypeBadge type={agent.agent_type} />
           </span>
           <span className="truncate text-xs text-muted-foreground">
-            by {agent.creator_id} <DevMark kind="missing" note="creator name: API only returns creator_id" />
+            by {creatorLabel(agent)}{" "}
+            {!agent.creator_username && <DevMark kind="missing" note={CREATOR_NAME_NOTE} />}
+          </span>
+        </div>
+      </>
+    ),
+  }
+}
+
+function toCreatorItem(creator: Creator): ResultItem {
+  return {
+    id: `creator-${creator.id}`,
+    href: creatorHref(creator.id),
+    group: "Creators",
+    keywords: `${creator.username ?? ""} ${creator.name ?? ""} ${creator.id}`,
+    render: () => (
+      <>
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary to-orange-400 text-primary-foreground">
+          <User className="size-4" />
+        </div>
+        <div className="flex flex-1 flex-col overflow-hidden text-left">
+          <span className="flex items-center gap-1.5 truncate font-mono text-sm font-bold text-foreground">
+            {creatorDisplayName(creator)}
+            {!creator.username && <DevMark kind="missing" note={CREATOR_NAME_NOTE} />}
+          </span>
+          <span className="truncate text-xs text-muted-foreground">
+            {creator.name ? `${creator.name} · ` : ""}
+            {creator.agentCount} agent{creator.agentCount === 1 ? "" : "s"}
           </span>
         </div>
       </>
@@ -104,14 +140,22 @@ export function CommandMenu() {
   const results = React.useMemo(() => {
     const agentItems = agents.map(toAgentItem)
     const pageItems = pages.map(toPageItem)
+    const creators = collectCreators(agents)
     const q = query.trim().toLowerCase()
 
     if (q.startsWith("/")) {
       const pageQuery = q.slice(1)
       return pageItems.filter((item) => item.keywords.toLowerCase().includes(pageQuery))
     }
+    // "@" : seulement les créateurs (tous si rien n'est tapé après).
+    if (q.startsWith("@")) {
+      const creatorQuery = q.slice(1)
+      const found = creatorQuery ? searchCreators(creators, creatorQuery, 8) : creators.slice(0, 8)
+      return found.map(toCreatorItem)
+    }
     if (!q) return [...agentItems.slice(-3), ...pageItems]
-    return [...agentItems, ...pageItems].filter((item) => item.keywords.toLowerCase().includes(q))
+    const matches = (item: ResultItem) => item.keywords.toLowerCase().includes(q)
+    return [...agentItems.filter(matches), ...searchCreators(creators, q).map(toCreatorItem), ...pageItems.filter(matches)]
   }, [agents, pages, query])
 
   const groups = React.useMemo(() => {
@@ -175,7 +219,7 @@ export function CommandMenu() {
                 setActiveIndex(0)
               }}
               onKeyDown={onInputKeyDown}
-              placeholder="Search agents, or type / for pages…"
+              placeholder="Search agents, @ for creators, / for pages…"
               className="h-12 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <kbd className="shrink-0 rounded-md border border-muted/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">

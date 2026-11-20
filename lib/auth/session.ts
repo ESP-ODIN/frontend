@@ -1,16 +1,20 @@
 import { cookies } from "next/headers"
 
-import { SESSION_COOKIE } from "@/lib/auth/constants"
+import { REFRESH_COOKIE, SESSION_COOKIE } from "@/lib/auth/constants"
 
-export async function setSession(token: string) {
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24,
+} as const
+
+/** Stocke l'access token et, s'il y en a un, le refresh token (même durée que REFRESH_TOKEN_TTL côté auth : 24 h). */
+export async function setSession(token: string, refreshToken?: string) {
   const cookieStore = await cookies()
-  cookieStore.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24,
-  })
+  cookieStore.set(SESSION_COOKIE, token, COOKIE_OPTIONS)
+  if (refreshToken) cookieStore.set(REFRESH_COOKIE, refreshToken, COOKIE_OPTIONS)
 }
 
 /**
@@ -22,7 +26,30 @@ export async function isAuthenticated(): Promise<boolean> {
   return cookieStore.has(SESSION_COOKIE)
 }
 
+export type SessionAccount = { id: string; email: string | null }
+
+/**
+ * Compte connecté, lu dans le payload du JWT (claims `id` et `email`, les seuls que l'auth met).
+ * Le token n'est pas vérifié ici : ça sert seulement à choisir quoi afficher, les routes protégées
+ * du backend revalident la signature. `null` sans session ou si le token est illisible.
+ */
+export async function getSessionAccount(): Promise<SessionAccount | null> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get(SESSION_COOKIE)?.value
+  const payload = token?.split(".")[1]
+  if (!payload) return null
+
+  try {
+    const claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { id?: unknown; email?: unknown }
+    if (typeof claims.id !== "string") return null
+    return { id: claims.id, email: typeof claims.email === "string" ? claims.email : null }
+  } catch {
+    return null
+  }
+}
+
 export async function clearSession() {
   const cookieStore = await cookies()
   cookieStore.delete(SESSION_COOKIE)
+  cookieStore.delete(REFRESH_COOKIE)
 }

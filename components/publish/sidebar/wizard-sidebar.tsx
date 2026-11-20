@@ -1,10 +1,10 @@
 import { MarketplacePreviewCard } from "@/components/publish/sidebar/marketplace-preview-card"
 import { ChecklistPanel } from "@/components/publish/sidebar/checklist-panel"
 
-export function WizardSidebar() {
+export function WizardSidebar({ author }: { author: string | null }) {
   return (
     <aside className="flex w-full flex-col gap-6 lg:sticky lg:top-28 lg:w-80 lg:shrink-0">
-      <MarketplacePreviewCard />
+      <MarketplacePreviewCard author={author} />
       <ChecklistPanel />
     </aside>
   )

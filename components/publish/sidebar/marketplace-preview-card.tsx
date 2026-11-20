@@ -1,6 +1,6 @@
 "use client"
 
-import { Bookmark, Download, Eye, ThumbsUp } from "lucide-react"
+import { Bookmark, Download, ThumbsUp } from "lucide-react"
 
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { AgentTypeBadge } from "@/components/agent/agent-type-badge"
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { usePublishWizard } from "@/components/publish/wizard-context"
 import { DevMark } from "@/components/dev/dev-mark"
 
-export function MarketplacePreviewCard() {
+export function MarketplacePreviewCard({ author }: { author: string | null }) {
   const { data } = usePublishWizard()
   const { package: pkg } = data
 
@@ -23,7 +23,10 @@ export function MarketplacePreviewCard() {
             </p>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <p>
-                by @you <DevMark kind="mock" note="no logged-in user, author is hardcoded" />
+                by {author ?? "@you"}{" "}
+                {!author?.startsWith("@") && (
+                  <DevMark kind="missing" note="username: no GET /me route in the auth API, only the JWT email is known" />
+                )}
               </p>
               <AgentTypeBadge type={pkg.type} />
             </div>
@@ -54,9 +57,6 @@ export function MarketplacePreviewCard() {
         </span>
         <span className="flex items-center gap-1">
           <Bookmark className="size-3" />0
-        </span>
-        <span className="flex items-center gap-1">
-          <Eye className="size-3" />0
         </span>
         <span className="flex items-center gap-1">
           <Download className="size-3" />0

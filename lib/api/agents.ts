@@ -8,10 +8,13 @@ type ApiAgent = {
   id: string
   name: string
   creator_id: string
+  /** Pas encore renvoyé : forme demandée à l'API marketplace. */
+  creator?: { id: string; username?: string; first_name?: string; last_name?: string }
   category: CategoryId
   agent_type: AgentType
   runtime: string
   description?: string
+  readme_markdown?: string | null
   tags?: string[]
   is_official_pick: boolean
   featured?: boolean
@@ -31,11 +34,8 @@ export type AgentDetail = {
   savesLabel?: string
   secure: boolean
   sizeLabel?: string
-  overview: string[]
-  installSteps: { comment: string; command: string }[]
-  configFilename: string
-  configLines: string[]
-  checks: { title: string; description: string }[]
+  /** README en Markdown (readme_markdown), null si l'agent n'en a pas. */
+  readme: string | null
   permissions: { label: string; granted: boolean }[]
 }
 
@@ -51,6 +51,8 @@ function toAgent(apiAgent: ApiAgent): Agent {
     id: apiAgent.id,
     name: apiAgent.name,
     creator_id: apiAgent.creator_id,
+    creator_username: apiAgent.creator?.username || undefined,
+    creator_name: [apiAgent.creator?.first_name, apiAgent.creator?.last_name].filter(Boolean).join(" ") || undefined,
     description: apiAgent.description ?? "",
     tags: limitTags(apiAgent.tags),
     downloads_count: apiAgent.downloads_count,
@@ -73,14 +75,7 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
     downloads_count: apiAgent.downloads_count,
     runtime: apiAgent.runtime,
     secure: isSecure(apiAgent),
-    overview: [apiAgent.description ?? ""],
-    installSteps: [
-      { comment: "1. Installer l'agent", command: `odin install ${apiAgent.name}` },
-      { comment: "2. Lancer l'agent", command: `odin run ${apiAgent.name}` },
-    ],
-    configFilename: `.odin/${apiAgent.name}.json`,
-    configLines: ["{", `  "model": "claude-3-5-sonnet"`, "}"],
-    checks: [],
+    readme: apiAgent.readme_markdown?.trim() || null,
     permissions: [],
   }
 }
@@ -91,6 +86,21 @@ function toAgentDetail(apiAgent: ApiAgent): AgentDetail {
  */
 export const getMarketplaceAgents = cache(async (): Promise<Agent[]> => {
   const res = await fetch(`${MARKETPLACE_API_URL}/catalog/agents`, { cache: "no-store" })
+  if (!res.ok) throw new Error(`Marketplace API responded with ${res.status}`)
+
+  const { data } = (await res.json()) as { data: ApiAgent[] }
+  return data.map(toAgent)
+})
+
+/**
+ * Agents publiés par un créateur (GET /catalog/creators/:id/agents). L'API répond 404 quand le
+ * créateur n'a encore rien publié : on le traite comme une liste vide.
+ */
+export const getCreatorAgents = cache(async (creatorId: string): Promise<Agent[]> => {
+  const res = await fetch(`${MARKETPLACE_API_URL}/catalog/creators/${encodeURIComponent(creatorId)}/agents`, {
+    cache: "no-store",
+  })
+  if (res.status === 400 || res.status === 404) return []
   if (!res.ok) throw new Error(`Marketplace API responded with ${res.status}`)
 
   const { data } = (await res.json()) as { data: ApiAgent[] }

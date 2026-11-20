@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { History, MessagesSquare, ShieldCheck, type LucideIcon } from "lucide-react"
+import { History, type LucideIcon } from "lucide-react"
 
 import type { AgentDetail } from "@/lib/api/agents"
 import { cn } from "@/lib/utils"
@@ -32,26 +32,6 @@ const tabs: Tab[] = [
       title: "Version history is on its way",
       description: "Every release of this agent, with its changelog and what changed between versions.",
       missing: "changelog: agent_version exists in the DB but no endpoint exposes it",
-    },
-  },
-  {
-    id: "community",
-    label: "Community reports",
-    upcoming: {
-      icon: MessagesSquare,
-      title: "Community reports are coming",
-      description: "Field reports, tips and configs shared by people running this agent in production.",
-      missing: "community reports: not wired to the social API",
-    },
-  },
-  {
-    id: "security",
-    label: "Security",
-    upcoming: {
-      icon: ShieldCheck,
-      title: "Security results are coming",
-      description: "The results of each security test run: static analysis, vulnerability scan and sandboxed run.",
-      missing: "security results are not in the API",
     },
   },
 ]

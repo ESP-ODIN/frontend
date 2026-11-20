@@ -8,6 +8,8 @@ import { TerminalAccessSelect } from "@/components/publish/fields/terminal-acces
 import { EnvVarsField } from "@/components/publish/fields/env-vars-field"
 import { PermissionSummary } from "@/components/publish/fields/permission-summary"
 import { usePublishWizard } from "@/components/publish/wizard-context"
+import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 
 export function StepPermissions() {
   const { data } = usePublishWizard()
@@ -17,13 +19,25 @@ export function StepPermissions() {
       title="Permissions"
       description="The access your agent requires, declared explicitly."
     >
-      <FormSection title="System access" table="permissions">
+      <FormSection
+        title="System access"
+        table="permissions"
+        aside={
+          <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.permissions} />
+        }
+      >
         <InternetAccessToggle />
         <FilesystemAccessSelect />
         <EnvVarsField />
       </FormSection>
 
-      <FormSection title="Terminal" table="permissions.terminal">
+      <FormSection
+        title="Terminal"
+        table="permissions.terminal"
+        aside={
+          <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.permissions} />
+        }
+      >
         <TerminalAccessSelect />
       </FormSection>
 

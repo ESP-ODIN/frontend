@@ -32,8 +32,11 @@ function WizardSteps() {
 
 export function PublishWizard({
   initialDraft,
+  author,
 }: {
   initialDraft: PublishDraft | null
+  /** @pseudo du compte connecté, sinon son email (seul le JWT est lu tant que GET /me manque). */
+  author: string | null
 }) {
   return (
     <PublishWizardProvider initialDraft={initialDraft}>
@@ -43,7 +46,7 @@ export function PublishWizard({
           <div className="min-w-0 flex-1 rounded-3xl border border-muted/40 bg-background-100 p-6 sm:p-8">
             <WizardSteps />
           </div>
-          <WizardSidebar />
+          <WizardSidebar author={author} />
         </div>
       </div>
     </PublishWizardProvider>

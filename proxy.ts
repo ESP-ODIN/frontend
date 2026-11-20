@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { SESSION_COOKIE } from "@/lib/auth/constants"
 import { safeRedirectPath } from "@/lib/auth/redirect"
 
-const PROTECTED_ROUTES = ["/publish"]
+const PROTECTED_ROUTES = ["/publish", "/profile"]
 const AUTH_ROUTES = ["/login", "/register"]
 
 export function proxy(request: NextRequest) {
@@ -22,5 +22,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/publish/:path*", "/login", "/register"],
+  matcher: ["/publish/:path*", "/profile/:path*", "/login", "/register"],
 }

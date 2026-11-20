@@ -2,11 +2,20 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Hash, Search, X } from "lucide-react"
+import { ArrowRight, Hash, Search, User, X } from "lucide-react"
 
 import type { Agent } from "@/lib/agents/types"
 import { AgentIcon } from "@/components/agent/agent-icon"
 import { collectTags, normalize, searchAgents, suggestTags, tokenize } from "@/lib/agents/search"
+import {
+  collectCreators,
+  CREATOR_NAME_NOTE,
+  creatorDisplayName,
+  creatorHref,
+  searchCreators,
+  type Creator,
+} from "@/lib/agents/creator"
+import { DevMark } from "@/components/dev/dev-mark"
 import { cn } from "@/lib/utils"
 
 type SearchBarProps = {
@@ -17,9 +26,13 @@ type SearchBarProps = {
   onTagsChange: (tags: string[]) => void
 }
 
-type Option = { kind: "tag"; tag: string; count: number } | { kind: "agent"; agent: Agent }
+type Option =
+  | { kind: "tag"; tag: string; count: number }
+  | { kind: "creator"; creator: Creator }
+  | { kind: "agent"; agent: Agent }
 
 const MAX_AGENT_SUGGESTIONS = 4
+const MAX_CREATOR_SUGGESTIONS = 3
 
 function Highlight({ text, tokens }: { text: string; tokens: string[] }) {
   const normalized = normalize(text)
@@ -48,10 +61,19 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
   const [activeIndex, setActiveIndex] = useState(-1)
 
   const allTags = useMemo(() => collectTags(agents), [agents])
+  const allCreators = useMemo(() => collectCreators(agents), [agents])
   const tokens = tokenize(query)
   const lastToken = tokens.at(-1) ?? ""
 
   const options = useMemo<Option[]>(() => {
+    // "@" en tête : on ne cherche que des créateurs.
+    if (query.trimStart().startsWith("@")) {
+      const creatorQuery = query.trim().slice(1)
+      const found = creatorQuery
+        ? searchCreators(allCreators, creatorQuery, MAX_CREATOR_SUGGESTIONS * 2)
+        : allCreators.slice(0, MAX_CREATOR_SUGGESTIONS * 2)
+      return found.map((creator): Option => ({ kind: "creator", creator }))
+    }
     const tagOptions = suggestTags(allTags, lastToken, tags).map(
       (entry): Option => ({ kind: "tag", tag: entry.tag, count: entry.count })
     )
@@ -60,11 +82,15 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
           .slice(0, MAX_AGENT_SUGGESTIONS)
           .map((agent): Option => ({ kind: "agent", agent }))
       : []
-    return [...tagOptions, ...agentOptions]
-  }, [agents, allTags, lastToken, query, tags])
+    const creatorOptions = query.trim()
+      ? searchCreators(allCreators, query, MAX_CREATOR_SUGGESTIONS).map((creator): Option => ({ kind: "creator", creator }))
+      : []
+    return [...tagOptions, ...agentOptions, ...creatorOptions]
+  }, [agents, allCreators, allTags, lastToken, query, tags])
 
   const tagOptions = options.filter((option) => option.kind === "tag")
   const agentOptions = options.filter((option) => option.kind === "agent")
+  const creatorOptions = options.filter((option) => option.kind === "creator")
 
   useEffect(() => {
     setActiveIndex(-1)
@@ -105,6 +131,9 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
   function select(option: Option) {
     if (option.kind === "tag") {
       addTag(option.tag)
+    } else if (option.kind === "creator") {
+      setOpen(false)
+      router.push(creatorHref(option.creator.id))
     } else {
       setOpen(false)
       router.push(`/agents/${option.agent.id}`)
@@ -150,7 +179,7 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
 
     return (
       <li
-        key={option.kind === "tag" ? `tag-${option.tag}` : option.agent.id}
+        key={option.kind === "tag" ? `tag-${option.tag}` : option.kind === "creator" ? `creator-${option.creator.id}` : option.agent.id}
         id={id}
         role="option"
         aria-selected={active}
@@ -173,6 +202,27 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
             <span className="rounded-full bg-muted/15 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
               {option.count}
             </span>
+          </>
+        ) : option.kind === "creator" ? (
+          <>
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary to-orange-400 text-primary-foreground">
+              <User className="size-3.5" />
+            </span>
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="flex items-center gap-1.5 truncate font-mono font-bold">
+                <span className="truncate">
+                  <Highlight text={creatorDisplayName(option.creator)} tokens={tokenize(query.replace(/^\s*@/, ""))} />
+                </span>
+                {!option.creator.username && <DevMark kind="missing" note={CREATOR_NAME_NOTE} />}
+              </span>
+              <span className="truncate text-xs text-muted-foreground">
+                {option.creator.name ? `${option.creator.name} · ` : ""}
+                {option.creator.agentCount} agent{option.creator.agentCount === 1 ? "" : "s"}
+              </span>
+            </span>
+            <ArrowRight
+              className={cn("size-3.5 shrink-0 text-primary transition-all", active ? "opacity-100" : "-translate-x-1 opacity-0")}
+            />
           </>
         ) : (
           <>
@@ -241,7 +291,7 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder={tags.length > 0 ? "Refine…" : "Search agents by name, tag, runtime…"}
+          placeholder={tags.length > 0 ? "Refine…" : "Search agents by name, tag, runtime… or @creator"}
           className="h-8 min-w-32 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
 
@@ -279,6 +329,12 @@ export function SearchBar({ agents, query, tags, onQueryChange, onTagsChange }: 
               </li>
             )}
             {agentOptions.map(renderOption)}
+            {creatorOptions.length > 0 && (
+              <li role="presentation" className="px-2.5 pt-2.5 pb-1 font-mono text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                Creators
+              </li>
+            )}
+            {creatorOptions.map(renderOption)}
           </ul>
         </div>
       )}
