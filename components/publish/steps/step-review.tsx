@@ -10,9 +10,10 @@ import { ManifestPreview } from "@/components/publish/steps/manifest-preview"
 import { PublishResult } from "@/components/publish/steps/publish-result"
 import { SecurityReviewDialog } from "@/components/publish/steps/security-review-dialog"
 import { usePublishWizard } from "@/components/publish/wizard-context"
-import { publishAgent } from "@/lib/api/publish"
+import { publishAgentAction } from "@/lib/publish/actions"
 import { addSubmission } from "@/lib/publish/submissions"
 import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 import { buildPublishPayload } from "@/lib/publish/build-payload"
 import { MANIFEST_SOURCE_OPTIONS, WIZARD_STEPS } from "@/lib/publish/constants"
 import { stringifyManifestToml } from "@/lib/publish/manifest-toml"
@@ -34,18 +35,22 @@ export function StepReview() {
 
   async function handlePublish() {
     setSubmission({ status: "loading" })
-    const result = await publishAgent(payload)
-    if (result.ok) {
-      const { name, version, type, category } = payload.manifest.package
-      // Suivi de la revue dans /profile?tab=creator, en attendant un statut côté API.
-      addSubmission({ name, version, type, category, runtime: payload.manifest.run.runtime })
-      setIsReviewDialogOpen(true)
+    try {
+      const result = await publishAgentAction(payload)
+      if (result.ok) {
+        const { name, version, type, category } = payload.manifest.package
+        // Suivi de la revue dans /profile?tab=creator, en attendant un statut côté API.
+        addSubmission({ name, version, type, category, runtime: payload.manifest.run.runtime })
+        setIsReviewDialogOpen(true)
+      }
+      setSubmission(
+        result.ok
+          ? { status: "success", id: result.id, name: result.name }
+          : { status: "error", message: result.error }
+      )
+    } catch {
+      setSubmission({ status: "error", message: "Network error. Please try again later." })
     }
-    setSubmission(
-      result.ok
-        ? { status: "success", name: result.name }
-        : { status: "error", message: result.error }
-    )
   }
 
   return (
@@ -55,7 +60,6 @@ export function StepReview() {
       footer={
         submission.status === "success" ? null : (
           <span className="flex items-center gap-3">
-            <DevMark kind="mock" note="publishAgent is faked (lib/api/publish.ts), POST /catalog/agents isn't called" />
             <Button
               type="button"
               icon={Rocket}
@@ -74,15 +78,26 @@ export function StepReview() {
       <ReviewSection
         title="Submission"
         rows={[
-          { label: "Source", value: sourceLabel },
+          {
+            label: "Source",
+            value: (
+              <span className="inline-flex items-center gap-2">
+                {sourceLabel}
+                <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.repository} />
+              </span>
+            ),
+          },
           {
             label: "README",
             value: (
-              <span>
-                <span className="font-mono">
-                  {payload.manifest.package.readme}
-                </span>{" "}
-                read from the repository
+              <span className="inline-flex items-center gap-2">
+                <span>
+                  <span className="font-mono">
+                    {payload.manifest.package.readme}
+                  </span>{" "}
+                  read from the repository
+                </span>
+                <DevMark kind="mock" note={PUBLISH_MISSING_NOTES.readme} />
               </span>
             ),
           },

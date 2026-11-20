@@ -4,6 +4,8 @@ import { useState } from "react"
 import { Check, Copy, Download, FileCode2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 
 const TABLE_LINE = /^\[[^\]]+\]$/
 const KEY_VALUE_LINE = /^(\S+)(\s*=\s*)(.*)$/
@@ -59,6 +61,7 @@ export function ManifestPreview({ toml }: { toml: string }) {
         <span className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
           <FileCode2 className="size-3.5" />
           manifest.toml
+          <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.manifest} />
         </span>
         <div className="flex gap-1">
           <Button

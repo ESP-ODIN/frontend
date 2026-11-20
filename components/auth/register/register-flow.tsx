@@ -30,6 +30,7 @@ import type { AvailabilityField } from "@/lib/api/auth"
 import { cn } from "@/lib/utils"
 import { validateNewPassword } from "@/lib/auth/password"
 import { PasswordStrength } from "@/components/auth/password-strength"
+import { DevMark } from "@/components/dev/dev-mark"
 
 type Values = {
   firstName: string
@@ -204,8 +205,19 @@ function useAvailability(field: AvailabilityField | undefined, value: string, fo
   return { status, checkNow }
 }
 
+const AVAILABILITY_MISSING_NOTE =
+  "GET /auth/availability doesn't exist in the auth API (404): a taken email or username is only caught on submit (409)"
+
 function AvailabilityStatus({ status, field }: { status: Availability; field: AvailabilityField }) {
-  if (status === "idle" || status === "unknown") return null
+  if (status === "unknown") {
+    return (
+      <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+        <DevMark kind="missing" note={AVAILABILITY_MISSING_NOTE} />
+        Availability will be checked when you create the account.
+      </p>
+    )
+  }
+  if (status === "idle") return null
   const label = field === "email" ? "email" : "username"
 
   return (
@@ -439,9 +451,9 @@ export function RegisterFlow() {
     setIsSubmitting(false)
 
     if (!result.ok) {
-      // Les erreurs de l'API (email déjà pris, format invalide) concernent l'email : on y retourne.
-      const emailStep = STEPS.findIndex((s) => s.id === "email")
-      setIndex(emailStep)
+      // On retourne sur le champ en cause : username si l'API le dit (409), sinon l'email.
+      const errorStep = STEPS.findIndex((s) => s.id === (result.field ?? "email"))
+      setIndex(errorStep)
       setShowPassword(false)
       setError(result.error)
       return

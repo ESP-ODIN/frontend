@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { PublishWizard } from "@/components/publish/publish-wizard"
+import { getCurrentUser } from "@/lib/auth/current-user"
 import { DRAFT_PARAM, parseDraft } from "@/lib/publish/url-state"
 
 export const metadata: Metadata = {
@@ -18,6 +19,9 @@ export default async function Page({
     typeof draftParam === "string" ? draftParam : null
   )
 
+  const user = await getCurrentUser()
+  const author = user?.username ? `@${user.username}` : (user?.email ?? null)
+
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
       <div>
@@ -29,7 +33,7 @@ export default async function Page({
           and permissions.
         </p>
       </div>
-      <PublishWizard initialDraft={initialDraft} />
+      <PublishWizard initialDraft={initialDraft} author={author} />
     </div>
   )
 }

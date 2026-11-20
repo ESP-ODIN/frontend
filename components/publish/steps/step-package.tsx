@@ -9,6 +9,8 @@ import { AgentTypeSelector } from "@/components/publish/fields/agent-type-select
 import { CategorySelect } from "@/components/publish/fields/category-select"
 import { TagsField } from "@/components/publish/fields/tags-field"
 import { ChangelogField } from "@/components/publish/fields/changelog-field"
+import { DevMark } from "@/components/dev/dev-mark"
+import { PUBLISH_MISSING_NOTES } from "@/lib/publish/dev-notes"
 
 export function StepPackage() {
   return (
@@ -30,7 +32,13 @@ export function StepPackage() {
         <TagsField />
       </FormSection>
 
-      <FormSection title="Release notes" table="package">
+      <FormSection
+        title="Release notes"
+        table="package"
+        aside={
+          <DevMark kind="missing" note={PUBLISH_MISSING_NOTES.changelog} />
+        }
+      >
         <ChangelogField />
       </FormSection>
     </StepShell>

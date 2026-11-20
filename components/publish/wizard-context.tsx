@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react"
 
-import { checkNameAvailability } from "@/lib/api/publish"
+import { checkNameAvailabilityAction } from "@/lib/publish/actions"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { DEFAULT_FORM_DATA, WIZARD_STEPS } from "@/lib/publish/constants"
 import {
@@ -35,7 +35,7 @@ import type {
 type SubmissionState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "success"; name: string }
+  | { status: "success"; id: string; name: string }
   | { status: "error"; message: string }
 
 type WizardContextValue = {
@@ -70,7 +70,7 @@ function useNameAvailability(packageName: string): NameCheckStatus {
     }
 
     setStatus("checking")
-    checkNameAvailability(debouncedName)
+    checkNameAvailabilityAction(debouncedName)
       .then((result) => {
         if (requestId.current === id)
           setStatus(result.available ? "available" : "taken")

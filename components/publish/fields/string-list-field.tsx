@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { Plus, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -11,6 +11,7 @@ import { FieldShell } from "@/components/publish/fields/field-shell"
 type StringListFieldProps = {
   id: string
   label: string
+  trailing?: ReactNode
   hint?: string
   required?: boolean
   placeholder?: string
@@ -23,6 +24,7 @@ type StringListFieldProps = {
 export function StringListField({
   id,
   label,
+  trailing,
   hint,
   required,
   placeholder,
@@ -50,6 +52,7 @@ export function StringListField({
       id={id}
       label={label}
       required={required}
+      trailing={trailing}
       hint={isInvalid ? undefined : hint}
       error={isInvalid ? invalidHint : undefined}
     >
